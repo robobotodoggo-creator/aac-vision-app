@@ -1,0 +1,36 @@
+{
+  "mappings": [
+    {
+      "objects": ["food", "bowl", "cup", "bottle", "dining table"],
+      "suggestions": ["eat", "drink", "more", "all_done", "hungry", "yummy"]
+    },
+    {
+      "objects": ["person", "people", "child"],
+      "suggestions": ["hi", "bye", "help", "play", "friend"]
+    },
+    {
+      "objects": ["car", "bus", "truck", "bicycle"],
+      "suggestions": ["go", "stop", "car", "home", "scared"]
+    },
+    {
+      "objects": ["dog", "cat", "bird", "animal"],
+      "suggestions": ["like", "scared", "happy", "stop", "more"]
+    },
+    {
+      "objects": ["tv", "laptop", "phone", "remote"],
+      "suggestions": ["watch", "play", "stop", "more", "listen"]
+    },
+    {
+      "objects": ["book", "notebook"],
+      "suggestions": ["read", "more", "open", "close", "like"]
+    },
+    {
+      "objects": ["bed", "pillow", "blanket"],
+      "suggestions": ["tired", "stop", "more", "love", "help"]
+    },
+    {
+      "objects": ["toilet", "sink", "bathtub"],
+      "suggestions": ["bathroom", "help", "all_done", "water"]
+    }
+  ]
+}
