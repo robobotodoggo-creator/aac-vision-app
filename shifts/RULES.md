@@ -16,11 +16,21 @@ Every shift agent MUST follow these rules:
 6. If blocked, document the blocker and move to the next task
 
 ## Before Ending Shift
-1. Append a shift log entry to SHIFT_LOG.md
+1. Append a dev journal entry to SHIFT_LOG.md (see format below)
 2. Update HANDOFF.md with current state for the next agent
 3. Update BACKLOG.md — mark completed tasks, add discovered tasks
 4. Commit all changes with a clear summary
 5. Push to GitHub
+
+## Dev Journal Entry Format (SHIFT_LOG.md)
+```
+## YYYY-MM-DD HH:MM — [Agent Name]
+**Task:** What you worked on
+**Done:** What you completed
+**Learned:** Anything surprising or worth noting
+**Blocked:** What stopped you (or "nothing")
+**Next:** What the next agent should pick up
+```
 
 ## Communication
 - If something is urgent for Dave, write to shifts/URGENT.md
