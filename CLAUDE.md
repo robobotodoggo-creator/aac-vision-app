@@ -57,6 +57,25 @@ lib/
 Samsung Galaxy Tab S10+ (12.4" 2560x1600, Android, 12GB RAM)
 Min SDK: 23 (Android 6.0)
 
+## AI Agent Architecture
+
+This project is built by autonomous AI agents coordinated through OpenClaw.
+
+### Roles
+- **Qwen 8B (local, OpenClaw):** Project manager / dispatcher. Runs 2x/day via cron (9 AM, 6 PM PT). Reads the backlog, runs tests, spawns Claude when work is needed. Also reachable on-demand via Telegram. Never codes — only manages.
+- **Claude Opus 4.6 (Claude Code Pro):** The coder. Spawned by Qwen for specific tasks. Reads CLAUDE.md + shifts/RULES.md, picks up stories from BACKLOG.md, does the work, commits, updates handoff docs.
+- **Long-running Claude (future):** A persistent "director" instance that maintains high-level project context across weeks. Answers strategic questions, reviews architecture, never touches code directly. Qwen routes questions to it.
+
+### How Shifts Work
+1. Qwen wakes up (cron or Telegram trigger)
+2. Reads HANDOFF.md, BACKLOG.md, runs `flutter analyze`
+3. If green, spawns Claude Code to pick up top priority task
+4. Claude reads RULES.md, does the work, commits, updates HANDOFF.md + SHIFT_LOG.md
+5. Qwen reports summary to Dave via Telegram
+
+### Triggering a Check-In Manually
+Message the Telegram bot: "check on the AAC app" or "run tests on aac_vision_app"
+
 ## Owner
-Dave (roboboto) — building this for AAC users
+Dave (roboboto) — building this for AAC users, post-stroke aphasia focus
 GitHub: robobotodoggo-creator
