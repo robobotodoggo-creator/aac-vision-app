@@ -1,10 +1,10 @@
 # Handoff — Current State
 
 ## Last Updated
-2026-02-15 by Claude Opus 4.6 (initial setup)
+2026-04-27 by Claude Opus 4.6
 
 ## Project Status
-The AAC Vision App has been scaffolded with all core features. The code compiles clean (`flutter analyze` passes). It has NOT been built or run on a device yet.
+All HIGH priority backlog items are complete. `flutter analyze` and `flutter build apk --debug` both pass clean. App has NOT been tested on a physical device yet.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
@@ -12,30 +12,33 @@ The AAC Vision App has been scaffolded with all core features. The code compiles
 - Symbol grid with category tabs
 - Sentence builder (long-press tiles to compose, tap Speak to vocalize)
 - TTS service (flutter_tts)
-- Vision service (Google ML Kit object detection, ~5fps processing)
+- Vision service (Google ML Kit object detection, ~5fps processing) with proper error handling
 - Context service (JSON-based object-to-symbol mappings)
 - Cloud service (Claude API with 30s cache, 5s timeout)
-- Settings screen (camera toggle, cloud toggle, API key, grid size, TTS controls)
+- Settings screen (camera toggle with error display, cloud toggle, API key, grid size, TTS controls)
 - Dark theme, high contrast, wakelock, haptic feedback
+- Android permissions (CAMERA, INTERNET, VIBRATE, WAKE_LOCK)
+- Recent phrases bar (persisted, tappable for re-speak)
+- Visual flash animation on tile tap (200ms blue flash for accessibility)
 
 ## What Needs Attention Next
-1. **Android permissions** — AndroidManifest.xml needs CAMERA, INTERNET, VIBRATE, WAKE_LOCK permissions added
-2. **First build test** — Run `flutter build apk --debug` to catch any build issues
-3. **Recent phrases bar** — Spec calls for it but not implemented yet
-4. **Error handling** — Vision service needs graceful camera/ML Kit failure handling
+1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
+2. **Landscape layout** — Tablet optimization for 12.4" display
+3. **Symbol search/filter** — Search within categories
+4. **TTS persistence** — Rate/pitch sliders in settings don't persist their values
 
-## Key Files
-- `lib/main.dart` — App entry point
-- `lib/services/app_state.dart` — Central state management (Provider)
-- `lib/screens/home_screen.dart` — Main AAC grid screen
-- `lib/screens/settings_screen.dart` — Settings
-- `assets/data/default_symbols.json` — Symbol library
-- `assets/data/context_mappings.json` — Object detection -> suggestion mappings
+## Key Files Changed This Shift
+- `android/app/src/main/AndroidManifest.xml` — Added permissions
+- `lib/services/vision_service.dart` — Error handling, init returns bool, error stream
+- `lib/services/app_state.dart` — visionError state, speakPhrase, recent phrases persistence
+- `lib/widgets/recent_phrases_bar.dart` — NEW: scrollable recent phrases row
+- `lib/widgets/symbol_tile.dart` — Visual flash animation on tap
+- `lib/screens/home_screen.dart` — Added RecentPhrasesBar to layout
+- `lib/screens/settings_screen.dart` — Shows vision error message
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)
-But should work on any Android 10+ device.
+But should work on any Android 6.0+ device (minSdk 23).
 
 ## Git
-- Repo initialized, initial commit done
-- Remote: not yet pushed to GitHub
+- All changes committed and pushed to main

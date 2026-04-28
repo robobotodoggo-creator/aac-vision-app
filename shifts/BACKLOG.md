@@ -1,11 +1,7 @@
 # AAC Vision App Backlog
 
 ## HIGH Priority
-- [ ] Add camera permissions to AndroidManifest.xml (INTERNET, CAMERA, VIBRATE, WAKE_LOCK)
-- [ ] Test flutter build on Android — fix any build errors
-- [ ] Add recent phrases bar above the category tabs for quick re-use
-- [ ] Implement proper error handling in vision_service.dart (camera unavailable, ML Kit init failure)
-- [ ] Add haptic feedback confirmation (visual flash on tile tap)
+(none — all completed)
 
 ## MEDIUM Priority
 - [ ] Add landscape layout optimization for tablet (S10+ is 12.4")
@@ -15,6 +11,7 @@
 - [ ] Add loading state while app initializes
 - [ ] Make suggestion bar scrollable with overflow indicator
 - [ ] Settings: persist TTS rate/pitch values (currently hardcoded)
+- [ ] Test on physical Android device
 
 ## LOW Priority
 - [ ] Custom symbol creation (add new symbols with emoji + label)
@@ -36,3 +33,8 @@
 - [x] Settings screen
 - [x] Camera PiP preview widget
 - [x] Suggestion bar widget
+- [x] Add camera permissions to AndroidManifest.xml
+- [x] Test flutter build on Android — builds clean
+- [x] Add recent phrases bar above category tabs
+- [x] Implement proper error handling in vision_service.dart
+- [x] Add haptic feedback visual flash on tile tap
