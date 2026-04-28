@@ -6,6 +6,7 @@ import '../widgets/suggestion_bar.dart';
 import '../widgets/sentence_bar.dart';
 import '../widgets/camera_preview.dart';
 import '../widgets/recent_phrases_bar.dart';
+import '../widgets/symbol_search_bar.dart';
 import 'settings_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -45,6 +46,7 @@ class HomeScreen extends StatelessWidget {
         const SuggestionBar(),
         const RecentPhrasesBar(),
         _buildHorizontalCategoryTabs(state, context),
+        const SymbolSearchBar(),
         const Expanded(child: AacGrid()),
       ],
     );
@@ -62,6 +64,7 @@ class HomeScreen extends StatelessWidget {
               const SentenceBar(),
               const SuggestionBar(),
               const RecentPhrasesBar(),
+              const SymbolSearchBar(),
               const Expanded(child: AacGrid()),
             ],
           ),

@@ -19,6 +19,7 @@ class AppState extends ChangeNotifier {
   final List<AacSymbol> _sentenceSymbols = [];
   List<String> _recentPhrases = [];
   String _selectedCategory = 'core';
+  String _searchQuery = '';
   bool _cameraEnabled = false;
   bool _cloudEnabled = false;
   int _gridColumns = 4;
@@ -29,6 +30,7 @@ class AppState extends ChangeNotifier {
   List<AacSymbol> get sentenceSymbols => _sentenceSymbols;
   List<String> get recentPhrases => _recentPhrases;
   String get selectedCategory => _selectedCategory;
+  String get searchQuery => _searchQuery;
   bool get cameraEnabled => _cameraEnabled;
   bool get cloudEnabled => _cloudEnabled;
   int get gridColumns => _gridColumns;
@@ -40,8 +42,14 @@ class AppState extends ChangeNotifier {
     return cats;
   }
 
-  List<AacSymbol> get filteredSymbols =>
-      _allSymbols.where((s) => s.category == _selectedCategory).toList();
+  List<AacSymbol> get filteredSymbols {
+    var symbols = _allSymbols.where((s) => s.category == _selectedCategory);
+    if (_searchQuery.isNotEmpty) {
+      final query = _searchQuery.toLowerCase();
+      symbols = symbols.where((s) => s.label.toLowerCase().contains(query));
+    }
+    return symbols.toList();
+  }
 
   Future<void> init() async {
     await _loadSymbols();
@@ -82,6 +90,12 @@ class AppState extends ChangeNotifier {
 
   void selectCategory(String category) {
     _selectedCategory = category;
+    _searchQuery = '';
+    notifyListeners();
+  }
+
+  void setSearchQuery(String query) {
+    _searchQuery = query;
     notifyListeners();
   }
 
