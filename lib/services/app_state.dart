@@ -22,6 +22,7 @@ class AppState extends ChangeNotifier {
   bool _cameraEnabled = false;
   bool _cloudEnabled = false;
   int _gridColumns = 4;
+  String? _visionError;
 
   List<AacSymbol> get allSymbols => _allSymbols;
   List<AacSymbol> get suggestedSymbols => _suggestedSymbols;
@@ -31,6 +32,7 @@ class AppState extends ChangeNotifier {
   bool get cameraEnabled => _cameraEnabled;
   bool get cloudEnabled => _cloudEnabled;
   int get gridColumns => _gridColumns;
+  String? get visionError => _visionError;
 
   List<String> get categories {
     final cats = _allSymbols.map((s) => s.category).toSet().toList();
@@ -48,6 +50,13 @@ class AppState extends ChangeNotifier {
     await _loadPreferences();
 
     vision.detectedObjects.listen(_onObjectsDetected);
+    vision.errors.listen(_onVisionError);
+  }
+
+  void _onVisionError(String error) {
+    _visionError = error;
+    _cameraEnabled = false;
+    notifyListeners();
   }
 
   Future<void> _loadSymbols() async {
@@ -126,13 +135,21 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> toggleCamera(bool enabled) async {
-    _cameraEnabled = enabled;
+    _visionError = null;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('cameraEnabled', enabled);
     if (enabled) {
-      await vision.init();
-      vision.startDetection();
+      final success = await vision.init();
+      if (success) {
+        _cameraEnabled = true;
+        await prefs.setBool('cameraEnabled', true);
+        vision.startDetection();
+      } else {
+        _cameraEnabled = false;
+        await prefs.setBool('cameraEnabled', false);
+      }
     } else {
+      _cameraEnabled = false;
+      await prefs.setBool('cameraEnabled', false);
       vision.stopDetection();
       _suggestedSymbols.clear();
     }

@@ -44,6 +44,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     value: state.cameraEnabled,
                     onChanged: (v) => state.toggleCamera(v),
                   ),
+                  if (state.visionError != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      child: Text(
+                        state.visionError!,
+                        style: const TextStyle(
+                            color: Colors.redAccent, fontSize: 16),
+                      ),
+                    ),
                 ],
               ),
 
