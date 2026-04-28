@@ -4,7 +4,7 @@
 (none — all completed)
 
 ## MEDIUM Priority
-- [ ] Add landscape layout optimization for tablet (S10+ is 12.4")
+- [x] Add landscape layout optimization for tablet (S10+ is 12.4")
 - [ ] Implement symbol search/filter within categories
 - [ ] Add ability to customize/reorder symbols from settings
 - [ ] Cache TTS initialization for faster first-speak

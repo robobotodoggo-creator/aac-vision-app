@@ -1,15 +1,17 @@
 # Handoff — Current State
 
 ## Last Updated
-2026-04-27 by Claude Opus 4.6
+2026-04-28 by Claude Opus 4.6
 
 ## Project Status
-All HIGH priority backlog items are complete. `flutter analyze` and `flutter build apk --debug` both pass clean. App has NOT been tested on a physical device yet.
+All HIGH priority items complete. First MEDIUM item (landscape layout) done. `flutter analyze` passes clean. APK build not verified this shift (no Java runtime on this machine). App has NOT been tested on a physical device yet.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
 - 56 AAC symbols across 7 categories (core, food, feelings, actions, people, places, emergency)
 - Symbol grid with category tabs
+- **Landscape layout** — vertical category sidebar, auto-increased grid columns, smaller camera PiP
+- Portrait layout unchanged — horizontal category tabs
 - Sentence builder (long-press tiles to compose, tap Speak to vocalize)
 - TTS service (flutter_tts)
 - Vision service (Google ML Kit object detection, ~5fps processing) with proper error handling
@@ -23,18 +25,15 @@ All HIGH priority backlog items are complete. `flutter analyze` and `flutter bui
 
 ## What Needs Attention Next
 1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
-2. **Landscape layout** — Tablet optimization for 12.4" display
-3. **Symbol search/filter** — Search within categories
-4. **TTS persistence** — Rate/pitch sliders in settings don't persist their values
+2. **Symbol search/filter** — Search within categories
+3. **TTS persistence** — Rate/pitch sliders in settings don't persist their values
+4. **Loading state** — Show loading indicator while app initializes
+5. **Java runtime** — APK builds require Java; not installed on current dev machine
 
 ## Key Files Changed This Shift
-- `android/app/src/main/AndroidManifest.xml` — Added permissions
-- `lib/services/vision_service.dart` — Error handling, init returns bool, error stream
-- `lib/services/app_state.dart` — visionError state, speakPhrase, recent phrases persistence
-- `lib/widgets/recent_phrases_bar.dart` — NEW: scrollable recent phrases row
-- `lib/widgets/symbol_tile.dart` — Visual flash animation on tap
-- `lib/screens/home_screen.dart` — Added RecentPhrasesBar to layout
-- `lib/screens/settings_screen.dart` — Shows vision error message
+- `lib/screens/home_screen.dart` — Landscape/portrait layout switching with OrientationBuilder, vertical category sidebar
+- `lib/widgets/aac_grid.dart` — Auto-adjust grid columns (+2 in landscape)
+- `lib/widgets/camera_preview.dart` — Smaller PiP in landscape
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)

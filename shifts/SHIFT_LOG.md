@@ -33,3 +33,18 @@
 **Learned:** VisionService.init() had no error handling at all — camera failures would throw unhandled exceptions. The recentPhrases list existed in AppState but was never persisted or exposed in UI.
 **Blocked:** Nothing
 **Next:** Medium priority items — landscape layout optimization, symbol search/filter, TTS rate/pitch persistence. Should also test on actual device.
+
+## 2026-04-28 — Claude Opus 4.6
+**Task:** Add landscape layout optimization for tablet (MEDIUM priority)
+**Done:**
+- HomeScreen now detects orientation and switches between portrait and landscape layouts
+- Landscape: category tabs move to a vertical sidebar (100px wide, left side) freeing vertical space
+- Landscape: Settings button sits at bottom of sidebar with icon + label
+- Portrait: layout unchanged (horizontal category tab bar)
+- AacGrid auto-adds 2 extra columns in landscape (e.g., 4 → 6) to use wider display
+- CameraPreview PiP shrinks slightly in landscape (100x130 vs 120x160) to save space
+- All touch targets remain ≥60dp in both orientations
+- `flutter analyze` passes clean
+**Learned:** `flutter build apk --debug` fails on this machine due to missing Java runtime — environment issue, not code. Previous shift had Java available. OrientationBuilder is the cleanest way to handle this since it rebuilds only when orientation changes.
+**Blocked:** APK build requires Java runtime installation on this machine
+**Next:** Symbol search/filter, TTS rate/pitch persistence, loading state. Device testing still needed.

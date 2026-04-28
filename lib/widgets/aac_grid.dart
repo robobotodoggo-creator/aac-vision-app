@@ -11,10 +11,15 @@ class AacGrid extends StatelessWidget {
     return Consumer<AppState>(
       builder: (context, state, _) {
         final symbols = state.filteredSymbols;
+        final isLandscape =
+            MediaQuery.of(context).orientation == Orientation.landscape;
+        // In landscape, add 2 extra columns to use the wider space
+        final columns =
+            isLandscape ? state.gridColumns + 2 : state.gridColumns;
         return GridView.builder(
           padding: const EdgeInsets.all(8),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: state.gridColumns,
+            crossAxisCount: columns,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
           ),

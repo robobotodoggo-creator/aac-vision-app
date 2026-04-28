@@ -13,14 +13,17 @@ class CameraPreviewWidget extends StatelessWidget {
         if (!state.cameraEnabled || !state.vision.isInitialized) {
           return const SizedBox.shrink();
         }
+        final isLandscape =
+            MediaQuery.of(context).orientation == Orientation.landscape;
         return Positioned(
           right: 12,
           bottom: 12,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: SizedBox(
-              width: 120,
-              height: 160,
+              // Slightly smaller PiP in landscape to save vertical space
+              width: isLandscape ? 100 : 120,
+              height: isLandscape ? 130 : 160,
               child: CameraPreview(state.vision.cameraController!),
             ),
           ),
