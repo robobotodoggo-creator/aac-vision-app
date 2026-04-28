@@ -48,3 +48,17 @@
 **Learned:** `flutter build apk --debug` fails on this machine due to missing Java runtime — environment issue, not code. Previous shift had Java available. OrientationBuilder is the cleanest way to handle this since it rebuilds only when orientation changes.
 **Blocked:** APK build requires Java runtime installation on this machine
 **Next:** Symbol search/filter, TTS rate/pitch persistence, loading state. Device testing still needed.
+
+## 2026-04-28 — Claude Opus 4.6
+**Task:** Implement symbol search/filter within categories (MEDIUM priority)
+**Done:**
+- Added `_searchQuery` field and `setSearchQuery` method to AppState
+- `filteredSymbols` now filters by both category and search query (case-insensitive label match)
+- Search query auto-clears when user switches categories
+- Created `SymbolSearchBar` widget (TextField with search icon and clear button)
+- Added search bar to both portrait and landscape layouts in HomeScreen
+- 48dp height, 16sp text, rounded corners, high-contrast dark styling
+- `flutter analyze` passes clean
+**Learned:** Need to sync the TextEditingController when AppState clears the search externally (on category change). Consumer rebuild handles this by checking if controller text diverges from state.
+**Blocked:** Nothing
+**Next:** TTS rate/pitch persistence, loading state, symbol customization. Device testing still needed.
