@@ -65,6 +65,7 @@ class AppState extends ChangeNotifier {
     _cameraEnabled = prefs.getBool('cameraEnabled') ?? false;
     _cloudEnabled = prefs.getBool('cloudEnabled') ?? false;
     _gridColumns = prefs.getInt('gridColumns') ?? 4;
+    _recentPhrases = prefs.getStringList('recentPhrases') ?? [];
     final apiKey = prefs.getString('apiKey');
     if (apiKey != null) cloud.setApiKey(apiKey);
     notifyListeners();
@@ -105,12 +106,23 @@ class AppState extends ChangeNotifier {
     clearSentence();
   }
 
+  Future<void> speakPhrase(String phrase) async {
+    await tts.speak(phrase);
+  }
+
   void _addRecentPhrase(String phrase) {
+    _recentPhrases.remove(phrase);
     _recentPhrases.insert(0, phrase);
     if (_recentPhrases.length > 10) {
       _recentPhrases = _recentPhrases.sublist(0, 10);
     }
+    _saveRecentPhrases();
     notifyListeners();
+  }
+
+  Future<void> _saveRecentPhrases() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('recentPhrases', _recentPhrases);
   }
 
   Future<void> toggleCamera(bool enabled) async {
