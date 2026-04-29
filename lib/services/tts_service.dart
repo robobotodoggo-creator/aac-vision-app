@@ -4,12 +4,16 @@ class TtsService {
   final FlutterTts _tts = FlutterTts();
   bool _initialized = false;
 
-  Future<void> init() async {
+  Future<void> init({double rate = 0.45, double pitch = 1.0}) async {
     if (_initialized) return;
     await _tts.setLanguage('en-US');
-    await _tts.setSpeechRate(0.45);
-    await _tts.setPitch(1.0);
+    await _tts.setSpeechRate(rate);
+    await _tts.setPitch(pitch);
     await _tts.setVolume(1.0);
+    await _tts.awaitSpeakCompletion(true);
+    // Prime the TTS engine so the first real speak has no cold-start delay
+    await _tts.speak('');
+    await _tts.stop();
     _initialized = true;
   }
 

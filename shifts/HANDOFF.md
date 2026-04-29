@@ -1,10 +1,10 @@
 # Handoff — Current State
 
 ## Last Updated
-2026-04-28 by Claude Opus 4.6
+2026-04-29 by Claude Opus 4.6
 
 ## Project Status
-All HIGH priority items complete. Six MEDIUM items done (landscape layout, symbol search, TTS persistence, loading state, suggestion overflow, symbol customization/reorder). `flutter analyze` passes clean. APK build not verified (no Java runtime on this machine). App has NOT been tested on a physical device yet.
+All HIGH and MEDIUM priority items complete. `flutter analyze` passes clean. APK build not verified (no Java runtime on this machine). App has NOT been tested on a physical device yet.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
@@ -15,7 +15,7 @@ All HIGH priority items complete. Six MEDIUM items done (landscape layout, symbo
 - **Landscape layout** — vertical category sidebar, auto-increased grid columns, smaller camera PiP
 - Portrait layout unchanged — horizontal category tabs
 - Sentence builder (long-press tiles to compose, tap Speak to vocalize)
-- TTS service (flutter_tts) with **persisted rate/pitch** — sliders reflect saved values, update live
+- TTS service (flutter_tts) with **persisted rate/pitch** and **cached initialization** — engine is primed during startup with empty speak, init runs in parallel with symbol/context loading
 - Vision service (Google ML Kit object detection, ~5fps processing) with proper error handling
 - Context service (JSON-based object-to-symbol mappings)
 - Cloud service (Claude API with 30s cache, 5s timeout)
@@ -29,15 +29,13 @@ All HIGH priority items complete. Six MEDIUM items done (landscape layout, symbo
 
 ## What Needs Attention Next
 1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
-2. **Cache TTS initialization** — For faster first-speak
-3. **Java runtime** — APK builds require Java; not installed on current dev machine
-4. **Untracked `web/` directory** — Flutter web scaffold exists but is unused; consider adding to `.gitignore`
+2. **Java runtime** — APK builds require Java; not installed on current dev machine
+3. **Custom symbol creation** — Top remaining LOW priority item
 
 ## Key Files Changed This Shift
-- `lib/services/app_state.dart` — Added `_hiddenSymbolIds`, `_symbolOrder` fields; `filteredSymbols` now excludes hidden and respects custom order; new methods: `symbolsForCategory()`, `toggleSymbolVisibility()`, `reorderSymbol()`, `resetSymbolCustomizations()`; persistence via SharedPreferences
-- `lib/screens/manage_symbols_screen.dart` — New screen with per-category ReorderableListView, drag handles, visibility toggles, reset button
-- `lib/screens/settings_screen.dart` — Added Symbols section with "Manage Symbols" navigation and hidden count display
-- Reverted `.metadata` and `build.gradle.kts` stale changes (platform web→android, minSdk restored to 23)
+- `lib/services/tts_service.dart` — `init()` now accepts `rate`/`pitch` params; added `awaitSpeakCompletion` + empty speak for engine warm-up
+- `lib/services/app_state.dart` — `init()` loads TTS prefs early, runs symbol/context/TTS init in parallel via `Future.wait`; removed redundant TTS calls from `_loadPreferences`
+- `.gitignore` — Added `/web/` (unused Flutter web scaffold)
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)

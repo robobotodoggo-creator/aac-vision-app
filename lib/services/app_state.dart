@@ -93,9 +93,18 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> init() async {
-    await _loadSymbols();
-    await context.init();
-    await tts.init();
+    // Load preferences first so we can pass persisted TTS values to init
+    final prefs = await SharedPreferences.getInstance();
+    final savedRate = prefs.getDouble('speechRate') ?? 0.45;
+    final savedPitch = prefs.getDouble('pitch') ?? 1.0;
+
+    // Run symbol loading, context init, and TTS init in parallel
+    await Future.wait([
+      _loadSymbols(),
+      context.init(),
+      tts.init(rate: savedRate, pitch: savedPitch),
+    ]);
+
     await _loadPreferences();
 
     vision.detectedObjects.listen(_onObjectsDetected);
@@ -129,8 +138,7 @@ class AppState extends ChangeNotifier {
     _recentPhrases = prefs.getStringList('recentPhrases') ?? [];
     _speechRate = prefs.getDouble('speechRate') ?? 0.45;
     _pitch = prefs.getDouble('pitch') ?? 1.0;
-    await tts.setSpeechRate(_speechRate);
-    await tts.setPitch(_pitch);
+    // TTS rate/pitch already set during init() — no redundant calls needed
     _hiddenSymbolIds =
         (prefs.getStringList('hiddenSymbolIds') ?? []).toSet();
     final orderStr = prefs.getString('symbolOrder');

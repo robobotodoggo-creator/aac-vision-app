@@ -91,3 +91,16 @@
 **Learned:** `ReorderableListView.builder` needs the index passed to `ReorderableDragStartListener` directly — can't derive it from key. The `withValues()` API is the Flutter 3.x way to set opacity on colors (replaces `withOpacity()`). The `web/` untracked directory was the source of the `.metadata` platform change.
 **Blocked:** Nothing
 **Next:** Cache TTS initialization, custom symbol creation. Device testing still needed.
+
+## 2026-04-29 — Claude Opus 4.6
+**Task:** Cache TTS initialization for faster first-speak (MEDIUM priority) + add web/ to .gitignore (LOW)
+**Done:**
+- TtsService.init() now accepts persisted rate/pitch params — avoids setting defaults then overwriting
+- Added TTS engine warm-up: `awaitSpeakCompletion(true)` + empty `speak('')` during init primes the native TTS engine so the first real speak has no cold-start delay
+- AppState.init() now loads SharedPreferences early, extracts TTS values, and runs symbol loading, context init, and TTS init in parallel via `Future.wait` (was sequential)
+- Removed redundant `setSpeechRate`/`setPitch` calls from `_loadPreferences` since values are now set correctly during init
+- Added `/web/` to .gitignore (unused Flutter web scaffold)
+- `flutter analyze` passes clean
+**Learned:** The original init flow was fully sequential — symbols, context, TTS one after another — but they're independent and can safely run in parallel. On Android, the first `FlutterTts.speak()` call triggers the platform TTS engine to connect, causing 100-500ms delay. Speaking an empty string during init absorbs that cost.
+**Blocked:** Nothing
+**Next:** Custom symbol creation, device testing. All MEDIUM backlog items now complete.

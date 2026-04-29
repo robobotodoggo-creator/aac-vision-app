@@ -11,7 +11,7 @@
 - [x] Make suggestion bar scrollable with overflow indicator
 - [x] Add ability to customize/reorder symbols from settings
 - [x] Investigate stale `.metadata` and `build.gradle.kts` changes (reverted — caused by `flutter create --platforms web`)
-- [ ] Cache TTS initialization for faster first-speak
+- [x] Cache TTS initialization for faster first-speak
 - [ ] Test on physical Android device
 
 ## LOW Priority
@@ -21,7 +21,7 @@
 - [ ] Dark/light theme toggle (dark is default, some users may prefer light)
 - [ ] Add sound effects option for tile taps (in addition to TTS)
 - [ ] Onboarding tutorial overlay for first launch
-- [ ] Add `web/` to .gitignore (untracked Flutter web scaffold, not needed)
+- [x] Add `web/` to .gitignore (untracked Flutter web scaffold, not needed)
 
 ## DONE
 - [x] Project scaffold and dependency setup
