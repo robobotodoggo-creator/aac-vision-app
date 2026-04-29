@@ -4,13 +4,14 @@
 2026-04-29 by Claude Opus 4.6
 
 ## Project Status
-All HIGH and MEDIUM priority items complete. `flutter analyze` passes clean. APK build not verified (no Java runtime on this machine). App has NOT been tested on a physical device yet.
+All HIGH and MEDIUM priority items complete. Top LOW item (custom symbol creation) also done. `flutter analyze` passes clean. APK build not verified (no Java runtime on this machine). App has NOT been tested on a physical device yet.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
-- 56 AAC symbols across 7 categories (core, food, feelings, actions, people, places, emergency)
+- 56 default AAC symbols across 7 categories (core, food, feelings, actions, people, places, emergency)
+- **Custom symbol creation** — Users can add new symbols with emoji + label via FAB on Manage Symbols screen; custom symbols persisted in SharedPreferences; deletable with confirmation dialog
 - Symbol grid with category tabs
-- **Symbol customization** — Manage Symbols screen (Settings > Symbols) with per-category reorderable list, drag handles, and show/hide toggles; persisted in SharedPreferences; Reset button to restore defaults
+- **Symbol customization** — Manage Symbols screen (Settings > Symbols) with per-category reorderable list, drag handles, show/hide toggles, and delete for custom symbols; persisted in SharedPreferences; Reset button to restore defaults
 - **Symbol search/filter** — search bar above grid filters symbols by label within the selected category; auto-clears on category change
 - **Landscape layout** — vertical category sidebar, auto-increased grid columns, smaller camera PiP
 - Portrait layout unchanged — horizontal category tabs
@@ -30,12 +31,12 @@ All HIGH and MEDIUM priority items complete. `flutter analyze` passes clean. APK
 ## What Needs Attention Next
 1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 2. **Java runtime** — APK builds require Java; not installed on current dev machine
-3. **Custom symbol creation** — Top remaining LOW priority item
+3. **Export/import symbol configs** — Next LOW priority item
 
 ## Key Files Changed This Shift
-- `lib/services/tts_service.dart` — `init()` now accepts `rate`/`pitch` params; added `awaitSpeakCompletion` + empty speak for engine warm-up
-- `lib/services/app_state.dart` — `init()` loads TTS prefs early, runs symbol/context/TTS init in parallel via `Future.wait`; removed redundant TTS calls from `_loadPreferences`
-- `.gitignore` — Added `/web/` (unused Flutter web scaffold)
+- `lib/services/app_state.dart` — Added `addCustomSymbol`, `deleteCustomSymbol`, `_loadCustomSymbols`, `_saveCustomSymbols`, `isCustomSymbol` methods; custom symbols loaded from SharedPreferences into `_allSymbols` during init
+- `lib/screens/manage_symbols_screen.dart` — Added FAB (+) for Add Symbol dialog (emoji, label, speak text, category); delete button for custom symbols with confirmation
+- `lib/screens/settings_screen.dart` — Updated subtitle to mention "Add" capability
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)

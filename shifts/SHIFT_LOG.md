@@ -104,3 +104,19 @@
 **Learned:** The original init flow was fully sequential — symbols, context, TTS one after another — but they're independent and can safely run in parallel. On Android, the first `FlutterTts.speak()` call triggers the platform TTS engine to connect, causing 100-500ms delay. Speaking an empty string during init absorbs that cost.
 **Blocked:** Nothing
 **Next:** Custom symbol creation, device testing. All MEDIUM backlog items now complete.
+
+## 2026-04-29 — Claude Opus 4.6
+**Task:** Custom symbol creation (LOW priority) — add new symbols with emoji + label
+**Done:**
+- Added `addCustomSymbol` and `deleteCustomSymbol` methods to AppState
+- Custom symbols persisted in SharedPreferences as JSON, loaded into `_allSymbols` during startup
+- Custom symbol IDs use `custom_` prefix to distinguish from default symbols
+- FAB (+) button on Manage Symbols screen opens Add Symbol dialog
+- Dialog has fields for emoji, label, speak text (optional, defaults to label), and category dropdown
+- Delete button (trash icon with confirmation dialog) shown only for custom symbols in the manage list
+- Cleanup on delete: removes from hidden set and custom order maps
+- Settings subtitle updated to mention "Add" capability
+- `flutter analyze` passes clean
+**Learned:** `DropdownButtonFormField.value` is deprecated in Flutter 3.33+ — switched to `DropdownButton` inside `InputDecorator` to avoid the warning. `StatefulBuilder` is necessary inside `showDialog` to manage local dialog state (category selection) without rebuilding the parent.
+**Blocked:** Nothing
+**Next:** Export/import symbol configs, device testing. Custom symbol creation is complete.

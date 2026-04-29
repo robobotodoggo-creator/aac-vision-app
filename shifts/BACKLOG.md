@@ -15,7 +15,7 @@
 - [ ] Test on physical Android device
 
 ## LOW Priority
-- [ ] Custom symbol creation (add new symbols with emoji + label)
+- [x] Custom symbol creation (add new symbols with emoji + label)
 - [ ] Export/import symbol configurations as JSON
 - [ ] Add usage analytics (local only — which symbols used most, for therapist reports)
 - [ ] Dark/light theme toggle (dark is default, some users may prefer light)
