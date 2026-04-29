@@ -146,23 +146,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Speech Rate',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 18)),
+                        Text(
+                            'Speech Rate: ${state.speechRate.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 18)),
                         Slider(
-                          value: 0.45,
+                          value: state.speechRate,
                           min: 0.1,
                           max: 1.0,
-                          onChanged: (v) => state.tts.setSpeechRate(v),
+                          onChanged: (v) => state.setSpeechRate(v),
                         ),
-                        const Text('Pitch',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 18)),
+                        Text(
+                            'Pitch: ${state.pitch.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 18)),
                         Slider(
-                          value: 1.0,
+                          value: state.pitch,
                           min: 0.5,
                           max: 2.0,
-                          onChanged: (v) => state.tts.setPitch(v),
+                          onChanged: (v) => state.setPitch(v),
                         ),
                       ],
                     ),

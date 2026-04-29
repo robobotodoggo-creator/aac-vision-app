@@ -23,8 +23,12 @@ class AppState extends ChangeNotifier {
   bool _cameraEnabled = false;
   bool _cloudEnabled = false;
   int _gridColumns = 4;
+  double _speechRate = 0.45;
+  double _pitch = 1.0;
+  bool _initialized = false;
   String? _visionError;
 
+  bool get initialized => _initialized;
   List<AacSymbol> get allSymbols => _allSymbols;
   List<AacSymbol> get suggestedSymbols => _suggestedSymbols;
   List<AacSymbol> get sentenceSymbols => _sentenceSymbols;
@@ -34,6 +38,8 @@ class AppState extends ChangeNotifier {
   bool get cameraEnabled => _cameraEnabled;
   bool get cloudEnabled => _cloudEnabled;
   int get gridColumns => _gridColumns;
+  double get speechRate => _speechRate;
+  double get pitch => _pitch;
   String? get visionError => _visionError;
 
   List<String> get categories {
@@ -59,6 +65,9 @@ class AppState extends ChangeNotifier {
 
     vision.detectedObjects.listen(_onObjectsDetected);
     vision.errors.listen(_onVisionError);
+
+    _initialized = true;
+    notifyListeners();
   }
 
   void _onVisionError(String error) {
@@ -83,6 +92,10 @@ class AppState extends ChangeNotifier {
     _cloudEnabled = prefs.getBool('cloudEnabled') ?? false;
     _gridColumns = prefs.getInt('gridColumns') ?? 4;
     _recentPhrases = prefs.getStringList('recentPhrases') ?? [];
+    _speechRate = prefs.getDouble('speechRate') ?? 0.45;
+    _pitch = prefs.getDouble('pitch') ?? 1.0;
+    await tts.setSpeechRate(_speechRate);
+    await tts.setPitch(_pitch);
     final apiKey = prefs.getString('apiKey');
     if (apiKey != null) cloud.setApiKey(apiKey);
     notifyListeners();
@@ -187,6 +200,22 @@ class AppState extends ChangeNotifier {
     _gridColumns = columns;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('gridColumns', columns);
+    notifyListeners();
+  }
+
+  Future<void> setSpeechRate(double rate) async {
+    _speechRate = rate;
+    await tts.setSpeechRate(rate);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('speechRate', rate);
+    notifyListeners();
+  }
+
+  Future<void> setPitch(double pitch) async {
+    _pitch = pitch;
+    await tts.setPitch(pitch);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('pitch', pitch);
     notifyListeners();
   }
 

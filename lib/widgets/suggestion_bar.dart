@@ -31,24 +31,49 @@ class SuggestionBar extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  itemCount: state.suggestedSymbols.length,
-                  itemBuilder: (context, index) {
-                    final symbol = state.suggestedSymbols[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: SizedBox(
-                        width: 80,
-                        child: SymbolTile(
-                          symbol: symbol,
-                          onTap: () => state.speakSymbol(symbol),
-                          onLongPress: () => state.addToSentence(symbol),
+                child: Stack(
+                  children: [
+                    ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      itemCount: state.suggestedSymbols.length,
+                      itemBuilder: (context, index) {
+                        final symbol = state.suggestedSymbols[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: SizedBox(
+                            width: 80,
+                            child: SymbolTile(
+                              symbol: symbol,
+                              onTap: () => state.speakSymbol(symbol),
+                              onLongPress: () => state.addToSentence(symbol),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    if (state.suggestedSymbols.length > 3)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        width: 24,
+                        child: IgnorePointer(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  Colors.blue[900]!.withValues(alpha: 0),
+                                  Colors.blue[900]!,
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    );
-                  },
+                  ],
                 ),
               ),
             ],

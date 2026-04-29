@@ -27,7 +27,6 @@ void main() async {
   );
 
   final appState = AppState();
-  await appState.init();
 
   runApp(
     ChangeNotifierProvider.value(
@@ -35,6 +34,8 @@ void main() async {
       child: const AacVisionApp(),
     ),
   );
+
+  await appState.init();
 }
 
 class AacVisionApp extends StatelessWidget {
@@ -50,7 +51,47 @@ class AacVisionApp extends StatelessWidget {
         colorSchemeSeed: Colors.blue,
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: Consumer<AppState>(
+        builder: (context, state, _) {
+          if (!state.initialized) {
+            return const _LoadingScreen();
+          }
+          return const HomeScreen();
+        },
+      ),
+    );
+  }
+}
+
+class _LoadingScreen extends StatelessWidget {
+  const _LoadingScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '💬',
+              style: TextStyle(fontSize: 64),
+            ),
+            SizedBox(height: 24),
+            Text(
+              'AAC Vision',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 16),
+            CircularProgressIndicator(color: Colors.blue),
+          ],
+        ),
+      ),
     );
   }
 }
