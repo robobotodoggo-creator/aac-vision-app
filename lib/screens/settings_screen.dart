@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
+import 'manage_symbols_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -132,6 +133,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ],
                     ),
                   ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
+              // Manage Symbols
+              _buildSection(
+                'Symbols',
+                [
+                  ListTile(
+                    title: const Text('Manage Symbols',
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                    subtitle: const Text(
+                        'Reorder, show, or hide symbols',
+                        style: TextStyle(color: Colors.white54)),
+                    trailing: const Icon(Icons.chevron_right,
+                        color: Colors.white54, size: 28),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ManageSymbolsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  if (state.hiddenSymbolIds.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      child: Text(
+                        '${state.hiddenSymbolIds.length} symbol(s) hidden',
+                        style: const TextStyle(
+                            color: Colors.white38, fontSize: 16),
+                      ),
+                    ),
                 ],
               ),
 

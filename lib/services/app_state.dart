@@ -18,6 +18,8 @@ class AppState extends ChangeNotifier {
   List<AacSymbol> _suggestedSymbols = [];
   final List<AacSymbol> _sentenceSymbols = [];
   List<String> _recentPhrases = [];
+  Set<String> _hiddenSymbolIds = {};
+  Map<String, List<String>> _symbolOrder = {};
   String _selectedCategory = 'core';
   String _searchQuery = '';
   bool _cameraEnabled = false;
@@ -33,6 +35,7 @@ class AppState extends ChangeNotifier {
   List<AacSymbol> get suggestedSymbols => _suggestedSymbols;
   List<AacSymbol> get sentenceSymbols => _sentenceSymbols;
   List<String> get recentPhrases => _recentPhrases;
+  Set<String> get hiddenSymbolIds => _hiddenSymbolIds;
   String get selectedCategory => _selectedCategory;
   String get searchQuery => _searchQuery;
   bool get cameraEnabled => _cameraEnabled;
@@ -49,12 +52,44 @@ class AppState extends ChangeNotifier {
   }
 
   List<AacSymbol> get filteredSymbols {
-    var symbols = _allSymbols.where((s) => s.category == _selectedCategory);
+    var symbols = _allSymbols
+        .where((s) => s.category == _selectedCategory)
+        .where((s) => !_hiddenSymbolIds.contains(s.id));
     if (_searchQuery.isNotEmpty) {
       final query = _searchQuery.toLowerCase();
       symbols = symbols.where((s) => s.label.toLowerCase().contains(query));
     }
-    return symbols.toList();
+    final result = symbols.toList();
+    final order = _symbolOrder[_selectedCategory];
+    if (order != null) {
+      result.sort((a, b) {
+        final ai = order.indexOf(a.id);
+        final bi = order.indexOf(b.id);
+        if (ai == -1 && bi == -1) return 0;
+        if (ai == -1) return 1;
+        if (bi == -1) return 1;
+        return ai.compareTo(bi);
+      });
+    }
+    return result;
+  }
+
+  /// Returns all symbols for a category, including hidden ones, in custom order.
+  List<AacSymbol> symbolsForCategory(String category) {
+    final symbols =
+        _allSymbols.where((s) => s.category == category).toList();
+    final order = _symbolOrder[category];
+    if (order != null) {
+      symbols.sort((a, b) {
+        final ai = order.indexOf(a.id);
+        final bi = order.indexOf(b.id);
+        if (ai == -1 && bi == -1) return 0;
+        if (ai == -1) return 1;
+        if (bi == -1) return 1;
+        return ai.compareTo(bi);
+      });
+    }
+    return symbols;
   }
 
   Future<void> init() async {
@@ -96,6 +131,14 @@ class AppState extends ChangeNotifier {
     _pitch = prefs.getDouble('pitch') ?? 1.0;
     await tts.setSpeechRate(_speechRate);
     await tts.setPitch(_pitch);
+    _hiddenSymbolIds =
+        (prefs.getStringList('hiddenSymbolIds') ?? []).toSet();
+    final orderStr = prefs.getString('symbolOrder');
+    if (orderStr != null) {
+      final decoded = json.decode(orderStr) as Map<String, dynamic>;
+      _symbolOrder = decoded.map(
+          (k, v) => MapEntry(k, (v as List).cast<String>()));
+    }
     final apiKey = prefs.getString('apiKey');
     if (apiKey != null) cloud.setApiKey(apiKey);
     notifyListeners();
@@ -217,6 +260,45 @@ class AppState extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('pitch', pitch);
     notifyListeners();
+  }
+
+  bool isSymbolHidden(String id) => _hiddenSymbolIds.contains(id);
+
+  Future<void> toggleSymbolVisibility(String id) async {
+    if (_hiddenSymbolIds.contains(id)) {
+      _hiddenSymbolIds.remove(id);
+    } else {
+      _hiddenSymbolIds.add(id);
+    }
+    await _saveSymbolCustomizations();
+    notifyListeners();
+  }
+
+  Future<void> reorderSymbol(
+      String category, int oldIndex, int newIndex) async {
+    final symbols = symbolsForCategory(category);
+    final ids = symbols.map((s) => s.id).toList();
+    if (newIndex > oldIndex) newIndex--;
+    final id = ids.removeAt(oldIndex);
+    ids.insert(newIndex, id);
+    _symbolOrder[category] = ids;
+    await _saveSymbolCustomizations();
+    notifyListeners();
+  }
+
+  Future<void> resetSymbolCustomizations() async {
+    _hiddenSymbolIds.clear();
+    _symbolOrder.clear();
+    await _saveSymbolCustomizations();
+    notifyListeners();
+  }
+
+  Future<void> _saveSymbolCustomizations() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(
+        'hiddenSymbolIds', _hiddenSymbolIds.toList());
+    final orderJson = json.encode(_symbolOrder);
+    await prefs.setString('symbolOrder', orderJson);
   }
 
   void _onObjectsDetected(List<String> objects) {
