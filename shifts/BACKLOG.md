@@ -6,12 +6,13 @@
 ## MEDIUM Priority
 - [x] Add landscape layout optimization for tablet (S10+ is 12.4")
 - [x] Implement symbol search/filter within categories
+- [x] Settings: persist TTS rate/pitch values
+- [x] Add loading state while app initializes
+- [x] Make suggestion bar scrollable with overflow indicator
 - [ ] Add ability to customize/reorder symbols from settings
 - [ ] Cache TTS initialization for faster first-speak
-- [ ] Add loading state while app initializes
-- [ ] Make suggestion bar scrollable with overflow indicator
-- [ ] Settings: persist TTS rate/pitch values (currently hardcoded)
 - [ ] Test on physical Android device
+- [ ] Investigate stale `.metadata` and `build.gradle.kts` changes (minSdk reverted, platform changed to web)
 
 ## LOW Priority
 - [ ] Custom symbol creation (add new symbols with emoji + label)

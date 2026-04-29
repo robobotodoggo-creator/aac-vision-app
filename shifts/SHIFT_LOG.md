@@ -62,3 +62,15 @@
 **Learned:** Need to sync the TextEditingController when AppState clears the search externally (on category change). Consumer rebuild handles this by checking if controller text diverges from state.
 **Blocked:** Nothing
 **Next:** TTS rate/pitch persistence, loading state, symbol customization. Device testing still needed.
+
+## 2026-04-28 — Claude Opus 4.6
+**Task:** Three MEDIUM priority items: TTS persistence, loading state, suggestion bar overflow
+**Done:**
+- TTS rate/pitch now persisted in SharedPreferences; sliders in Settings reflect saved values and update live via AppState setters
+- Added `_initialized` flag to AppState; `main.dart` now calls `runApp()` immediately and shows a loading screen (app name + spinner) until `init()` completes
+- Suggestion bar now has a gradient fade on the right edge when >3 suggestions, indicating scrollable overflow (IgnorePointer so it doesn't block touches)
+- Noticed pre-existing unstaged changes in `.metadata` (platform android→web) and `build.gradle.kts` (minSdk 23→flutter default) — did NOT commit these as they'd break ML Kit compatibility
+- `flutter analyze` passes clean
+**Learned:** The TTS sliders were using hardcoded values (0.45, 1.0) and calling `state.tts.setSpeechRate()` directly — changes worked in-session but were lost on restart and the slider UI never moved. Moving state ownership to AppState with persistence fixes both issues.
+**Blocked:** Pre-existing `.metadata` and `build.gradle.kts` changes need investigation — someone or something changed minSdk from 23 to flutter default and platform from android to web. These should be reverted or intentionally committed separately.
+**Next:** Symbol customization/reorder, cache TTS initialization. Device testing still needed.
