@@ -74,3 +74,20 @@
 **Learned:** The TTS sliders were using hardcoded values (0.45, 1.0) and calling `state.tts.setSpeechRate()` directly — changes worked in-session but were lost on restart and the slider UI never moved. Moving state ownership to AppState with persistence fixes both issues.
 **Blocked:** Pre-existing `.metadata` and `build.gradle.kts` changes need investigation — someone or something changed minSdk from 23 to flutter default and platform from android to web. These should be reverted or intentionally committed separately.
 **Next:** Symbol customization/reorder, cache TTS initialization. Device testing still needed.
+
+## 2026-04-28 — Claude Opus 4.6
+**Task:** Symbol customization/reorder (MEDIUM priority) + investigate stale build files
+**Done:**
+- Reverted stale `.metadata` (platform web→android) and `build.gradle.kts` (minSdk flutter.default→23) — these were caused by `flutter create --platforms web` and would break ML Kit
+- Added `ManageSymbolsScreen` accessible from Settings > Symbols > Manage Symbols
+- Per-category reorderable list with drag handles for custom symbol ordering
+- Visibility toggle (eye icon) to show/hide individual symbols
+- Hidden symbols excluded from `filteredSymbols` in the main grid
+- Custom order and hidden set persisted in SharedPreferences (JSON for order map, StringList for hidden IDs)
+- Added `symbolsForCategory()` method that returns all symbols including hidden ones (used by manage screen)
+- Reset button with confirmation dialog restores defaults
+- Settings shows count of hidden symbols
+- `flutter analyze` passes clean
+**Learned:** `ReorderableListView.builder` needs the index passed to `ReorderableDragStartListener` directly — can't derive it from key. The `withValues()` API is the Flutter 3.x way to set opacity on colors (replaces `withOpacity()`). The `web/` untracked directory was the source of the `.metadata` platform change.
+**Blocked:** Nothing
+**Next:** Cache TTS initialization, custom symbol creation. Device testing still needed.

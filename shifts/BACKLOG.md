@@ -9,10 +9,10 @@
 - [x] Settings: persist TTS rate/pitch values
 - [x] Add loading state while app initializes
 - [x] Make suggestion bar scrollable with overflow indicator
-- [ ] Add ability to customize/reorder symbols from settings
+- [x] Add ability to customize/reorder symbols from settings
+- [x] Investigate stale `.metadata` and `build.gradle.kts` changes (reverted — caused by `flutter create --platforms web`)
 - [ ] Cache TTS initialization for faster first-speak
 - [ ] Test on physical Android device
-- [ ] Investigate stale `.metadata` and `build.gradle.kts` changes (minSdk reverted, platform changed to web)
 
 ## LOW Priority
 - [ ] Custom symbol creation (add new symbols with emoji + label)
@@ -21,6 +21,7 @@
 - [ ] Dark/light theme toggle (dark is default, some users may prefer light)
 - [ ] Add sound effects option for tile taps (in addition to TTS)
 - [ ] Onboarding tutorial overlay for first launch
+- [ ] Add `web/` to .gitignore (untracked Flutter web scaffold, not needed)
 
 ## DONE
 - [x] Project scaffold and dependency setup
