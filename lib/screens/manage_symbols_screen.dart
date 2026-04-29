@@ -12,6 +12,193 @@ class ManageSymbolsScreen extends StatefulWidget {
 class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
   String _selectedCategory = 'core';
 
+  void _showAddSymbolDialog(AppState state) {
+    final labelController = TextEditingController();
+    final speakController = TextEditingController();
+    final emojiController = TextEditingController();
+    String category = _selectedCategory;
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) {
+            return AlertDialog(
+              backgroundColor: Colors.grey[900],
+              title: const Text('Add Symbol',
+                  style: TextStyle(color: Colors.white)),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: emojiController,
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 32),
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        labelText: 'Emoji',
+                        labelStyle:
+                            const TextStyle(color: Colors.white54, fontSize: 16),
+                        hintText: 'Tap to type emoji',
+                        hintStyle:
+                            const TextStyle(color: Colors.white24, fontSize: 16),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey[700]!),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: labelController,
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 18),
+                      decoration: InputDecoration(
+                        labelText: 'Label',
+                        labelStyle:
+                            const TextStyle(color: Colors.white54, fontSize: 16),
+                        hintText: 'e.g. Cookie',
+                        hintStyle:
+                            const TextStyle(color: Colors.white24, fontSize: 16),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey[700]!),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: speakController,
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 18),
+                      decoration: InputDecoration(
+                        labelText: 'Speak Text (optional)',
+                        labelStyle:
+                            const TextStyle(color: Colors.white54, fontSize: 16),
+                        hintText: 'Defaults to label',
+                        hintStyle:
+                            const TextStyle(color: Colors.white24, fontSize: 16),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey[700]!),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Category',
+                        labelStyle:
+                            const TextStyle(color: Colors.white54, fontSize: 16),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey[700]!),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: category,
+                          dropdownColor: Colors.grey[800],
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 18),
+                          isExpanded: true,
+                          items: state.categories.map((cat) {
+                            return DropdownMenuItem(
+                              value: cat,
+                              child: Text(
+                                cat[0].toUpperCase() + cat.substring(1),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            if (val != null) {
+                              setDialogState(() => category = val);
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child:
+                      const Text('Cancel', style: TextStyle(fontSize: 16)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    final label = labelController.text.trim();
+                    final emoji = emojiController.text.trim();
+                    if (label.isEmpty || emoji.isEmpty) return;
+                    final speakText = speakController.text.trim().isEmpty
+                        ? label
+                        : speakController.text.trim();
+                    state.addCustomSymbol(
+                      label: label,
+                      speakText: speakText,
+                      category: category,
+                      emoji: emoji,
+                    );
+                    Navigator.pop(ctx);
+                    setState(() => _selectedCategory = category);
+                  },
+                  child: const Text('Add',
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _confirmDelete(AppState state, String symbolId, String label) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.grey[900],
+        title: const Text('Delete Symbol?',
+            style: TextStyle(color: Colors.white)),
+        content: Text(
+            'Remove "$label" permanently? This cannot be undone.',
+            style: const TextStyle(color: Colors.white70, fontSize: 16)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel', style: TextStyle(fontSize: 16)),
+          ),
+          TextButton(
+            onPressed: () {
+              state.deleteCustomSymbol(symbolId);
+              Navigator.pop(ctx);
+            },
+            child: const Text('Delete',
+                style: TextStyle(color: Colors.redAccent, fontSize: 16)),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(
@@ -58,6 +245,11 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                     style: TextStyle(color: Colors.redAccent, fontSize: 16)),
               ),
             ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => _showAddSymbolDialog(state),
+            backgroundColor: Colors.blue[700],
+            child: const Icon(Icons.add, size: 28),
           ),
           body: Column(
             children: [
@@ -110,6 +302,7 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                   itemBuilder: (context, index) {
                     final symbol = symbols[index];
                     final isHidden = state.isSymbolHidden(symbol.id);
+                    final isCustom = state.isCustomSymbol(symbol.id);
                     return Container(
                       key: ValueKey(symbol.id),
                       margin: const EdgeInsets.symmetric(
@@ -136,6 +329,15 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              if (isCustom)
+                                IconButton(
+                                  icon: const Icon(Icons.delete_outline,
+                                      color: Colors.redAccent, size: 24),
+                                  onPressed: () => _confirmDelete(
+                                      state, symbol.id, symbol.label),
+                                  constraints: const BoxConstraints(
+                                      minHeight: 48, minWidth: 48),
+                                ),
                               IconButton(
                                 icon: Icon(
                                   isHidden

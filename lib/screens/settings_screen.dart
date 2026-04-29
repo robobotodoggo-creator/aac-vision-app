@@ -146,7 +146,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: const Text('Manage Symbols',
                         style: TextStyle(color: Colors.white, fontSize: 18)),
                     subtitle: const Text(
-                        'Reorder, show, or hide symbols',
+                        'Add, reorder, show, or hide symbols',
                         style: TextStyle(color: Colors.white54)),
                     trailing: const Icon(Icons.chevron_right,
                         color: Colors.white54, size: 28),

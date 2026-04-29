@@ -18,6 +18,7 @@ class AppState extends ChangeNotifier {
   List<AacSymbol> _suggestedSymbols = [];
   final List<AacSymbol> _sentenceSymbols = [];
   List<String> _recentPhrases = [];
+  List<AacSymbol> _customSymbols = [];
   Set<String> _hiddenSymbolIds = {};
   Map<String, List<String>> _symbolOrder = {};
   String _selectedCategory = 'core';
@@ -127,6 +128,61 @@ class AppState extends ChangeNotifier {
     final list = data['symbols'] as List;
     _allSymbols =
         list.map((s) => AacSymbol.fromJson(s as Map<String, dynamic>)).toList();
+    await _loadCustomSymbols();
+    notifyListeners();
+  }
+
+  Future<void> _loadCustomSymbols() async {
+    final prefs = await SharedPreferences.getInstance();
+    final customJson = prefs.getString('customSymbols');
+    if (customJson != null) {
+      final list = json.decode(customJson) as List;
+      _customSymbols = list
+          .map((s) => AacSymbol.fromJson(s as Map<String, dynamic>))
+          .toList();
+      _allSymbols.addAll(_customSymbols);
+    }
+  }
+
+  Future<void> _saveCustomSymbols() async {
+    final prefs = await SharedPreferences.getInstance();
+    final encoded =
+        json.encode(_customSymbols.map((s) => s.toJson()).toList());
+    await prefs.setString('customSymbols', encoded);
+  }
+
+  bool isCustomSymbol(String id) => id.startsWith('custom_');
+
+  Future<void> addCustomSymbol({
+    required String label,
+    required String speakText,
+    required String category,
+    required String emoji,
+  }) async {
+    final id = 'custom_${DateTime.now().millisecondsSinceEpoch}';
+    final symbol = AacSymbol(
+      id: id,
+      label: label,
+      speakText: speakText,
+      category: category,
+      emoji: emoji,
+    );
+    _customSymbols.add(symbol);
+    _allSymbols.add(symbol);
+    await _saveCustomSymbols();
+    notifyListeners();
+  }
+
+  Future<void> deleteCustomSymbol(String id) async {
+    _customSymbols.removeWhere((s) => s.id == id);
+    _allSymbols.removeWhere((s) => s.id == id);
+    _hiddenSymbolIds.remove(id);
+    // Clean up from custom order maps
+    for (final order in _symbolOrder.values) {
+      order.remove(id);
+    }
+    await _saveCustomSymbols();
+    await _saveSymbolCustomizations();
     notifyListeners();
   }
 
