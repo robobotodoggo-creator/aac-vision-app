@@ -9,12 +9,14 @@ import 'tts_service.dart';
 import 'vision_service.dart';
 import 'context_service.dart';
 import 'cloud_service.dart';
+import 'usage_stats_service.dart';
 
 class AppState extends ChangeNotifier {
   final TtsService tts = TtsService();
   final VisionService vision = VisionService();
   final ContextService context = ContextService();
   final CloudService cloud = CloudService();
+  final UsageStatsService usageStats = UsageStatsService();
 
   List<AacSymbol> _allSymbols = [];
   List<AacSymbol> _suggestedSymbols = [];
@@ -101,11 +103,12 @@ class AppState extends ChangeNotifier {
     final savedRate = prefs.getDouble('speechRate') ?? 0.45;
     final savedPitch = prefs.getDouble('pitch') ?? 1.0;
 
-    // Run symbol loading, context init, and TTS init in parallel
+    // Run symbol loading, context init, TTS init, and usage stats in parallel
     await Future.wait([
       _loadSymbols(),
       context.init(),
       tts.init(rate: savedRate, pitch: savedPitch),
+      usageStats.init(),
     ]);
 
     await _loadPreferences();
@@ -223,6 +226,7 @@ class AppState extends ChangeNotifier {
 
   void addToSentence(AacSymbol symbol) {
     _sentenceSymbols.add(symbol);
+    usageStats.recordTap(symbol.id);
     notifyListeners();
   }
 
@@ -241,6 +245,7 @@ class AppState extends ChangeNotifier {
   Future<void> speakSymbol(AacSymbol symbol) async {
     await tts.speak(symbol.speakText);
     _addRecentPhrase(symbol.speakText);
+    usageStats.recordTap(symbol.id);
   }
 
   Future<void> speakSentence() async {

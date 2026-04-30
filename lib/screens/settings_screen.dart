@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
 import 'manage_symbols_screen.dart';
+import 'usage_stats_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -164,6 +165,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                       child: Text(
                         '${state.hiddenSymbolIds.length} symbol(s) hidden',
+                        style: const TextStyle(
+                            color: Colors.white38, fontSize: 16),
+                      ),
+                    ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
+              // Usage Stats
+              _buildSection(
+                'Usage Stats',
+                [
+                  ListTile(
+                    title: const Text('View Usage Stats',
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                    subtitle: const Text(
+                        'Most-used symbols and daily activity for therapist reports',
+                        style: TextStyle(color: Colors.white54)),
+                    trailing: const Icon(Icons.chevron_right,
+                        color: Colors.white54, size: 28),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const UsageStatsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  if (state.usageStats.totalTaps > 0)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      child: Text(
+                        '${state.usageStats.totalTaps} total taps tracked',
                         style: const TextStyle(
                             color: Colors.white38, fontSize: 16),
                       ),
