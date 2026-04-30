@@ -8,6 +8,7 @@ class RecentPhrasesBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Consumer<AppState>(
       builder: (context, state, _) {
         if (state.recentPhrases.isEmpty) {
@@ -15,12 +16,12 @@ class RecentPhrasesBar extends StatelessWidget {
         }
         return Container(
           height: 52,
-          color: Colors.grey[850],
+          color: cs.surfaceContainerHigh,
           child: Row(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 12),
-                child: Icon(Icons.history, color: Colors.white38, size: 20),
+              Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: Icon(Icons.history, color: cs.outline, size: 20),
               ),
               Expanded(
                 child: ListView.builder(
@@ -33,7 +34,7 @@ class RecentPhrasesBar extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 4, vertical: 8),
                       child: Material(
-                        color: Colors.grey[700],
+                        color: cs.surfaceContainer,
                         borderRadius: BorderRadius.circular(20),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
@@ -48,8 +49,8 @@ class RecentPhrasesBar extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 phrase,
-                                style: const TextStyle(
-                                  color: Colors.white,
+                                style: TextStyle(
+                                  color: cs.onSurface,
                                   fontSize: 16,
                                 ),
                               ),

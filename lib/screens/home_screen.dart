@@ -17,7 +17,6 @@ class HomeScreen extends StatelessWidget {
     return Consumer<AppState>(
       builder: (context, state, _) {
         return Scaffold(
-          backgroundColor: Colors.black,
           body: SafeArea(
             child: OrientationBuilder(
               builder: (context, orientation) {
@@ -74,9 +73,10 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildCategorySidebar(AppState state, BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       width: 100,
-      color: Colors.grey[900],
+      color: cs.surfaceContainerHighest,
       child: Column(
         children: [
           Expanded(
@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                   child: Material(
-                    color: isSelected ? Colors.blue[700] : Colors.grey[800],
+                    color: isSelected ? cs.primary : cs.surfaceContainer,
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
@@ -101,8 +101,9 @@ class HomeScreen extends StatelessWidget {
                         child: Text(
                           cat[0].toUpperCase() + cat.substring(1),
                           style: TextStyle(
-                            color:
-                                isSelected ? Colors.white : Colors.white70,
+                            color: isSelected
+                                ? cs.onPrimary
+                                : cs.onSurfaceVariant,
                             fontSize: 16,
                             fontWeight: isSelected
                                 ? FontWeight.bold
@@ -121,7 +122,7 @@ class HomeScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(6),
             child: Material(
-              color: Colors.grey[800],
+              color: cs.surfaceContainer,
               borderRadius: BorderRadius.circular(12),
               child: InkWell(
                 borderRadius: BorderRadius.circular(12),
@@ -138,15 +139,16 @@ class HomeScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                  child: const Column(
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.settings, color: Colors.white70, size: 24),
-                      SizedBox(height: 4),
+                      Icon(Icons.settings,
+                          color: cs.onSurfaceVariant, size: 24),
+                      const SizedBox(height: 4),
                       Text(
                         'Settings',
-                        style:
-                            TextStyle(color: Colors.white70, fontSize: 14),
+                        style: TextStyle(
+                            color: cs.onSurfaceVariant, fontSize: 14),
                       ),
                     ],
                   ),
@@ -160,6 +162,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildHorizontalCategoryTabs(AppState state, BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return SizedBox(
       height: 48,
       child: ListView(
@@ -174,13 +177,13 @@ class HomeScreen extends StatelessWidget {
                 label: Text(
                   cat[0].toUpperCase() + cat.substring(1),
                   style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.white70,
+                    color: isSelected ? cs.onPrimary : cs.onSurfaceVariant,
                     fontSize: 16,
                   ),
                 ),
                 selected: isSelected,
-                selectedColor: Colors.blue[700],
-                backgroundColor: Colors.grey[800],
+                selectedColor: cs.primary,
+                backgroundColor: cs.surfaceContainer,
                 onSelected: (_) => state.selectCategory(cat),
               ),
             );
@@ -188,11 +191,12 @@ class HomeScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: ActionChip(
-              avatar: const Icon(Icons.settings,
-                  color: Colors.white70, size: 18),
-              label: const Text('Settings',
-                  style: TextStyle(color: Colors.white70, fontSize: 16)),
-              backgroundColor: Colors.grey[800],
+              avatar: Icon(Icons.settings,
+                  color: cs.onSurfaceVariant, size: 18),
+              label: Text('Settings',
+                  style:
+                      TextStyle(color: cs.onSurfaceVariant, fontSize: 16)),
+              backgroundColor: cs.surfaceContainer,
               onPressed: () {
                 Navigator.push(
                   context,

@@ -8,6 +8,7 @@ class UsageStatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Consumer<AppState>(
       builder: (context, state, _) {
         final stats = state.usageStats;
@@ -23,10 +24,9 @@ class UsageStatsScreen extends StatelessWidget {
         }
 
         return Scaffold(
-          backgroundColor: Colors.black,
           appBar: AppBar(
             title: const Text('Usage Stats'),
-            backgroundColor: Colors.grey[900],
+            backgroundColor: cs.surfaceContainerHighest,
             actions: [
               PopupMenuButton<String>(
                 icon: const Icon(Icons.more_vert),
@@ -92,12 +92,13 @@ class UsageStatsScreen extends StatelessWidget {
             ],
           ),
           body: stats.totalTaps == 0
-              ? const Center(
+              ? Center(
                   child: Padding(
-                    padding: EdgeInsets.all(32),
+                    padding: const EdgeInsets.all(32),
                     child: Text(
                       'No usage data yet.\nStart tapping symbols and your stats will appear here.',
-                      style: TextStyle(color: Colors.white54, fontSize: 18),
+                      style: TextStyle(
+                          color: cs.onSurfaceVariant, fontSize: 18),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -106,12 +107,12 @@ class UsageStatsScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   children: [
                     // Summary cards
-                    _buildSummaryRow(stats.totalTaps,
+                    _buildSummaryRow(context, stats.totalTaps,
                         stats.uniqueSymbolsUsed, stats.daysTracked),
                     const SizedBox(height: 20),
 
                     // Most used symbols
-                    _buildSectionHeader('Most Used Symbols'),
+                    _buildSectionHeader(context, 'Most Used Symbols'),
                     const SizedBox(height: 8),
                     ...topSymbols.map((entry) {
                       final label = labelMap[entry.key] ?? entry.key;
@@ -120,15 +121,15 @@ class UsageStatsScreen extends StatelessWidget {
                           ? (entry.value / stats.totalTaps * 100)
                           : 0.0;
                       return _buildSymbolRow(
-                          emoji, label, entry.value, pct);
+                          context, emoji, label, entry.value, pct);
                     }),
                     const SizedBox(height: 20),
 
                     // Daily activity
-                    _buildSectionHeader('Daily Activity'),
+                    _buildSectionHeader(context, 'Daily Activity'),
                     const SizedBox(height: 8),
                     ...recentDays.map((entry) {
-                      return _buildDayRow(entry.key, entry.value);
+                      return _buildDayRow(context, entry.key, entry.value);
                     }),
                   ],
                 ),
@@ -137,33 +138,42 @@ class UsageStatsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryRow(int totalTaps, int uniqueSymbols, int daysTracked) {
+  Widget _buildSummaryRow(
+      BuildContext context, int totalTaps, int uniqueSymbols, int daysTracked) {
     return Row(
       children: [
-        Expanded(child: _buildSummaryCard('Total Taps', '$totalTaps', Icons.touch_app)),
+        Expanded(
+            child: _buildSummaryCard(
+                context, 'Total Taps', '$totalTaps', Icons.touch_app)),
         const SizedBox(width: 8),
-        Expanded(child: _buildSummaryCard('Symbols Used', '$uniqueSymbols', Icons.grid_view)),
+        Expanded(
+            child: _buildSummaryCard(
+                context, 'Symbols Used', '$uniqueSymbols', Icons.grid_view)),
         const SizedBox(width: 8),
-        Expanded(child: _buildSummaryCard('Days Active', '$daysTracked', Icons.calendar_today)),
+        Expanded(
+            child: _buildSummaryCard(
+                context, 'Days Active', '$daysTracked', Icons.calendar_today)),
       ],
     );
   }
 
-  Widget _buildSummaryCard(String title, String value, IconData icon) {
+  Widget _buildSummaryCard(
+      BuildContext context, String title, String value, IconData icon) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey[900],
+        color: cs.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         children: [
-          Icon(icon, color: Colors.blue, size: 28),
+          Icon(icon, color: cs.primary, size: 28),
           const SizedBox(height: 8),
           Text(
             value,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: cs.onSurface,
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
@@ -171,7 +181,7 @@ class UsageStatsScreen extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             title,
-            style: const TextStyle(color: Colors.white54, fontSize: 14),
+            style: TextStyle(color: cs.onSurfaceVariant, fontSize: 14),
             textAlign: TextAlign.center,
           ),
         ],
@@ -179,23 +189,26 @@ class UsageStatsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    final cs = Theme.of(context).colorScheme;
     return Text(
       title,
-      style: const TextStyle(
-        color: Colors.blue,
+      style: TextStyle(
+        color: cs.primary,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
     );
   }
 
-  Widget _buildSymbolRow(String emoji, String label, int count, double pct) {
+  Widget _buildSymbolRow(
+      BuildContext context, String emoji, String label, int count, double pct) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 4),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.grey[900],
+        color: cs.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -205,13 +218,13 @@ class UsageStatsScreen extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(color: Colors.white, fontSize: 18),
+              style: TextStyle(color: cs.onSurface, fontSize: 18),
             ),
           ),
           Text(
             '$count',
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: cs.onSurface,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -221,7 +234,7 @@ class UsageStatsScreen extends StatelessWidget {
             width: 48,
             child: Text(
               '${pct.toStringAsFixed(0)}%',
-              style: const TextStyle(color: Colors.white38, fontSize: 16),
+              style: TextStyle(color: cs.outline, fontSize: 16),
               textAlign: TextAlign.right,
             ),
           ),
@@ -230,27 +243,28 @@ class UsageStatsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDayRow(String date, int count) {
+  Widget _buildDayRow(BuildContext context, String date, int count) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 4),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.grey[900],
+        color: cs.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
-          const Icon(Icons.calendar_today, color: Colors.white38, size: 20),
+          Icon(Icons.calendar_today, color: cs.outline, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               date,
-              style: const TextStyle(color: Colors.white, fontSize: 18),
+              style: TextStyle(color: cs.onSurface, fontSize: 18),
             ),
           ),
           Text(
             '$count taps',
-            style: const TextStyle(color: Colors.white70, fontSize: 18),
+            style: TextStyle(color: cs.onSurfaceVariant, fontSize: 18),
           ),
         ],
       ),

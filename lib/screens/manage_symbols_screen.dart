@@ -24,12 +24,13 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
     showDialog(
       context: context,
       builder: (ctx) {
+        final cs = Theme.of(ctx).colorScheme;
         return StatefulBuilder(
           builder: (ctx, setDialogState) {
             return AlertDialog(
-              backgroundColor: Colors.grey[900],
-              title: const Text('Add Symbol',
-                  style: TextStyle(color: Colors.white)),
+              backgroundColor: cs.surfaceContainerHighest,
+              title: Text('Add Symbol',
+                  style: TextStyle(color: cs.onSurface)),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -37,21 +38,21 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                     TextField(
                       controller: emojiController,
                       style:
-                          const TextStyle(color: Colors.white, fontSize: 32),
+                          TextStyle(color: cs.onSurface, fontSize: 32),
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         labelText: 'Emoji',
                         labelStyle:
-                            const TextStyle(color: Colors.white54, fontSize: 16),
+                            TextStyle(color: cs.onSurfaceVariant, fontSize: 16),
                         hintText: 'Tap to type emoji',
                         hintStyle:
-                            const TextStyle(color: Colors.white24, fontSize: 16),
+                            TextStyle(color: cs.outline, fontSize: 16),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey[700]!),
+                              BorderSide(color: cs.outlineVariant),
                         ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: cs.primary),
                         ),
                       ),
                     ),
@@ -59,20 +60,20 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                     TextField(
                       controller: labelController,
                       style:
-                          const TextStyle(color: Colors.white, fontSize: 18),
+                          TextStyle(color: cs.onSurface, fontSize: 18),
                       decoration: InputDecoration(
                         labelText: 'Label',
                         labelStyle:
-                            const TextStyle(color: Colors.white54, fontSize: 16),
+                            TextStyle(color: cs.onSurfaceVariant, fontSize: 16),
                         hintText: 'e.g. Cookie',
                         hintStyle:
-                            const TextStyle(color: Colors.white24, fontSize: 16),
+                            TextStyle(color: cs.outline, fontSize: 16),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey[700]!),
+                              BorderSide(color: cs.outlineVariant),
                         ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: cs.primary),
                         ),
                       ),
                     ),
@@ -80,20 +81,20 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                     TextField(
                       controller: speakController,
                       style:
-                          const TextStyle(color: Colors.white, fontSize: 18),
+                          TextStyle(color: cs.onSurface, fontSize: 18),
                       decoration: InputDecoration(
                         labelText: 'Speak Text (optional)',
                         labelStyle:
-                            const TextStyle(color: Colors.white54, fontSize: 16),
+                            TextStyle(color: cs.onSurfaceVariant, fontSize: 16),
                         hintText: 'Defaults to label',
                         hintStyle:
-                            const TextStyle(color: Colors.white24, fontSize: 16),
+                            TextStyle(color: cs.outline, fontSize: 16),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey[700]!),
+                              BorderSide(color: cs.outlineVariant),
                         ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: cs.primary),
                         ),
                       ),
                     ),
@@ -102,21 +103,21 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                       decoration: InputDecoration(
                         labelText: 'Category',
                         labelStyle:
-                            const TextStyle(color: Colors.white54, fontSize: 16),
+                            TextStyle(color: cs.onSurfaceVariant, fontSize: 16),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.grey[700]!),
+                              BorderSide(color: cs.outlineVariant),
                         ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: cs.primary),
                         ),
                       ),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: category,
-                          dropdownColor: Colors.grey[800],
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 18),
+                          dropdownColor: cs.surfaceContainer,
+                          style: TextStyle(
+                              color: cs.onSurface, fontSize: 18),
                           isExpanded: true,
                           items: state.categories.map((cat) {
                             return DropdownMenuItem(
@@ -160,9 +161,9 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                     Navigator.pop(ctx);
                     setState(() => _selectedCategory = category);
                   },
-                  child: const Text('Add',
+                  child: Text('Add',
                       style: TextStyle(
-                          color: Colors.blue,
+                          color: cs.primary,
                           fontSize: 16,
                           fontWeight: FontWeight.bold)),
                 ),
@@ -219,45 +220,48 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
   void _confirmDelete(AppState state, String symbolId, String label) {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Colors.grey[900],
-        title: const Text('Delete Symbol?',
-            style: TextStyle(color: Colors.white)),
-        content: Text(
-            'Remove "$label" permanently? This cannot be undone.',
-            style: const TextStyle(color: Colors.white70, fontSize: 16)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(fontSize: 16)),
-          ),
-          TextButton(
-            onPressed: () {
-              state.deleteCustomSymbol(symbolId);
-              Navigator.pop(ctx);
-            },
-            child: const Text('Delete',
-                style: TextStyle(color: Colors.redAccent, fontSize: 16)),
-          ),
-        ],
-      ),
+      builder: (ctx) {
+        final cs = Theme.of(ctx).colorScheme;
+        return AlertDialog(
+          backgroundColor: cs.surfaceContainerHighest,
+          title: Text('Delete Symbol?',
+              style: TextStyle(color: cs.onSurface)),
+          content: Text(
+              'Remove "$label" permanently? This cannot be undone.',
+              style: TextStyle(color: cs.onSurfaceVariant, fontSize: 16)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel', style: TextStyle(fontSize: 16)),
+            ),
+            TextButton(
+              onPressed: () {
+                state.deleteCustomSymbol(symbolId);
+                Navigator.pop(ctx);
+              },
+              child: const Text('Delete',
+                  style: TextStyle(color: Colors.redAccent, fontSize: 16)),
+            ),
+          ],
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Consumer<AppState>(
       builder: (context, state, _) {
         final symbols = state.symbolsForCategory(_selectedCategory);
         return Scaffold(
-          backgroundColor: Colors.black,
           appBar: AppBar(
             title: const Text('Manage Symbols'),
-            backgroundColor: Colors.grey[900],
+            backgroundColor: cs.surfaceContainerHighest,
             actions: [
               PopupMenuButton<String>(
-                icon: const Icon(Icons.more_vert, color: Colors.white),
-                color: Colors.grey[850],
+                icon: Icon(Icons.more_vert, color: cs.onSurface),
+                color: cs.surfaceContainerHigh,
                 onSelected: (value) {
                   switch (value) {
                     case 'export':
@@ -267,44 +271,50 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                     case 'reset':
                       showDialog(
                         context: context,
-                        builder: (ctx) => AlertDialog(
-                          backgroundColor: Colors.grey[900],
-                          title: const Text('Reset All?',
-                              style: TextStyle(color: Colors.white)),
-                          content: const Text(
-                              'This will restore default symbol order and make all symbols visible.',
-                              style: TextStyle(
-                                  color: Colors.white70, fontSize: 16)),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(ctx),
-                              child: const Text('Cancel',
-                                  style: TextStyle(fontSize: 16)),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                state.resetSymbolCustomizations();
-                                Navigator.pop(ctx);
-                              },
-                              child: const Text('Reset',
-                                  style: TextStyle(
-                                      color: Colors.redAccent, fontSize: 16)),
-                            ),
-                          ],
-                        ),
+                        builder: (ctx) {
+                          final dcs = Theme.of(ctx).colorScheme;
+                          return AlertDialog(
+                            backgroundColor: dcs.surfaceContainerHighest,
+                            title: Text('Reset All?',
+                                style: TextStyle(color: dcs.onSurface)),
+                            content: Text(
+                                'This will restore default symbol order and make all symbols visible.',
+                                style: TextStyle(
+                                    color: dcs.onSurfaceVariant,
+                                    fontSize: 16)),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(ctx),
+                                child: const Text('Cancel',
+                                    style: TextStyle(fontSize: 16)),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  state.resetSymbolCustomizations();
+                                  Navigator.pop(ctx);
+                                },
+                                child: const Text('Reset',
+                                    style: TextStyle(
+                                        color: Colors.redAccent,
+                                        fontSize: 16)),
+                              ),
+                            ],
+                          );
+                        },
                       );
                   }
                 },
-                itemBuilder: (_) => const [
+                itemBuilder: (_) => [
                   PopupMenuItem(
                     value: 'export',
                     child: Row(
                       children: [
-                        Icon(Icons.upload, color: Colors.white70, size: 22),
-                        SizedBox(width: 12),
+                        Icon(Icons.upload,
+                            color: cs.onSurfaceVariant, size: 22),
+                        const SizedBox(width: 12),
                         Text('Export Config',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 16)),
+                            style: TextStyle(
+                                color: cs.onSurface, fontSize: 16)),
                       ],
                     ),
                   ),
@@ -312,19 +322,21 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                     value: 'import',
                     child: Row(
                       children: [
-                        Icon(Icons.download, color: Colors.white70, size: 22),
-                        SizedBox(width: 12),
+                        Icon(Icons.download,
+                            color: cs.onSurfaceVariant, size: 22),
+                        const SizedBox(width: 12),
                         Text('Import Config',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 16)),
+                            style: TextStyle(
+                                color: cs.onSurface, fontSize: 16)),
                       ],
                     ),
                   ),
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 'reset',
                     child: Row(
                       children: [
-                        Icon(Icons.restore, color: Colors.redAccent, size: 22),
+                        Icon(Icons.restore,
+                            color: Colors.redAccent, size: 22),
                         SizedBox(width: 12),
                         Text('Reset All',
                             style: TextStyle(
@@ -338,7 +350,8 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () => _showAddSymbolDialog(state),
-            backgroundColor: Colors.blue[700],
+            backgroundColor: cs.primary,
+            foregroundColor: cs.onPrimary,
             child: const Icon(Icons.add, size: 28),
           ),
           body: Column(
@@ -358,13 +371,15 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                         label: Text(
                           cat[0].toUpperCase() + cat.substring(1),
                           style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.white70,
+                            color: isSelected
+                                ? cs.onPrimary
+                                : cs.onSurfaceVariant,
                             fontSize: 16,
                           ),
                         ),
                         selected: isSelected,
-                        selectedColor: Colors.blue[700],
-                        backgroundColor: Colors.grey[800],
+                        selectedColor: cs.primary,
+                        backgroundColor: cs.surfaceContainer,
                         onSelected: (_) =>
                             setState(() => _selectedCategory = cat),
                       ),
@@ -377,7 +392,8 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 child: Text(
                   'Drag to reorder. Tap the eye to show/hide.',
-                  style: TextStyle(color: Colors.white54, fontSize: 16),
+                  style:
+                      TextStyle(color: cs.onSurfaceVariant, fontSize: 16),
                 ),
               ),
               // Reorderable symbol list
@@ -399,8 +415,8 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                           vertical: 3, horizontal: 4),
                       decoration: BoxDecoration(
                         color: isHidden
-                            ? Colors.grey[900]
-                            : Colors.grey[850],
+                            ? cs.surfaceContainerHighest
+                            : cs.surfaceContainerHigh,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Opacity(
@@ -410,8 +426,8 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                               style: const TextStyle(fontSize: 28)),
                           title: Text(
                             symbol.label,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: cs.onSurface,
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
                             ),
@@ -434,8 +450,8 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                                       ? Icons.visibility_off
                                       : Icons.visibility,
                                   color: isHidden
-                                      ? Colors.white38
-                                      : Colors.blue[300],
+                                      ? cs.outline
+                                      : cs.primary,
                                   size: 28,
                                 ),
                                 onPressed: () =>
@@ -446,8 +462,8 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                               const SizedBox(width: 8),
                               ReorderableDragStartListener(
                                 index: index,
-                                child: const Icon(Icons.drag_handle,
-                                    color: Colors.white54, size: 28),
+                                child: Icon(Icons.drag_handle,
+                                    color: cs.onSurfaceVariant, size: 28),
                               ),
                             ],
                           ),

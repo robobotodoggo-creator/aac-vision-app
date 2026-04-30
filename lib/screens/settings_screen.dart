@@ -22,27 +22,54 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Consumer<AppState>(
       builder: (context, state, _) {
         return Scaffold(
-          backgroundColor: Colors.black,
           appBar: AppBar(
             title: const Text('Settings'),
-            backgroundColor: Colors.grey[900],
+            backgroundColor: cs.surfaceContainerHighest,
           ),
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              // Theme toggle
+              _buildSection(
+                context,
+                'Appearance',
+                [
+                  SwitchListTile(
+                    title: Text('Dark Mode',
+                        style:
+                            TextStyle(color: cs.onSurface, fontSize: 18)),
+                    subtitle: Text('Switch between dark and light theme',
+                        style: TextStyle(color: cs.onSurfaceVariant)),
+                    value: state.darkMode,
+                    onChanged: (v) => state.setDarkMode(v),
+                    secondary: Icon(
+                      state.darkMode
+                          ? Icons.dark_mode
+                          : Icons.light_mode,
+                      color: cs.primary,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
               // Camera toggle
               _buildSection(
+                context,
                 'Camera',
                 [
                   SwitchListTile(
-                    title: const Text('Enable Camera',
-                        style: TextStyle(color: Colors.white, fontSize: 18)),
-                    subtitle: const Text(
+                    title: Text('Enable Camera',
+                        style:
+                            TextStyle(color: cs.onSurface, fontSize: 18)),
+                    subtitle: Text(
                         'Detect objects for context-aware suggestions',
-                        style: TextStyle(color: Colors.white54)),
+                        style: TextStyle(color: cs.onSurfaceVariant)),
                     value: state.cameraEnabled,
                     onChanged: (v) => state.toggleCamera(v),
                   ),
@@ -62,14 +89,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               // Cloud toggle
               _buildSection(
+                context,
                 'Cloud Suggestions',
                 [
                   SwitchListTile(
-                    title: const Text('Smart Suggestions (uses internet)',
-                        style: TextStyle(color: Colors.white, fontSize: 18)),
-                    subtitle: const Text(
+                    title: Text('Smart Suggestions (uses internet)',
+                        style:
+                            TextStyle(color: cs.onSurface, fontSize: 18)),
+                    subtitle: Text(
                         'Send context to Claude for richer suggestions',
-                        style: TextStyle(color: Colors.white54)),
+                        style: TextStyle(color: cs.onSurfaceVariant)),
                     value: state.cloudEnabled,
                     onChanged: (v) => state.toggleCloud(v),
                   ),
@@ -79,19 +108,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: TextField(
                         controller: _apiKeyController,
                         style:
-                            const TextStyle(color: Colors.white, fontSize: 16),
+                            TextStyle(color: cs.onSurface, fontSize: 16),
                         decoration: InputDecoration(
                           labelText: 'Anthropic API Key',
-                          labelStyle: const TextStyle(color: Colors.white54),
+                          labelStyle:
+                              TextStyle(color: cs.onSurfaceVariant),
                           hintText: 'sk-ant-...',
-                          hintStyle: const TextStyle(color: Colors.white24),
+                          hintStyle: TextStyle(color: cs.outline),
                           border: const OutlineInputBorder(),
                           enabledBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: Colors.grey[700]!),
+                                BorderSide(color: cs.outlineVariant),
                           ),
                           suffixIcon: IconButton(
-                            icon: const Icon(Icons.save, color: Colors.blue),
+                            icon: Icon(Icons.save, color: cs.primary),
                             onPressed: () {
                               state.setApiKey(_apiKeyController.text);
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -110,24 +140,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               // Grid size
               _buildSection(
+                context,
                 'Grid Layout',
                 [
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        const Text('Grid columns: ',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 18)),
+                        Text('Grid columns: ',
+                            style: TextStyle(
+                                color: cs.onSurface, fontSize: 18)),
                         const Spacer(),
                         for (final cols in [3, 4, 5])
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4),
                             child: ChoiceChip(
                               label: Text('${cols}x$cols',
                                   style: const TextStyle(fontSize: 16)),
                               selected: state.gridColumns == cols,
-                              selectedColor: Colors.blue[700],
+                              selectedColor: cs.primary,
                               onSelected: (_) => state.setGridColumns(cols),
                             ),
                           ),
@@ -141,16 +173,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               // Manage Symbols
               _buildSection(
+                context,
                 'Symbols',
                 [
                   ListTile(
-                    title: const Text('Manage Symbols',
-                        style: TextStyle(color: Colors.white, fontSize: 18)),
-                    subtitle: const Text(
-                        'Add, reorder, show, or hide symbols',
-                        style: TextStyle(color: Colors.white54)),
-                    trailing: const Icon(Icons.chevron_right,
-                        color: Colors.white54, size: 28),
+                    title: Text('Manage Symbols',
+                        style:
+                            TextStyle(color: cs.onSurface, fontSize: 18)),
+                    subtitle: Text('Add, reorder, show, or hide symbols',
+                        style: TextStyle(color: cs.onSurfaceVariant)),
+                    trailing: Icon(Icons.chevron_right,
+                        color: cs.onSurfaceVariant, size: 28),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -165,8 +198,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                       child: Text(
                         '${state.hiddenSymbolIds.length} symbol(s) hidden',
-                        style: const TextStyle(
-                            color: Colors.white38, fontSize: 16),
+                        style:
+                            TextStyle(color: cs.outline, fontSize: 16),
                       ),
                     ),
                 ],
@@ -176,16 +209,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               // Usage Stats
               _buildSection(
+                context,
                 'Usage Stats',
                 [
                   ListTile(
-                    title: const Text('View Usage Stats',
-                        style: TextStyle(color: Colors.white, fontSize: 18)),
-                    subtitle: const Text(
+                    title: Text('View Usage Stats',
+                        style:
+                            TextStyle(color: cs.onSurface, fontSize: 18)),
+                    subtitle: Text(
                         'Most-used symbols and daily activity for therapist reports',
-                        style: TextStyle(color: Colors.white54)),
-                    trailing: const Icon(Icons.chevron_right,
-                        color: Colors.white54, size: 28),
+                        style: TextStyle(color: cs.onSurfaceVariant)),
+                    trailing: Icon(Icons.chevron_right,
+                        color: cs.onSurfaceVariant, size: 28),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -200,8 +235,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                       child: Text(
                         '${state.usageStats.totalTaps} total taps tracked',
-                        style: const TextStyle(
-                            color: Colors.white38, fontSize: 16),
+                        style:
+                            TextStyle(color: cs.outline, fontSize: 16),
                       ),
                     ),
                 ],
@@ -211,6 +246,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               // TTS settings
               _buildSection(
+                context,
                 'Text-to-Speech',
                 [
                   Padding(
@@ -220,8 +256,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Text(
                             'Speech Rate: ${state.speechRate.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 18)),
+                            style: TextStyle(
+                                color: cs.onSurface, fontSize: 18)),
                         Slider(
                           value: state.speechRate,
                           min: 0.1,
@@ -230,8 +266,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         Text(
                             'Pitch: ${state.pitch.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 18)),
+                            style: TextStyle(
+                                color: cs.onSurface, fontSize: 18)),
                         Slider(
                           value: state.pitch,
                           min: 0.5,
@@ -250,10 +286,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildSection(String title, List<Widget> children) {
+  Widget _buildSection(
+      BuildContext context, String title, List<Widget> children) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[900],
+        color: cs.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -263,8 +301,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.all(16),
             child: Text(
               title,
-              style: const TextStyle(
-                color: Colors.blue,
+              style: TextStyle(
+                color: cs.primary,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),

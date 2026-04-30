@@ -32,6 +32,7 @@ class AppState extends ChangeNotifier {
   int _gridColumns = 4;
   double _speechRate = 0.45;
   double _pitch = 1.0;
+  bool _darkMode = true;
   bool _initialized = false;
   String? _visionError;
 
@@ -48,6 +49,7 @@ class AppState extends ChangeNotifier {
   int get gridColumns => _gridColumns;
   double get speechRate => _speechRate;
   double get pitch => _pitch;
+  bool get darkMode => _darkMode;
   String? get visionError => _visionError;
 
   List<String> get categories {
@@ -199,6 +201,7 @@ class AppState extends ChangeNotifier {
     _recentPhrases = prefs.getStringList('recentPhrases') ?? [];
     _speechRate = prefs.getDouble('speechRate') ?? 0.45;
     _pitch = prefs.getDouble('pitch') ?? 1.0;
+    _darkMode = prefs.getBool('darkMode') ?? true;
     // TTS rate/pitch already set during init() — no redundant calls needed
     _hiddenSymbolIds =
         (prefs.getStringList('hiddenSymbolIds') ?? []).toSet();
@@ -330,6 +333,13 @@ class AppState extends ChangeNotifier {
     await tts.setPitch(pitch);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('pitch', pitch);
+    notifyListeners();
+  }
+
+  Future<void> setDarkMode(bool dark) async {
+    _darkMode = dark;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('darkMode', dark);
     notifyListeners();
   }
 

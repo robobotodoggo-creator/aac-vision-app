@@ -29,6 +29,7 @@ class _SymbolSearchBarState extends State<SymbolSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Consumer<AppState>(
       builder: (context, state, _) {
         // Sync controller when query is cleared externally (e.g. category change)
@@ -42,17 +43,17 @@ class _SymbolSearchBarState extends State<SymbolSearchBar> {
             child: TextField(
               controller: _controller,
               onChanged: (value) => state.setSearchQuery(value),
-              style: const TextStyle(color: Colors.white, fontSize: 16),
+              style: TextStyle(color: cs.onSurface, fontSize: 16),
               decoration: InputDecoration(
                 hintText:
                     'Search ${state.selectedCategory[0].toUpperCase()}${state.selectedCategory.substring(1)}...',
-                hintStyle: const TextStyle(color: Colors.white38, fontSize: 16),
+                hintStyle: TextStyle(color: cs.outline, fontSize: 16),
                 prefixIcon:
-                    const Icon(Icons.search, color: Colors.white54, size: 24),
+                    Icon(Icons.search, color: cs.onSurfaceVariant, size: 24),
                 suffixIcon: state.searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear,
-                            color: Colors.white54, size: 24),
+                        icon: Icon(Icons.clear,
+                            color: cs.onSurfaceVariant, size: 24),
                         onPressed: () {
                           _controller.clear();
                           state.setSearchQuery('');
@@ -60,7 +61,7 @@ class _SymbolSearchBarState extends State<SymbolSearchBar> {
                       )
                     : null,
                 filled: true,
-                fillColor: Colors.grey[850],
+                fillColor: cs.surfaceContainerHigh,
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),

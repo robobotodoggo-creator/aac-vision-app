@@ -8,19 +8,20 @@ class SentenceBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Consumer<AppState>(
       builder: (context, state, _) {
         return Container(
           height: 56,
-          color: Colors.grey[900],
+          color: cs.surfaceContainerHighest,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             children: [
               Expanded(
                 child: state.sentenceSymbols.isEmpty
-                    ? const Text(
+                    ? Text(
                         'Long-press tiles to build a sentence',
-                        style: TextStyle(color: Colors.white38, fontSize: 16),
+                        style: TextStyle(color: cs.outline, fontSize: 16),
                       )
                     : ListView(
                         scrollDirection: Axis.horizontal,
@@ -31,12 +32,13 @@ class SentenceBar extends StatelessWidget {
                             child: Chip(
                               label: Text(
                                 '${s.emoji} ${s.label}',
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 16),
+                                style: TextStyle(
+                                    color: cs.onPrimaryContainer,
+                                    fontSize: 16),
                               ),
-                              backgroundColor: Colors.blue[800],
-                              deleteIcon: const Icon(Icons.close,
-                                  size: 18, color: Colors.white70),
+                              backgroundColor: cs.primaryContainer,
+                              deleteIcon: Icon(Icons.close,
+                                  size: 18, color: cs.onPrimaryContainer),
                               onDeleted: () => state.removeLastFromSentence(),
                             ),
                           );
@@ -49,8 +51,8 @@ class SentenceBar extends StatelessWidget {
                     HapticFeedback.mediumImpact();
                     state.clearSentence();
                   },
-                  icon: const Icon(Icons.delete_outline,
-                      color: Colors.white54, size: 28),
+                  icon: Icon(Icons.delete_outline,
+                      color: cs.onSurfaceVariant, size: 28),
                 ),
                 const SizedBox(width: 4),
                 ElevatedButton.icon(

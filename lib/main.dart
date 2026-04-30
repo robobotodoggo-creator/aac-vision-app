@@ -18,14 +18,6 @@ void main() async {
     DeviceOrientation.landscapeRight,
   ]);
 
-  // Dark system UI
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-    ),
-  );
-
   final appState = AppState();
 
   runApp(
@@ -43,22 +35,37 @@ class AacVisionApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'AAC Vision',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        colorSchemeSeed: Colors.blue,
-        useMaterial3: true,
-      ),
-      home: Consumer<AppState>(
-        builder: (context, state, _) {
-          if (!state.initialized) {
-            return const _LoadingScreen();
-          }
-          return const HomeScreen();
-        },
-      ),
+    return Consumer<AppState>(
+      builder: (context, state, _) {
+        final isDark = state.darkMode;
+        // Keep status bar icons matching the theme
+        SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness:
+                isDark ? Brightness.light : Brightness.dark,
+          ),
+        );
+        return MaterialApp(
+          title: 'AAC Vision',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            brightness: Brightness.light,
+            colorSchemeSeed: Colors.blue,
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            colorSchemeSeed: Colors.blue,
+            useMaterial3: true,
+            scaffoldBackgroundColor: Colors.black,
+          ),
+          themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+          home: !state.initialized
+              ? const _LoadingScreen()
+              : const HomeScreen(),
+        );
+      },
     );
   }
 }
@@ -68,27 +75,27 @@ class _LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.black,
+    final cs = Theme.of(context).colorScheme;
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              '💬',
+            const Text(
+              '\u{1F4AC}',
               style: TextStyle(fontSize: 64),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             Text(
               'AAC Vision',
               style: TextStyle(
-                color: Colors.white,
+                color: cs.onSurface,
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16),
-            CircularProgressIndicator(color: Colors.blue),
+            const SizedBox(height: 16),
+            CircularProgressIndicator(color: cs.primary),
           ],
         ),
       ),

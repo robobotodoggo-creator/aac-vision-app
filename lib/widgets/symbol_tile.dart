@@ -21,7 +21,6 @@ class SymbolTile extends StatefulWidget {
 class _SymbolTileState extends State<SymbolTile>
     with SingleTickerProviderStateMixin {
   late final AnimationController _flashController;
-  late final Animation<Color?> _colorAnimation;
 
   @override
   void initState() {
@@ -30,10 +29,6 @@ class _SymbolTileState extends State<SymbolTile>
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-    _colorAnimation = ColorTween(
-      begin: Colors.grey[850],
-      end: Colors.blue[400],
-    ).animate(_flashController);
     _flashController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         _flashController.reverse();
@@ -55,11 +50,17 @@ class _SymbolTileState extends State<SymbolTile>
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return AnimatedBuilder(
-      animation: _colorAnimation,
+      animation: _flashController,
       builder: (context, child) {
+        final color = Color.lerp(
+          cs.surfaceContainerHigh,
+          cs.primary,
+          _flashController.value,
+        );
         return Material(
-          color: _colorAnimation.value,
+          color: color,
           borderRadius: BorderRadius.circular(12),
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
@@ -88,8 +89,8 @@ class _SymbolTileState extends State<SymbolTile>
             const SizedBox(height: 4),
             Text(
               widget.symbol.label,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: cs.onSurface,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),

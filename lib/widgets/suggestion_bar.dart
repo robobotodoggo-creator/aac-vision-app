@@ -8,6 +8,7 @@ class SuggestionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Consumer<AppState>(
       builder: (context, state, _) {
         if (state.suggestedSymbols.isEmpty) {
@@ -15,16 +16,16 @@ class SuggestionBar extends StatelessWidget {
         }
         return Container(
           height: 100,
-          color: Colors.blue[900],
+          color: cs.primaryContainer,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 12, top: 4),
+              Padding(
+                padding: const EdgeInsets.only(left: 12, top: 4),
                 child: Text(
                   'Suggested',
                   style: TextStyle(
-                    color: Colors.white70,
+                    color: cs.onPrimaryContainer,
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
@@ -65,8 +66,8 @@ class SuggestionBar extends StatelessWidget {
                                 begin: Alignment.centerLeft,
                                 end: Alignment.centerRight,
                                 colors: [
-                                  Colors.blue[900]!.withValues(alpha: 0),
-                                  Colors.blue[900]!,
+                                  cs.primaryContainer.withValues(alpha: 0),
+                                  cs.primaryContainer,
                                 ],
                               ),
                             ),
