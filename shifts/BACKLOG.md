@@ -19,7 +19,7 @@
 - [x] Export/import symbol configurations as JSON
 - [x] Add usage analytics (local only — which symbols used most, for therapist reports)
 - [x] Dark/light theme toggle (dark is default, some users may prefer light)
-- [ ] Add sound effects option for tile taps (in addition to TTS)
+- [x] Add sound effects option for tile taps (in addition to TTS)
 - [ ] Onboarding tutorial overlay for first launch
 - [x] Add `web/` to .gitignore (untracked Flutter web scaffold, not needed)
 

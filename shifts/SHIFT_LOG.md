@@ -164,3 +164,19 @@
 **Learned:** The original codebase had ~100+ hardcoded color references across 11 files. Material 3's `ColorScheme` surface container hierarchy (`surfaceContainer`, `surfaceContainerHigh`, `surfaceContainerHighest`) maps well to the existing visual hierarchy (chips < tiles < cards/sections). `Color.lerp` with an animation controller value is simpler than `ColorTween` when colors need to come from the theme context rather than initState.
 **Blocked:** Nothing
 **Next:** Sound effects for tile taps, onboarding tutorial. Device testing still needed.
+
+## 2026-04-30 — Claude Opus 4.6
+**Task:** Add sound effects option for tile taps (LOW priority)
+**Done:**
+- Created `SoundService` that generates a 50ms 800Hz click WAV programmatically at runtime — no bundled audio assets needed
+- WAV generation uses sine wave with exponential decay, 22050Hz 16-bit mono PCM (~2KB)
+- Added `audioplayers` dependency; `SoundService.playTap()` plays via `BytesSource`
+- Added `soundEffects` toggle to AppState with SharedPreferences persistence (defaults to off)
+- Sound plays on both single taps (`speakSymbol`) and long-press sentence building (`addToSentence`)
+- Toggle in Settings > Appearance section with volume_up/volume_off icon
+- `sound.init()` added to parallel startup in `AppState.init()`
+- `sound.dispose()` called in `AppState.dispose()`
+- `flutter analyze` passes clean
+**Learned:** `audioplayers` `BytesSource` accepts a raw `Uint8List` WAV, eliminating the need for asset files. Generating the WAV programmatically keeps the project simpler — no audio files to manage. The sound effect is intentionally fire-and-forget (not awaited) so it doesn't block TTS playback.
+**Blocked:** Nothing
+**Next:** Onboarding tutorial overlay. Device testing still needed.
