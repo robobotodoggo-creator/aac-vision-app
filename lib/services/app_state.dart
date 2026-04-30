@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/aac_symbol.dart';
 import 'tts_service.dart';
@@ -363,6 +365,61 @@ class AppState extends ChangeNotifier {
         'hiddenSymbolIds', _hiddenSymbolIds.toList());
     final orderJson = json.encode(_symbolOrder);
     await prefs.setString('symbolOrder', orderJson);
+  }
+
+  /// Exports custom symbols, hidden IDs, and symbol order to a JSON file.
+  /// Returns the file path for sharing.
+  Future<File> exportSymbolConfig() async {
+    final data = {
+      'version': 1,
+      'exportedAt': DateTime.now().toIso8601String(),
+      'customSymbols': _customSymbols.map((s) => s.toJson()).toList(),
+      'hiddenSymbolIds': _hiddenSymbolIds.toList(),
+      'symbolOrder': _symbolOrder,
+    };
+    final jsonStr = const JsonEncoder.withIndent('  ').convert(data);
+    final dir = await getTemporaryDirectory();
+    final file = File('${dir.path}/aac_symbols_config.json');
+    await file.writeAsString(jsonStr);
+    return file;
+  }
+
+  /// Imports symbol config from a JSON string. Replaces current customizations.
+  Future<String?> importSymbolConfig(String jsonStr) async {
+    try {
+      final data = json.decode(jsonStr) as Map<String, dynamic>;
+
+      // Load custom symbols
+      if (data['customSymbols'] != null) {
+        // Remove existing custom symbols from _allSymbols
+        _allSymbols.removeWhere((s) => s.id.startsWith('custom_'));
+        final list = data['customSymbols'] as List;
+        _customSymbols = list
+            .map((s) => AacSymbol.fromJson(s as Map<String, dynamic>))
+            .toList();
+        _allSymbols.addAll(_customSymbols);
+        await _saveCustomSymbols();
+      }
+
+      // Load hidden symbol IDs
+      if (data['hiddenSymbolIds'] != null) {
+        _hiddenSymbolIds =
+            (data['hiddenSymbolIds'] as List).cast<String>().toSet();
+      }
+
+      // Load symbol order
+      if (data['symbolOrder'] != null) {
+        final decoded = data['symbolOrder'] as Map<String, dynamic>;
+        _symbolOrder =
+            decoded.map((k, v) => MapEntry(k, (v as List).cast<String>()));
+      }
+
+      await _saveSymbolCustomizations();
+      notifyListeners();
+      return null; // success
+    } catch (e) {
+      return 'Invalid config file: $e';
+    }
   }
 
   void _onObjectsDetected(List<String> objects) {

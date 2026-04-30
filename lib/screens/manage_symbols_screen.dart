@@ -1,5 +1,8 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../services/app_state.dart';
 
 class ManageSymbolsScreen extends StatefulWidget {
@@ -171,6 +174,48 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
     );
   }
 
+  Future<void> _exportConfig(AppState state) async {
+    try {
+      final file = await state.exportSymbolConfig();
+      await SharePlus.instance.share(
+        ShareParams(files: [XFile(file.path)]),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Export failed: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _importConfig(AppState state) async {
+    try {
+      final result = await FilePicker.pickFiles(
+        type: FileType.any,
+        allowMultiple: false,
+      );
+      if (result == null || result.files.isEmpty) return;
+      final path = result.files.single.path;
+      if (path == null) return;
+      final jsonStr = await File(path).readAsString();
+      final error = await state.importSymbolConfig(jsonStr);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error ?? 'Config imported successfully'),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Import failed: $e')),
+        );
+      }
+    }
+  }
+
   void _confirmDelete(AppState state, String symbolId, String label) {
     showDialog(
       context: context,
@@ -210,39 +255,84 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
             title: const Text('Manage Symbols'),
             backgroundColor: Colors.grey[900],
             actions: [
-              TextButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      backgroundColor: Colors.grey[900],
-                      title: const Text('Reset All?',
-                          style: TextStyle(color: Colors.white)),
-                      content: const Text(
-                          'This will restore default symbol order and make all symbols visible.',
-                          style:
-                              TextStyle(color: Colors.white70, fontSize: 16)),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(ctx),
-                          child: const Text('Cancel',
-                              style: TextStyle(fontSize: 16)),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            state.resetSymbolCustomizations();
-                            Navigator.pop(ctx);
-                          },
-                          child: const Text('Reset',
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert, color: Colors.white),
+                color: Colors.grey[850],
+                onSelected: (value) {
+                  switch (value) {
+                    case 'export':
+                      _exportConfig(state);
+                    case 'import':
+                      _importConfig(state);
+                    case 'reset':
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          backgroundColor: Colors.grey[900],
+                          title: const Text('Reset All?',
+                              style: TextStyle(color: Colors.white)),
+                          content: const Text(
+                              'This will restore default symbol order and make all symbols visible.',
                               style: TextStyle(
-                                  color: Colors.redAccent, fontSize: 16)),
+                                  color: Colors.white70, fontSize: 16)),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(ctx),
+                              child: const Text('Cancel',
+                                  style: TextStyle(fontSize: 16)),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                state.resetSymbolCustomizations();
+                                Navigator.pop(ctx);
+                              },
+                              child: const Text('Reset',
+                                  style: TextStyle(
+                                      color: Colors.redAccent, fontSize: 16)),
+                            ),
+                          ],
                         ),
+                      );
+                  }
+                },
+                itemBuilder: (_) => const [
+                  PopupMenuItem(
+                    value: 'export',
+                    child: Row(
+                      children: [
+                        Icon(Icons.upload, color: Colors.white70, size: 22),
+                        SizedBox(width: 12),
+                        Text('Export Config',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 16)),
                       ],
                     ),
-                  );
-                },
-                child: const Text('Reset',
-                    style: TextStyle(color: Colors.redAccent, fontSize: 16)),
+                  ),
+                  PopupMenuItem(
+                    value: 'import',
+                    child: Row(
+                      children: [
+                        Icon(Icons.download, color: Colors.white70, size: 22),
+                        SizedBox(width: 12),
+                        Text('Import Config',
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 16)),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'reset',
+                    child: Row(
+                      children: [
+                        Icon(Icons.restore, color: Colors.redAccent, size: 22),
+                        SizedBox(width: 12),
+                        Text('Reset All',
+                            style: TextStyle(
+                                color: Colors.redAccent, fontSize: 16)),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
