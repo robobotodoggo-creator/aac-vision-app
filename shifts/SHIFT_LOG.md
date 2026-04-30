@@ -133,3 +133,18 @@
 **Learned:** `FilePicker.platform.pickFiles()` from older versions is now `FilePicker.pickFiles()` as a static method in file_picker 11.x. `path_provider` was a transitive dep via share_plus but needs explicit listing to satisfy `depend_on_referenced_packages` lint.
 **Blocked:** Nothing
 **Next:** Usage analytics (local), dark/light theme toggle, device testing.
+
+## 2026-04-29 — Claude Opus 4.6
+**Task:** Add usage analytics — local-only symbol usage tracking for therapist reports (LOW priority)
+**Done:**
+- Created `UsageStatsService` that tracks per-symbol tap counts and daily totals in SharedPreferences
+- Integrated tracking into `AppState.speakSymbol()` (single taps) and `addToSentence()` (long-press sentence building)
+- Added `usageStats.init()` to parallel startup in `AppState.init()`
+- Built `UsageStatsScreen` with summary cards (total taps, unique symbols, days active), most-used symbols list with percentages, and daily activity history
+- Export button generates a plain-text report and shares via share sheet (`share_plus`)
+- Clear data option with confirmation dialog
+- Added Usage Stats entry in Settings screen between Symbols and TTS sections
+- `flutter analyze` passes clean
+**Learned:** Consumer/Provider rebuilds handle the stats display well since AppState already calls `notifyListeners()` after speak/addToSentence. The stats service doesn't need to call notifyListeners itself — it just persists silently.
+**Blocked:** Nothing
+**Next:** Dark/light theme toggle, sound effects for tile taps, onboarding tutorial. Device testing still needed.
