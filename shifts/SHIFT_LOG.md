@@ -148,3 +148,19 @@
 **Learned:** Consumer/Provider rebuilds handle the stats display well since AppState already calls `notifyListeners()` after speak/addToSentence. The stats service doesn't need to call notifyListeners itself — it just persists silently.
 **Blocked:** Nothing
 **Next:** Dark/light theme toggle, sound effects for tile taps, onboarding tutorial. Device testing still needed.
+
+## 2026-04-30 — Claude Opus 4.6
+**Task:** Dark/light theme toggle (LOW priority)
+**Done:**
+- Added `darkMode` property to AppState with SharedPreferences persistence (defaults to true/dark)
+- MaterialApp now uses `theme`/`darkTheme`/`themeMode` pattern to switch between light and dark Material 3 themes
+- Dark theme keeps `scaffoldBackgroundColor: Colors.black` for high-contrast accessibility
+- Light theme uses Material 3 auto-generated light palette from blue seed
+- Replaced all hardcoded `Colors.*` across 11 files with `Theme.of(context).colorScheme.*` equivalents
+- Added "Appearance" section to Settings with Dark Mode SwitchListTile (sun/moon icon)
+- Status bar icon brightness adapts to selected theme
+- SymbolTile flash animation refactored: replaced `ColorTween` with `Color.lerp` using theme colors (avoids needing context in initState)
+- `flutter analyze` passes clean
+**Learned:** The original codebase had ~100+ hardcoded color references across 11 files. Material 3's `ColorScheme` surface container hierarchy (`surfaceContainer`, `surfaceContainerHigh`, `surfaceContainerHighest`) maps well to the existing visual hierarchy (chips < tiles < cards/sections). `Color.lerp` with an animation controller value is simpler than `ColorTween` when colors need to come from the theme context rather than initState.
+**Blocked:** Nothing
+**Next:** Sound effects for tile taps, onboarding tutorial. Device testing still needed.
