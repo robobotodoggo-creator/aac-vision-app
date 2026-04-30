@@ -16,7 +16,7 @@
 
 ## LOW Priority
 - [x] Custom symbol creation (add new symbols with emoji + label)
-- [ ] Export/import symbol configurations as JSON
+- [x] Export/import symbol configurations as JSON
 - [ ] Add usage analytics (local only — which symbols used most, for therapist reports)
 - [ ] Dark/light theme toggle (dark is default, some users may prefer light)
 - [ ] Add sound effects option for tile taps (in addition to TTS)

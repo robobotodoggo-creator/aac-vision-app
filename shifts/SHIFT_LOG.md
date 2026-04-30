@@ -120,3 +120,16 @@
 **Learned:** `DropdownButtonFormField.value` is deprecated in Flutter 3.33+ — switched to `DropdownButton` inside `InputDecorator` to avoid the warning. `StatefulBuilder` is necessary inside `showDialog` to manage local dialog state (category selection) without rebuilding the parent.
 **Blocked:** Nothing
 **Next:** Export/import symbol configs, device testing. Custom symbol creation is complete.
+
+## 2026-04-29 — Claude Opus 4.6
+**Task:** Export/import symbol configurations as JSON (LOW priority)
+**Done:**
+- Added `exportSymbolConfig()` to AppState — bundles custom symbols, hidden IDs, and symbol order into versioned JSON; writes to temp file for sharing
+- Added `importSymbolConfig(String)` to AppState — parses JSON, replaces current customizations (custom symbols, hidden set, order), persists changes
+- Added `_exportConfig` and `_importConfig` methods to ManageSymbolsScreen using `share_plus` (share sheet) and `file_picker` (file selection)
+- Replaced standalone Reset button with PopupMenuButton overflow menu containing Export, Import, and Reset actions
+- Added `share_plus`, `file_picker`, and `path_provider` dependencies
+- `flutter analyze` passes clean
+**Learned:** `FilePicker.platform.pickFiles()` from older versions is now `FilePicker.pickFiles()` as a static method in file_picker 11.x. `path_provider` was a transitive dep via share_plus but needs explicit listing to satisfy `depend_on_referenced_packages` lint.
+**Blocked:** Nothing
+**Next:** Usage analytics (local), dark/light theme toggle, device testing.
