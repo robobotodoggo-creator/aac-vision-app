@@ -9,6 +9,7 @@ import 'tts_service.dart';
 import 'vision_service.dart';
 import 'context_service.dart';
 import 'cloud_service.dart';
+import 'sound_service.dart';
 import 'usage_stats_service.dart';
 
 class AppState extends ChangeNotifier {
@@ -17,6 +18,7 @@ class AppState extends ChangeNotifier {
   final ContextService context = ContextService();
   final CloudService cloud = CloudService();
   final UsageStatsService usageStats = UsageStatsService();
+  final SoundService sound = SoundService();
 
   List<AacSymbol> _allSymbols = [];
   List<AacSymbol> _suggestedSymbols = [];
@@ -33,6 +35,7 @@ class AppState extends ChangeNotifier {
   double _speechRate = 0.45;
   double _pitch = 1.0;
   bool _darkMode = true;
+  bool _soundEffects = false;
   bool _initialized = false;
   String? _visionError;
 
@@ -50,6 +53,7 @@ class AppState extends ChangeNotifier {
   double get speechRate => _speechRate;
   double get pitch => _pitch;
   bool get darkMode => _darkMode;
+  bool get soundEffects => _soundEffects;
   String? get visionError => _visionError;
 
   List<String> get categories {
@@ -105,12 +109,13 @@ class AppState extends ChangeNotifier {
     final savedRate = prefs.getDouble('speechRate') ?? 0.45;
     final savedPitch = prefs.getDouble('pitch') ?? 1.0;
 
-    // Run symbol loading, context init, TTS init, and usage stats in parallel
+    // Run symbol loading, context init, TTS init, usage stats, and sound in parallel
     await Future.wait([
       _loadSymbols(),
       context.init(),
       tts.init(rate: savedRate, pitch: savedPitch),
       usageStats.init(),
+      sound.init(),
     ]);
 
     await _loadPreferences();
@@ -202,6 +207,7 @@ class AppState extends ChangeNotifier {
     _speechRate = prefs.getDouble('speechRate') ?? 0.45;
     _pitch = prefs.getDouble('pitch') ?? 1.0;
     _darkMode = prefs.getBool('darkMode') ?? true;
+    _soundEffects = prefs.getBool('soundEffects') ?? false;
     // TTS rate/pitch already set during init() — no redundant calls needed
     _hiddenSymbolIds =
         (prefs.getStringList('hiddenSymbolIds') ?? []).toSet();
@@ -228,6 +234,7 @@ class AppState extends ChangeNotifier {
   }
 
   void addToSentence(AacSymbol symbol) {
+    if (_soundEffects) sound.playTap();
     _sentenceSymbols.add(symbol);
     usageStats.recordTap(symbol.id);
     notifyListeners();
@@ -246,6 +253,7 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> speakSymbol(AacSymbol symbol) async {
+    if (_soundEffects) sound.playTap();
     await tts.speak(symbol.speakText);
     _addRecentPhrase(symbol.speakText);
     usageStats.recordTap(symbol.id);
@@ -340,6 +348,13 @@ class AppState extends ChangeNotifier {
     _darkMode = dark;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('darkMode', dark);
+    notifyListeners();
+  }
+
+  Future<void> setSoundEffects(bool enabled) async {
+    _soundEffects = enabled;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('soundEffects', enabled);
     notifyListeners();
   }
 
@@ -475,6 +490,7 @@ class AppState extends ChangeNotifier {
   void dispose() {
     tts.dispose();
     vision.dispose();
+    sound.dispose();
     super.dispose();
   }
 }

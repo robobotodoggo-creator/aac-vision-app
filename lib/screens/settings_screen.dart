@@ -53,6 +53,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       color: cs.primary,
                     ),
                   ),
+                  SwitchListTile(
+                    title: Text('Tap Sound Effects',
+                        style:
+                            TextStyle(color: cs.onSurface, fontSize: 18)),
+                    subtitle: Text(
+                        'Play a click sound when tapping symbols',
+                        style: TextStyle(color: cs.onSurfaceVariant)),
+                    value: state.soundEffects,
+                    onChanged: (v) => state.setSoundEffects(v),
+                    secondary: Icon(
+                      state.soundEffects
+                          ? Icons.volume_up
+                          : Icons.volume_off,
+                      color: cs.primary,
+                    ),
+                  ),
                 ],
               ),
 
