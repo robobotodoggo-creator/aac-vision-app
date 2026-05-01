@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -39,6 +40,8 @@ class AppState extends ChangeNotifier {
   bool _onboardingComplete = false;
   bool _initialized = false;
   String? _visionError;
+  StreamSubscription<List<String>>? _detectedObjectsSub;
+  StreamSubscription<String>? _visionErrorSub;
 
   bool get initialized => _initialized;
   List<AacSymbol> get allSymbols => _allSymbols;
@@ -122,8 +125,8 @@ class AppState extends ChangeNotifier {
 
     await _loadPreferences();
 
-    vision.detectedObjects.listen(_onObjectsDetected);
-    vision.errors.listen(_onVisionError);
+    _detectedObjectsSub = vision.detectedObjects.listen(_onObjectsDetected);
+    _visionErrorSub = vision.errors.listen(_onVisionError);
 
     _initialized = true;
     notifyListeners();
@@ -498,6 +501,8 @@ class AppState extends ChangeNotifier {
 
   @override
   void dispose() {
+    _detectedObjectsSub?.cancel();
+    _visionErrorSub?.cancel();
     tts.dispose();
     vision.dispose();
     sound.dispose();
