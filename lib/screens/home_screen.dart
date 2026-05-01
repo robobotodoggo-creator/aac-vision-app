@@ -7,6 +7,7 @@ import '../widgets/sentence_bar.dart';
 import '../widgets/camera_preview.dart';
 import '../widgets/recent_phrases_bar.dart';
 import '../widgets/symbol_search_bar.dart';
+import '../widgets/onboarding_overlay.dart';
 import 'settings_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,6 +29,12 @@ class HomeScreen extends StatelessWidget {
                     else
                       _buildPortraitLayout(context, state),
                     const CameraPreviewWidget(),
+                    if (!state.onboardingComplete)
+                      Positioned.fill(
+                        child: OnboardingOverlay(
+                          onComplete: () => state.completeOnboarding(),
+                        ),
+                      ),
                   ],
                 );
               },

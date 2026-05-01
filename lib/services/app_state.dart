@@ -36,6 +36,7 @@ class AppState extends ChangeNotifier {
   double _pitch = 1.0;
   bool _darkMode = true;
   bool _soundEffects = false;
+  bool _onboardingComplete = false;
   bool _initialized = false;
   String? _visionError;
 
@@ -54,6 +55,7 @@ class AppState extends ChangeNotifier {
   double get pitch => _pitch;
   bool get darkMode => _darkMode;
   bool get soundEffects => _soundEffects;
+  bool get onboardingComplete => _onboardingComplete;
   String? get visionError => _visionError;
 
   List<String> get categories {
@@ -208,6 +210,7 @@ class AppState extends ChangeNotifier {
     _pitch = prefs.getDouble('pitch') ?? 1.0;
     _darkMode = prefs.getBool('darkMode') ?? true;
     _soundEffects = prefs.getBool('soundEffects') ?? false;
+    _onboardingComplete = prefs.getBool('onboardingComplete') ?? false;
     // TTS rate/pitch already set during init() — no redundant calls needed
     _hiddenSymbolIds =
         (prefs.getStringList('hiddenSymbolIds') ?? []).toSet();
@@ -355,6 +358,13 @@ class AppState extends ChangeNotifier {
     _soundEffects = enabled;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('soundEffects', enabled);
+    notifyListeners();
+  }
+
+  Future<void> completeOnboarding() async {
+    _onboardingComplete = true;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboardingComplete', true);
     notifyListeners();
   }
 
