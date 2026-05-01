@@ -493,6 +493,8 @@ class AppState extends ChangeNotifier {
           }
           notifyListeners();
         }
+      }).catchError((_) {
+        // Cloud is optional — fall back to on-device suggestions silently
       });
     }
 

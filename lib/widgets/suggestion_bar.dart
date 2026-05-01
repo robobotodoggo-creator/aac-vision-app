@@ -26,7 +26,7 @@ class SuggestionBar extends StatelessWidget {
                   'Suggested',
                   style: TextStyle(
                     color: cs.onPrimaryContainer,
-                    fontSize: 12,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

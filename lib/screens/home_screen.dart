@@ -155,7 +155,7 @@ class HomeScreen extends StatelessWidget {
                       Text(
                         'Settings',
                         style: TextStyle(
-                            color: cs.onSurfaceVariant, fontSize: 14),
+                            color: cs.onSurfaceVariant, fontSize: 16),
                       ),
                     ],
                   ),

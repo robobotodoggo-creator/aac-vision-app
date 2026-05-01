@@ -216,3 +216,17 @@
 **Learned:** Nothing surprising — straightforward fix. All backlog items are now complete except physical device testing.
 **Blocked:** Nothing
 **Next:** Physical device testing is the only remaining task. All code backlog items are complete.
+
+## 2026-05-01 — Claude Opus 4.6
+**Task:** Accessibility audit and fixes — enforce 16sp minimum text and 60dp minimum touch targets
+**Done:**
+- Ran full codebase audit; discovered 3 text-size violations and 3 touch-target violations against project design principles
+- Fixed font size 14→16sp in home_screen.dart (sidebar Settings label) and usage_stats_screen.dart (summary card titles)
+- Fixed font size 12→16sp in suggestion_bar.dart ("Suggested" label)
+- Increased recent_phrases_bar.dart bar height 52→68dp and chip minHeight 36→60dp
+- Increased manage_symbols_screen.dart icon button constraints from 48x48 to 60x60dp (delete + visibility toggles)
+- Added `.catchError()` to unawaited cloud suggestion fetch in app_state.dart to prevent unhandled Future errors
+- `flutter analyze` passes clean
+**Learned:** The original codebase had several spots that slipped under the 16sp/60dp accessibility minimums stated in CLAUDE.md. These are easy to miss during incremental development — periodic audits catch them. The cloud suggestion `.then()` chain had no error handler, which would surface as an unhandled exception in debug mode if the API request failed after the CloudService catch block (e.g., during JSON parsing of the response).
+**Blocked:** Nothing
+**Next:** Physical device testing is the only remaining task. All code backlog items are complete.

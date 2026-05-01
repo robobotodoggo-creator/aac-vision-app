@@ -442,7 +442,7 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                                   onPressed: () => _confirmDelete(
                                       state, symbol.id, symbol.label),
                                   constraints: const BoxConstraints(
-                                      minHeight: 48, minWidth: 48),
+                                      minHeight: 60, minWidth: 60),
                                 ),
                               IconButton(
                                 icon: Icon(
@@ -457,7 +457,7 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                                 onPressed: () =>
                                     state.toggleSymbolVisibility(symbol.id),
                                 constraints: const BoxConstraints(
-                                    minHeight: 48, minWidth: 48),
+                                    minHeight: 60, minWidth: 60),
                               ),
                               const SizedBox(width: 8),
                               ReorderableDragStartListener(

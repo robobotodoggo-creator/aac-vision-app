@@ -1,7 +1,9 @@
 # AAC Vision App Backlog
 
 ## HIGH Priority
-(none — all completed)
+- [x] Fix text below 16sp minimum in 3 locations (accessibility violation of project design principles)
+- [x] Fix touch targets below 60dp minimum in 3 locations (accessibility violation of project design principles)
+- [x] Add .catchError() to unawaited cloud suggestion fetch in AppState (error handling gap)
 
 ## MEDIUM Priority
 - [x] Add landscape layout optimization for tablet (S10+ is 12.4")

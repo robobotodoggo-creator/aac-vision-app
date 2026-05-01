@@ -15,7 +15,7 @@ class RecentPhrasesBar extends StatelessWidget {
           return const SizedBox.shrink();
         }
         return Container(
-          height: 52,
+          height: 68,
           color: cs.surfaceContainerHigh,
           child: Row(
             children: [
@@ -43,7 +43,7 @@ class RecentPhrasesBar extends StatelessWidget {
                             state.speakPhrase(phrase);
                           },
                           child: Container(
-                            constraints: const BoxConstraints(minHeight: 36),
+                            constraints: const BoxConstraints(minHeight: 60),
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 6),
                             child: Center(

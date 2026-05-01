@@ -23,22 +23,28 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only rem
 - TTS service with persisted rate/pitch and cached initialization
 - Vision service (Google ML Kit, ~5fps) with error handling
 - Context service (JSON-based object-to-symbol mappings)
-- Cloud service (Claude API, 30s cache, 5s timeout)
+- Cloud service (Claude API, 30s cache, 5s timeout) with error handling on fetch
 - Settings screen (appearance, camera, cloud, API key, grid size, TTS, symbols, usage stats)
 - Loading screen during initialization
 - Suggestion bar with gradient fade overflow indicator
 - Material 3 theming, high contrast, wakelock, haptic feedback
 - Android permissions (CAMERA, INTERNET, VIBRATE, WAKE_LOCK)
-- Recent phrases bar (persisted, tappable)
+- Recent phrases bar (persisted, tappable, 60dp touch targets)
 - Visual flash animation on tile tap
 - **Stream subscriptions properly stored and cancelled in dispose()**
+- **All text 16sp+, all touch targets 60dp+ — verified via audit**
 
 ## What Needs Attention Next
 1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 2. **Java runtime** — APK builds require Java; not installed on current dev machine
 
 ## Key Files Changed This Shift
-- `lib/services/app_state.dart` — Added stream subscription storage and cancellation in dispose()
+- `lib/screens/home_screen.dart` — Fixed sidebar Settings label font size 14→16sp
+- `lib/screens/usage_stats_screen.dart` — Fixed summary card title font size 14→16sp
+- `lib/widgets/suggestion_bar.dart` — Fixed "Suggested" label font size 12→16sp
+- `lib/widgets/recent_phrases_bar.dart` — Increased bar height 52→68dp, chip minHeight 36→60dp
+- `lib/screens/manage_symbols_screen.dart` — Increased icon button constraints 48→60dp
+- `lib/services/app_state.dart` — Added .catchError() to cloud suggestion fetch
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)

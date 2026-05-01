@@ -181,7 +181,7 @@ class UsageStatsScreen extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             title,
-            style: TextStyle(color: cs.onSurfaceVariant, fontSize: 14),
+            style: TextStyle(color: cs.onSurfaceVariant, fontSize: 16),
             textAlign: TextAlign.center,
           ),
         ],
