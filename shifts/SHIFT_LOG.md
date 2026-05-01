@@ -194,3 +194,14 @@
 **Learned:** Using `Positioned.fill` inside the existing HomeScreen Stack is cleaner than wrapping HomeScreen in a new Stack — it keeps the overlay as a sibling of the camera PiP and avoids nesting complexity. The `scrim` color from ColorScheme with 0.85 alpha gives a good semi-transparent overlay that works well in both dark and light themes.
 **Blocked:** Nothing
 **Next:** All backlog items complete except physical device testing. No remaining LOW priority items.
+
+## 2026-04-30 — Claude Opus 4.6
+**Task:** Shift check-in — verify codebase health, look for remaining work
+**Done:**
+- Ran `flutter analyze` — passes clean, zero issues
+- Audited full codebase for missed issues: no TODOs/FIXMEs, no null safety problems, no deprecated APIs, all controllers properly disposed
+- Discovered one cosmetic issue: stream subscriptions in `AppState.init()` (lines 125-126) aren't stored or cancelled in `dispose()` — not a practical leak since `vision.dispose()` closes the underlying `StreamController`s, but added to LOW backlog for correctness
+- Confirmed all HIGH, MEDIUM, and LOW backlog items complete; only remaining item is physical device testing
+**Learned:** The codebase is in good shape. Stream subscription cleanup is technically best practice even when the StreamController itself is disposed, because closing a controller doesn't cancel subscriptions — it sends a done event and the subscription stays allocated until GC. In this app it's irrelevant (AppState is a singleton) but worth noting.
+**Blocked:** No code work to do — all backlog items complete. Physical device testing requires hardware.
+**Next:** Physical device testing is the only remaining task. Consider adding new features to the backlog (e.g., multi-language support, symbol categories from camera context, caregiver mode).

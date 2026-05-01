@@ -22,6 +22,7 @@
 - [x] Add sound effects option for tile taps (in addition to TTS)
 - [x] Onboarding tutorial overlay for first launch
 - [x] Add `web/` to .gitignore (untracked Flutter web scaffold, not needed)
+- [ ] Store stream subscriptions in AppState and cancel in dispose() (discovered 2026-04-30 — cosmetic, not a practical leak since vision.dispose() closes the controllers)
 
 ## DONE
 - [x] Project scaffold and dependency setup
