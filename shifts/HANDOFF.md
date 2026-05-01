@@ -1,10 +1,10 @@
 # Handoff — Current State
 
 ## Last Updated
-2026-04-30 by Claude Opus 4.6
+2026-05-01 by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM, and LOW priority backlog items complete. Only remaining item is physical device testing (MEDIUM). `flutter analyze` passes clean. Full codebase audit found no issues — no TODOs, no null safety problems, no deprecated APIs, all controllers disposed. One cosmetic item added to LOW backlog (stream subscription cleanup in AppState).
+All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only remaining backlog item is physical device testing (MEDIUM). `flutter analyze` passes clean.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
@@ -31,15 +31,14 @@ All HIGH, MEDIUM, and LOW priority backlog items complete. Only remaining item i
 - Android permissions (CAMERA, INTERNET, VIBRATE, WAKE_LOCK)
 - Recent phrases bar (persisted, tappable)
 - Visual flash animation on tile tap
+- **Stream subscriptions properly stored and cancelled in dispose()**
 
 ## What Needs Attention Next
 1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 2. **Java runtime** — APK builds require Java; not installed on current dev machine
-3. **Stream subscription cleanup** — LOW priority cosmetic fix in AppState (added to backlog)
 
 ## Key Files Changed This Shift
-- `shifts/BACKLOG.md` — Added discovered LOW priority item (stream subscription cleanup)
-- No code changes this shift — codebase audit only
+- `lib/services/app_state.dart` — Added stream subscription storage and cancellation in dispose()
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)

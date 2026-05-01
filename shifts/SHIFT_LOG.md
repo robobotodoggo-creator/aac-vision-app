@@ -205,3 +205,14 @@
 **Learned:** The codebase is in good shape. Stream subscription cleanup is technically best practice even when the StreamController itself is disposed, because closing a controller doesn't cancel subscriptions — it sends a done event and the subscription stays allocated until GC. In this app it's irrelevant (AppState is a singleton) but worth noting.
 **Blocked:** No code work to do — all backlog items complete. Physical device testing requires hardware.
 **Next:** Physical device testing is the only remaining task. Consider adding new features to the backlog (e.g., multi-language support, symbol categories from camera context, caregiver mode).
+
+## 2026-05-01 — Claude Opus 4.6
+**Task:** Fix stream subscription cleanup in AppState (LOW priority backlog item)
+**Done:**
+- Added `dart:async` import and two `StreamSubscription` fields (`_detectedObjectsSub`, `_visionErrorSub`) to AppState
+- Stored return values from `vision.detectedObjects.listen()` and `vision.errors.listen()` in init()
+- Added `cancel()` calls for both subscriptions in `dispose()`, before service disposal
+- `flutter analyze` passes clean
+**Learned:** Nothing surprising — straightforward fix. All backlog items are now complete except physical device testing.
+**Blocked:** Nothing
+**Next:** Physical device testing is the only remaining task. All code backlog items are complete.
