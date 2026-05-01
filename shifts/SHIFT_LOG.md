@@ -180,3 +180,17 @@
 **Learned:** `audioplayers` `BytesSource` accepts a raw `Uint8List` WAV, eliminating the need for asset files. Generating the WAV programmatically keeps the project simpler — no audio files to manage. The sound effect is intentionally fire-and-forget (not awaited) so it doesn't block TTS playback.
 **Blocked:** Nothing
 **Next:** Onboarding tutorial overlay. Device testing still needed.
+
+## 2026-04-30 — Claude Opus 4.6
+**Task:** Onboarding tutorial overlay for first launch (LOW priority)
+**Done:**
+- Created `OnboardingOverlay` widget with 5 tutorial steps: welcome, tap to speak, build sentences, browse categories, customize settings
+- Each step has an emoji illustration, title, and description with Next/Skip buttons and progress dots
+- Overlay renders as a full-screen semi-transparent layer on top of HomeScreen via `Positioned.fill` in the existing Stack
+- Added `onboardingComplete` flag to AppState with SharedPreferences persistence (defaults to false)
+- `completeOnboarding()` method sets the flag and persists; overlay disappears via Consumer rebuild
+- All text 18sp+, buttons 60dp height, high contrast — meets AAC accessibility requirements
+- `flutter analyze` passes clean
+**Learned:** Using `Positioned.fill` inside the existing HomeScreen Stack is cleaner than wrapping HomeScreen in a new Stack — it keeps the overlay as a sibling of the camera PiP and avoids nesting complexity. The `scrim` color from ColorScheme with 0.85 alpha gives a good semi-transparent overlay that works well in both dark and light themes.
+**Blocked:** Nothing
+**Next:** All backlog items complete except physical device testing. No remaining LOW priority items.
