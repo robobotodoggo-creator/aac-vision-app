@@ -1,10 +1,10 @@
 # Handoff — Current State
 
 ## Last Updated
-2026-05-01 by Claude Opus 4.6
+2026-05-02 by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only remaining backlog item is physical device testing (MEDIUM). `flutter analyze` passes clean. Full codebase audit confirms no new issues.
+All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only remaining backlog item is physical device testing (MEDIUM). `flutter analyze` passes clean.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
@@ -14,7 +14,7 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only rem
 - **Dark/light theme toggle** — Material 3 theming, all widgets use ColorScheme
 - **Custom symbol creation** — add new symbols with emoji + label via FAB
 - **Export/import symbol config** — JSON format via share sheet / file picker
-- **Usage analytics** — local-only tracking, therapist report export
+- **Usage analytics** — local-only tracking, therapist report export, clear stats via AppState
 - Symbol grid with category tabs
 - **Symbol customization** — reorder, show/hide, delete custom symbols
 - **Symbol search/filter** — search bar filters by label within category
@@ -34,6 +34,8 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only rem
 - **Stream subscriptions properly stored and cancelled in dispose()**
 - **All text 16sp+, all touch targets 60dp+ — verified via audit**
 - **All destructive-action colors use ColorScheme.error — no hardcoded reds**
+- **All service calls from widgets route through AppState for proper Provider rebuilds**
+- **TtsService.dispose() uses unawaited() for explicit Future handling**
 
 ## What Needs Attention Next
 1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
@@ -41,8 +43,9 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only rem
 3. **Dependencies** — Minor version updates available (cupertino_icons, shared_preferences, camera); no urgency
 
 ## Key Files Changed This Shift
-- No code changes — health check and audit only
-- `shifts/SHIFT_LOG.md` — Added shift check-in entry
+- `lib/services/app_state.dart` — Added `clearUsageStats()` method
+- `lib/screens/usage_stats_screen.dart` — Replaced `markNeedsBuild()` hack with `state.clearUsageStats()`
+- `lib/services/tts_service.dart` — Wrapped unawaited `_tts.stop()` with `unawaited()`
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)

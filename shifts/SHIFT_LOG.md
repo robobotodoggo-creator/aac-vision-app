@@ -254,3 +254,15 @@
 **Learned:** The codebase is stable and well-maintained. The two remaining hardcoded colors (`Colors.green[700]` on the Speak button, `Colors.blue` as Material 3 seed) are intentional design decisions documented in previous shift logs. Dependency updates are all minor patch versions — no urgency.
 **Blocked:** No code work to do — all backlog items complete. Physical device testing requires hardware access.
 **Next:** Physical device testing is the only remaining task. Consider adding widget tests or accessibility semantics labels to the backlog if the project needs to grow.
+
+## 2026-05-02 — Claude Opus 4.6
+**Task:** Shift check-in — codebase audit, fix discovered code smells
+**Done:**
+- Ran `flutter analyze` — passes clean, zero issues
+- Ran thorough codebase audit: TODO/FIXME, deprecated APIs, hardcoded colors, text sizes, touch targets, dispose/cleanup, stream subscriptions, unawaited Futures, security — found 2 fixable issues
+- Fixed `(context as Element).markNeedsBuild()` hack in UsageStatsScreen — added `clearUsageStats()` method to AppState that clears stats and calls `notifyListeners()`, so the Consumer rebuilds through proper Provider state management
+- Fixed unawaited `_tts.stop()` in TtsService.dispose() — wrapped with `unawaited()` from `dart:async` to make intent explicit
+- `flutter analyze` passes clean after fixes
+**Learned:** The `markNeedsBuild()` pattern was used because `UsageStatsService.clearStats()` doesn't trigger Provider rebuilds — it's a standalone service, not a ChangeNotifier. The proper fix is to route the call through AppState which owns the Provider relationship. This pattern could recur anywhere a service method is called directly from a widget without going through AppState.
+**Blocked:** Nothing
+**Next:** Physical device testing is the only remaining task. All code backlog items are complete.

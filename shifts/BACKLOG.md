@@ -17,6 +17,8 @@
 - [ ] Test on physical Android device
 
 ## LOW Priority
+- [x] Fix markNeedsBuild() hack in UsageStatsScreen — route stats clear through AppState.notifyListeners() (discovered 2026-05-02)
+- [x] Fix unawaited _tts.stop() in TtsService.dispose() — wrap with unawaited() for clarity (discovered 2026-05-02)
 - [x] Replace hardcoded destructive-action colors with ColorScheme.error (discovered 2026-05-01 — leftover from theming migration)
 - [x] Custom symbol creation (add new symbols with emoji + label)
 - [x] Export/import symbol configurations as JSON
