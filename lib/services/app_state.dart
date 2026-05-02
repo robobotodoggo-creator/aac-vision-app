@@ -501,6 +501,11 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> clearUsageStats() async {
+    await usageStats.clearStats();
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _detectedObjectsSub?.cancel();

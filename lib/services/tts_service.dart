@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class TtsService {
@@ -36,6 +37,6 @@ class TtsService {
   }
 
   void dispose() {
-    _tts.stop();
+    unawaited(_tts.stop());
   }
 }

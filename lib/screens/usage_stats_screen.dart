@@ -58,13 +58,11 @@ class UsageStatsScreen extends StatelessWidget {
                       ),
                     );
                     if (confirmed == true) {
-                      await stats.clearStats();
+                      await state.clearUsageStats();
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Usage data cleared')),
                         );
-                        // Force rebuild
-                        (context as Element).markNeedsBuild();
                       }
                     }
                   }
