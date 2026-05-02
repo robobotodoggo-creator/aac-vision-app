@@ -33,18 +33,16 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only rem
 - Visual flash animation on tile tap
 - **Stream subscriptions properly stored and cancelled in dispose()**
 - **All text 16sp+, all touch targets 60dp+ — verified via audit**
+- **All destructive-action colors use ColorScheme.error — no hardcoded reds**
 
 ## What Needs Attention Next
 1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 2. **Java runtime** — APK builds require Java; not installed on current dev machine
 
 ## Key Files Changed This Shift
-- `lib/screens/home_screen.dart` — Fixed sidebar Settings label font size 14→16sp
-- `lib/screens/usage_stats_screen.dart` — Fixed summary card title font size 14→16sp
-- `lib/widgets/suggestion_bar.dart` — Fixed "Suggested" label font size 12→16sp
-- `lib/widgets/recent_phrases_bar.dart` — Increased bar height 52→68dp, chip minHeight 36→60dp
-- `lib/screens/manage_symbols_screen.dart` — Increased icon button constraints 48→60dp
-- `lib/services/app_state.dart` — Added .catchError() to cloud suggestion fetch
+- `lib/screens/manage_symbols_screen.dart` — Replaced 5× hardcoded `Colors.redAccent` with `cs.error`
+- `lib/screens/settings_screen.dart` — Replaced 1× hardcoded `Colors.redAccent` with `cs.error`
+- `lib/screens/usage_stats_screen.dart` — Replaced 3× hardcoded `Colors.red` with `cs.error`
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)

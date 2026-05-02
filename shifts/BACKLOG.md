@@ -17,6 +17,7 @@
 - [ ] Test on physical Android device
 
 ## LOW Priority
+- [x] Replace hardcoded destructive-action colors with ColorScheme.error (discovered 2026-05-01 — leftover from theming migration)
 - [x] Custom symbol creation (add new symbols with emoji + label)
 - [x] Export/import symbol configurations as JSON
 - [x] Add usage analytics (local only — which symbols used most, for therapist reports)

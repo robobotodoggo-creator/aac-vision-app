@@ -230,3 +230,16 @@
 **Learned:** The original codebase had several spots that slipped under the 16sp/60dp accessibility minimums stated in CLAUDE.md. These are easy to miss during incremental development — periodic audits catch them. The cloud suggestion `.then()` chain had no error handler, which would surface as an unhandled exception in debug mode if the API request failed after the CloudService catch block (e.g., during JSON parsing of the response).
 **Blocked:** Nothing
 **Next:** Physical device testing is the only remaining task. All code backlog items are complete.
+
+## 2026-05-01 — Claude Opus 4.6
+**Task:** Complete theming migration — replace hardcoded destructive-action colors with ColorScheme.error
+**Done:**
+- Audited full codebase for issues; found 9 hardcoded `Colors.redAccent`/`Colors.red` across 3 files that survived the dark/light theme migration
+- Replaced all with `cs.error` / `dcs.error` so destructive actions (delete, reset, clear) adapt to the active theme
+- Files changed: manage_symbols_screen.dart (5 instances), settings_screen.dart (1), usage_stats_screen.dart (3)
+- Removed `const` from widgets that needed runtime color lookup
+- Left `Colors.green[700]` on the Speak button intentionally — green="go/speak" is a semantic AAC UX choice with no Material 3 equivalent
+- `flutter analyze` passes clean
+**Learned:** Material 3's `ColorScheme.error` is the proper semantic token for destructive actions. The previous theming migration covered ~100 hardcoded colors but missed these because red/redAccent are visually functional in both themes — they just don't participate in the theme system. `const` widgets containing color references can't use runtime `cs.*` lookups; removing `const` is the correct fix.
+**Blocked:** Nothing
+**Next:** Physical device testing is the only remaining task. All code backlog items are complete.
