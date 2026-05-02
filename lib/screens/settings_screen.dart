@@ -94,8 +94,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
                       child: Text(
                         state.visionError!,
-                        style: const TextStyle(
-                            color: Colors.redAccent, fontSize: 16),
+                        style: TextStyle(
+                            color: cs.error, fontSize: 16),
                       ),
                     ),
                 ],

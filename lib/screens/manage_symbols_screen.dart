@@ -239,8 +239,8 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                 state.deleteCustomSymbol(symbolId);
                 Navigator.pop(ctx);
               },
-              child: const Text('Delete',
-                  style: TextStyle(color: Colors.redAccent, fontSize: 16)),
+              child: Text('Delete',
+                  style: TextStyle(color: cs.error, fontSize: 16)),
             ),
           ],
         );
@@ -293,9 +293,9 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                                   state.resetSymbolCustomizations();
                                   Navigator.pop(ctx);
                                 },
-                                child: const Text('Reset',
+                                child: Text('Reset',
                                     style: TextStyle(
-                                        color: Colors.redAccent,
+                                        color: dcs.error,
                                         fontSize: 16)),
                               ),
                             ],
@@ -331,16 +331,16 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                       ],
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'reset',
                     child: Row(
                       children: [
                         Icon(Icons.restore,
-                            color: Colors.redAccent, size: 22),
-                        SizedBox(width: 12),
+                            color: cs.error, size: 22),
+                        const SizedBox(width: 12),
                         Text('Reset All',
                             style: TextStyle(
-                                color: Colors.redAccent, fontSize: 16)),
+                                color: cs.error, fontSize: 16)),
                       ],
                     ),
                   ),
@@ -437,8 +437,8 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
                             children: [
                               if (isCustom)
                                 IconButton(
-                                  icon: const Icon(Icons.delete_outline,
-                                      color: Colors.redAccent, size: 24),
+                                  icon: Icon(Icons.delete_outline,
+                                      color: cs.error, size: 24),
                                   onPressed: () => _confirmDelete(
                                       state, symbol.id, symbol.label),
                                   constraints: const BoxConstraints(

@@ -51,8 +51,8 @@ class UsageStatsScreen extends StatelessWidget {
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(ctx, true),
-                            child: const Text('Clear',
-                                style: TextStyle(color: Colors.red)),
+                            child: Text('Clear',
+                                style: TextStyle(color: cs.error)),
                           ),
                         ],
                       ),
@@ -78,12 +78,12 @@ class UsageStatsScreen extends StatelessWidget {
                       contentPadding: EdgeInsets.zero,
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'clear',
                     child: ListTile(
-                      leading: Icon(Icons.delete_outline, color: Colors.red),
+                      leading: Icon(Icons.delete_outline, color: cs.error),
                       title:
-                          Text('Clear Data', style: TextStyle(color: Colors.red)),
+                          Text('Clear Data', style: TextStyle(color: cs.error)),
                       contentPadding: EdgeInsets.zero,
                     ),
                   ),
