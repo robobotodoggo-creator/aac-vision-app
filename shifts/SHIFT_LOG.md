@@ -315,3 +315,18 @@
 **Learned:** After 8+ audit shifts, the codebase is thoroughly hardened. Previous shifts caught and fixed all practical bugs (camera file leak, disposed-state crash, chip delete targeting, controller leaks, accessibility sizing, theming). The remaining audit surface is diminishing returns — theoretical edge cases in hardcoded data that can't occur in practice.
 **Blocked:** No code work to do — all backlog items complete. Physical device testing requires hardware.
 **Next:** Physical device testing is the only remaining task. Consider adding widget/integration tests or new features to the backlog to move the project forward.
+
+## 2026-05-03 — Claude Opus 4.6
+**Task:** Add widget test suite for core functionality
+**Done:**
+- Created comprehensive test suite with 25 tests covering model, state logic, and widget behavior
+- AacSymbol model tests: fromJson creation, toJson roundtrip integrity
+- AppState sentence logic tests: add, remove last, remove at index, clear, invalid index handling
+- AppState category/search tests: default category, category switching, search query clear on category change
+- SymbolTile widget tests: emoji+label rendering, 60dp min constraints, tap callback, long-press callback, 16sp font size
+- SentenceBar widget tests: empty placeholder, chip rendering, Speak button visibility, index-based chip delete, clear button, placeholder font size
+- Set up platform channel mocks (SharedPreferences, flutter_tts) for test environment
+- All 25 tests pass, `flutter analyze` clean
+**Learned:** AppState creates concrete service instances (TTS, UsageStats) internally that call platform channels even for pure-logic methods like `addToSentence()` (triggers `usageStats.recordTap()` → SharedPreferences). Mocking `SharedPreferences.setMockInitialValues({})` and adding a mock handler for the `flutter_tts` MethodChannel resolves this without needing dependency injection refactoring.
+**Blocked:** Nothing
+**Next:** Physical device testing is the only remaining task. Consider expanding tests (suggestion bar, grid, onboarding) or adding new features.

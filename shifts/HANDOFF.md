@@ -4,11 +4,12 @@
 2026-05-03 by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only remaining backlog item is physical device testing (MEDIUM). `flutter analyze` passes clean. This shift ran a deep audit and found no new issues — the codebase is stable after 8+ audit cycles.
+All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only remaining backlog item is physical device testing (MEDIUM). `flutter analyze` passes clean. A widget test suite (25 tests) was added this shift covering model, state logic, and widget behavior.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
 - 56 default AAC symbols across 7 categories (core, food, feelings, actions, people, places, emergency)
+- **Widget test suite** — 25 tests covering AacSymbol model, AppState logic, SymbolTile, SentenceBar
 - **Onboarding tutorial overlay** — 5-step first-launch walkthrough; persisted in SharedPreferences
 - **Tap sound effects** — programmatic WAV generation, toggle in Settings (off by default)
 - **Dark/light theme toggle** — Material 3 theming, all widgets use ColorScheme
@@ -45,10 +46,10 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only rem
 1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 2. **Java runtime** — APK builds require Java; not installed on current dev machine
 3. **Dependencies** — Minor version updates available (camera, cupertino_icons, shared_preferences, google_mlkit_object_detection, vibration); no urgency or security issues
-4. **New work** — All code backlog items are done. Consider adding widget/integration tests or new features to move the project forward.
+4. **Expand tests** — Consider adding tests for suggestion bar, grid widget, onboarding overlay, and settings screen
 
 ## Key Files Changed This Shift
-- None — clean audit, no code changes needed
+- `test/widget_test.dart` — replaced placeholder test with 25-test suite
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)
