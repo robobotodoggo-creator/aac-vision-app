@@ -1,10 +1,10 @@
 # Handoff — Current State
 
 ## Last Updated
-2026-05-02 (night) by Claude Opus 4.6
+2026-05-02 (late night) by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only remaining backlog item is physical device testing (MEDIUM). `flutter analyze` passes clean. This shift found and fixed 3 real bugs via deep codebase audit — a critical camera image file leak, a cloud callback crash risk, and a dialog controller memory leak.
+All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only remaining backlog item is physical device testing (MEDIUM). `flutter analyze` passes clean. This shift found and fixed a UX bug in the sentence builder — chip delete buttons were all targeting the last symbol instead of the tapped one.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
@@ -39,6 +39,7 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only rem
 - **Camera frame temp files cleaned up after ML Kit processing (prevents disk exhaustion)**
 - **Cloud suggestion callback guards against disposed AppState (prevents crash)**
 - **Dialog TextEditingControllers properly disposed on close**
+- **Sentence bar chip delete targets correct symbol via index-based removal**
 
 ## What Needs Attention Next
 1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
@@ -46,9 +47,8 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. The only rem
 3. **Dependencies** — Minor version updates available (cupertino_icons, shared_preferences, camera); no urgency
 
 ## Key Files Changed This Shift
-- `lib/services/vision_service.dart` — Added `dart:io` import, delete temp image file in `_processFrame()` finally block
-- `lib/services/app_state.dart` — Added `_disposed` flag, guard cloud suggestion `.then()` callback, set flag in `dispose()`
-- `lib/screens/manage_symbols_screen.dart` — Dispose TextEditingControllers via `showDialog().then()`
+- `lib/services/app_state.dart` — Added `removeFromSentenceAt(int index)` for index-based sentence symbol removal
+- `lib/widgets/sentence_bar.dart` — Switched to `ListView.builder`, each chip's `onDeleted` now removes that specific symbol
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)

@@ -7,6 +7,7 @@
 - [x] Fix camera image file leak — takePicture() temp files never deleted, accumulates ~18k files/hour at 5fps (discovered 2026-05-02)
 - [x] Fix cloud suggestion callback — notifyListeners() on disposed AppState crashes in debug mode (discovered 2026-05-02)
 - [x] Fix TextEditingController leaks in add-symbol dialog — controllers never disposed (discovered 2026-05-02)
+- [x] Fix sentence bar chip delete targeting wrong symbol — all chips called removeLastFromSentence() instead of removing the tapped chip (discovered 2026-05-02)
 
 ## MEDIUM Priority
 - [x] Add landscape layout optimization for tablet (S10+ is 12.4")

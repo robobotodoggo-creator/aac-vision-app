@@ -290,3 +290,16 @@
 **Learned:** The camera image file leak was the most serious find — previous audits checked for stream leaks and dispose() patterns but missed that `CameraController.takePicture()` writes to the filesystem. At 5fps, that's ~432k files/day if the camera runs continuously. The `InputImage.fromFilePath()` API reads the file but doesn't own or clean it up. This kind of resource leak is invisible to static analysis and only surfaces under sustained use. Future audits should explicitly check for filesystem side effects in hot loops.
 **Blocked:** Nothing
 **Next:** Physical device testing is the only remaining task. All code backlog items are complete.
+
+## 2026-05-02 — Claude Opus 4.6
+**Task:** Shift check-in — codebase audit, fix discovered UX bug
+**Done:**
+- Ran `flutter analyze` — passes clean, zero issues
+- Ran deep audit covering race conditions, async disposal, edge cases in import/export, widget rebuild efficiency, null safety, and sentence builder logic
+- Found and fixed sentence bar delete-wrong-chip bug: every chip's X button called `removeLastFromSentence()`, always deleting the last symbol regardless of which chip was tapped. For AAC users building "I want water" and tapping X on "want", "water" would be deleted instead — unpredictable and confusing
+- Added `removeFromSentenceAt(int index)` to AppState for index-based deletion
+- Switched SentenceBar from `ListView` with `.map()` to `ListView.builder` so each chip's `onDeleted` passes the correct index
+- `flutter analyze` passes clean after fix
+**Learned:** The `.map()` pattern for building chip lists makes it easy to miss that the callback captures the wrong reference. Using `ListView.builder` with explicit index is both more efficient (lazy rendering) and eliminates the closure capture issue. Previous audits focused on memory/resource leaks and missed this user-facing logic bug. AAC apps need special attention to input predictability — every tap must do exactly what the user expects.
+**Blocked:** Nothing
+**Next:** Physical device testing is the only remaining task. All code backlog items are complete.
