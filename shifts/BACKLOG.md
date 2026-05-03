@@ -4,6 +4,9 @@
 - [x] Fix text below 16sp minimum in 3 locations (accessibility violation of project design principles)
 - [x] Fix touch targets below 60dp minimum in 3 locations (accessibility violation of project design principles)
 - [x] Add .catchError() to unawaited cloud suggestion fetch in AppState (error handling gap)
+- [x] Fix camera image file leak — takePicture() temp files never deleted, accumulates ~18k files/hour at 5fps (discovered 2026-05-02)
+- [x] Fix cloud suggestion callback — notifyListeners() on disposed AppState crashes in debug mode (discovered 2026-05-02)
+- [x] Fix TextEditingController leaks in add-symbol dialog — controllers never disposed (discovered 2026-05-02)
 
 ## MEDIUM Priority
 - [x] Add landscape layout optimization for tablet (S10+ is 12.4")

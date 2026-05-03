@@ -172,7 +172,11 @@ class _ManageSymbolsScreenState extends State<ManageSymbolsScreen> {
           },
         );
       },
-    );
+    ).then((_) {
+      labelController.dispose();
+      speakController.dispose();
+      emojiController.dispose();
+    });
   }
 
   Future<void> _exportConfig(AppState state) async {

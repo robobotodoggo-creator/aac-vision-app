@@ -277,3 +277,16 @@
 **Learned:** Codebase is stable across multiple check-in shifts. No code drift or regressions detected.
 **Blocked:** No code work to do — all backlog items complete. Physical device testing requires hardware.
 **Next:** Physical device testing is the only remaining task. Consider adding widget tests or integration tests to the backlog for long-term maintainability.
+
+## 2026-05-02 — Claude Opus 4.6
+**Task:** Deep codebase audit — find and fix bugs missed by previous check-in shifts
+**Done:**
+- Ran `flutter analyze` — passes clean, zero issues
+- Ran deep audit covering memory leaks, file descriptor exhaustion, crash-after-dispose, controller disposal, and edge cases
+- Fixed critical camera image file leak: `takePicture()` in `_processFrame()` creates temp files at ~5fps that were never deleted, causing unbounded disk usage (~18k files/hour). Added `File(imagePath).delete()` in the finally block.
+- Fixed cloud suggestion callback crash risk: the `.then()` callback on `cloud.getSuggestions()` could call `notifyListeners()` on a disposed `AppState`. Added `_disposed` flag, set in `dispose()`, checked before `notifyListeners()`.
+- Fixed TextEditingController memory leaks in `_showAddSymbolDialog()`: three controllers were created as local variables but never disposed. Added `.then()` on `showDialog()` to dispose all three when dialog closes.
+- `flutter analyze` passes clean after all fixes
+**Learned:** The camera image file leak was the most serious find — previous audits checked for stream leaks and dispose() patterns but missed that `CameraController.takePicture()` writes to the filesystem. At 5fps, that's ~432k files/day if the camera runs continuously. The `InputImage.fromFilePath()` API reads the file but doesn't own or clean it up. This kind of resource leak is invisible to static analysis and only surfaces under sustained use. Future audits should explicitly check for filesystem side effects in hot loops.
+**Blocked:** Nothing
+**Next:** Physical device testing is the only remaining task. All code backlog items are complete.

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_mlkit_object_detection/google_mlkit_object_detection.dart';
@@ -88,9 +89,11 @@ class VisionService {
     }
 
     _isProcessing = true;
+    String? imagePath;
     try {
       final image = await _cameraController!.takePicture();
-      final inputImage = InputImage.fromFilePath(image.path);
+      imagePath = image.path;
+      final inputImage = InputImage.fromFilePath(imagePath);
       final objects = await _objectDetector!.processImage(inputImage);
 
       final labels = <String>[];
@@ -110,6 +113,12 @@ class VisionService {
     } catch (e) {
       debugPrint('VisionService frame processing error: $e');
     } finally {
+      // Clean up the temp image file to prevent disk space exhaustion
+      if (imagePath != null) {
+        try {
+          await File(imagePath).delete();
+        } catch (_) {}
+      }
       _isProcessing = false;
     }
   }

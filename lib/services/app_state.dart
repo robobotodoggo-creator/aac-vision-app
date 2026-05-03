@@ -40,6 +40,7 @@ class AppState extends ChangeNotifier {
   bool _onboardingComplete = false;
   bool _initialized = false;
   String? _visionError;
+  bool _disposed = false;
   StreamSubscription<List<String>>? _detectedObjectsSub;
   StreamSubscription<String>? _visionErrorSub;
 
@@ -478,21 +479,20 @@ class AppState extends ChangeNotifier {
             recentPhrases: _recentPhrases,
           )
           .then((cloudSuggestions) {
-        if (cloudSuggestions != null) {
-          // Cloud suggestions are raw text — show as temporary symbols
-          for (final text in cloudSuggestions) {
-            if (!_suggestedSymbols.any((s) => s.speakText == text)) {
-              _suggestedSymbols.add(AacSymbol(
-                id: 'cloud_${text.hashCode}',
-                label: text,
-                speakText: text,
-                category: 'cloud',
-                emoji: '🤖',
-              ));
-            }
+        if (_disposed || cloudSuggestions == null) return;
+        // Cloud suggestions are raw text — show as temporary symbols
+        for (final text in cloudSuggestions) {
+          if (!_suggestedSymbols.any((s) => s.speakText == text)) {
+            _suggestedSymbols.add(AacSymbol(
+              id: 'cloud_${text.hashCode}',
+              label: text,
+              speakText: text,
+              category: 'cloud',
+              emoji: '🤖',
+            ));
           }
-          notifyListeners();
         }
+        notifyListeners();
       }).catchError((_) {
         // Cloud is optional — fall back to on-device suggestions silently
       });
@@ -508,6 +508,7 @@ class AppState extends ChangeNotifier {
 
   @override
   void dispose() {
+    _disposed = true;
     _detectedObjectsSub?.cancel();
     _visionErrorSub?.cancel();
     tts.dispose();
