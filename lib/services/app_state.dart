@@ -254,6 +254,13 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  void removeFromSentenceAt(int index) {
+    if (index >= 0 && index < _sentenceSymbols.length) {
+      _sentenceSymbols.removeAt(index);
+      notifyListeners();
+    }
+  }
+
   void clearSentence() {
     _sentenceSymbols.clear();
     notifyListeners();

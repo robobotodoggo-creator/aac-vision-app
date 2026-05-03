@@ -23,9 +23,11 @@ class SentenceBar extends StatelessWidget {
                         'Long-press tiles to build a sentence',
                         style: TextStyle(color: cs.outline, fontSize: 16),
                       )
-                    : ListView(
+                    : ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        children: state.sentenceSymbols.map((s) {
+                        itemCount: state.sentenceSymbols.length,
+                        itemBuilder: (context, index) {
+                          final s = state.sentenceSymbols[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 4, vertical: 8),
@@ -39,10 +41,10 @@ class SentenceBar extends StatelessWidget {
                               backgroundColor: cs.primaryContainer,
                               deleteIcon: Icon(Icons.close,
                                   size: 18, color: cs.onPrimaryContainer),
-                              onDeleted: () => state.removeLastFromSentence(),
+                              onDeleted: () => state.removeFromSentenceAt(index),
                             ),
                           );
-                        }).toList(),
+                        },
                       ),
               ),
               if (state.sentenceSymbols.isNotEmpty) ...[
