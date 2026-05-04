@@ -376,3 +376,19 @@
 **Learned:** `ExcludeSemantics` is important when wrapping composite widgets (emoji + label) with a single Semantics node — without it, TalkBack would announce the parent label AND each child text, creating noisy/confusing output for screen reader users. The pattern is: one Semantics node per interactive element with a clear label, exclude children that would duplicate information.
 **Blocked:** Nothing
 **Next:** Physical device testing is the only remaining task. All code backlog items are complete.
+
+## 2026-05-04 — Claude Opus 4.6
+**Task:** Shift check-in — codebase audit, harden persisted data parsing
+**Done:**
+- Ran `flutter analyze` — passes clean, zero issues
+- Ran full test suite — 65/65 tests pass
+- Ran deep codebase audit covering memory leaks, resource exhaustion, crash-after-dispose, JSON parsing resilience, cloud API response handling, race conditions
+- Fixed 3 persisted-data resilience issues:
+  - AppState `_loadPreferences()`: symbolOrder JSON parsing now wrapped in try-catch with fallback to empty map (prevents startup crash from corrupted SharedPreferences)
+  - AppState `_loadCustomSymbols()`: custom symbols JSON parsing now wrapped in try-catch with fallback to empty list (prevents startup crash from corrupted prefs)
+  - UsageStatsService `init()`: both symbolCounts and dailyCounts parsing wrapped in try-catch with fallback to empty maps
+- Hardened CloudService response parsing: replaced unsafe `content[0]['text']` chain with explicit null/bounds checks (`content as List?`, isEmpty check, safe cast to Map) — returns null gracefully instead of throwing inside outer try-catch
+- `flutter analyze` passes clean, all 65 tests pass after fixes
+**Learned:** Previous audits focused on resource leaks, dispose patterns, and UI bugs but missed that all SharedPreferences JSON parsing was unguarded. On Android, SharedPreferences can get corrupted by interrupted writes, app crashes during save, or storage issues. For an AAC accessibility tool, a startup crash from corrupted prefs is unacceptable — the user has no alternative communication method. Defensive parsing with fallback to defaults is essential at every persistence boundary.
+**Blocked:** Nothing
+**Next:** Physical device testing is the only remaining task. All code backlog items are complete.

@@ -4,7 +4,7 @@
 2026-05-04 by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical device testing (MEDIUM) still pending. `flutter analyze` passes clean. Test suite has 65 tests all passing.
+All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical device testing (MEDIUM) still pending. `flutter analyze` passes clean. Test suite has 65 tests all passing. SharedPreferences and cloud API parsing hardened against corrupted data.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
@@ -42,6 +42,8 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical dev
 - **Cloud suggestion callback guards against disposed AppState (prevents crash)**
 - **Dialog TextEditingControllers properly disposed on close**
 - **Sentence bar chip delete targets correct symbol via index-based removal**
+- **SharedPreferences JSON parsing resilient to corrupted data (try-catch with defaults)**
+- **Cloud API response parsing uses explicit null/bounds checks instead of relying on outer try-catch**
 
 ## What Needs Attention Next
 1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
@@ -49,13 +51,9 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical dev
 3. **Dependencies** — Minor version updates available (camera, cupertino_icons, shared_preferences, wakelock_plus); no urgency or security issues
 
 ## Key Files Changed This Shift
-- `lib/widgets/symbol_tile.dart` — Semantics with speakText label, ExcludeSemantics on emoji/label
-- `lib/widgets/sentence_bar.dart` — Semantics on chips (word position), clear button, speak button
-- `lib/screens/home_screen.dart` — Semantics on category buttons (sidebar + horizontal), settings button
-- `lib/widgets/recent_phrases_bar.dart` — Semantics on history icon, phrase chips
-- `lib/widgets/camera_preview.dart` — Semantics with image role on camera PiP
-- `lib/widgets/suggestion_bar.dart` — Semantics header on "Suggested" label
-- `lib/widgets/symbol_search_bar.dart` — Semantics on clear search button
+- `lib/services/app_state.dart` — try-catch around symbolOrder and customSymbols JSON parsing from SharedPreferences
+- `lib/services/usage_stats_service.dart` — try-catch around symbolCounts and dailyCounts JSON parsing
+- `lib/services/cloud_service.dart` — explicit null/bounds checks on API response content array
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)
