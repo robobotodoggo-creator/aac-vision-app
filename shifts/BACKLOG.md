@@ -22,7 +22,7 @@
 
 ## LOW Priority
 - [x] Add widget test suite for core functionality (model, state logic, SymbolTile, SentenceBar) — 25 tests (completed 2026-05-03)
-- [ ] Expand test coverage (suggestion bar, grid widget, onboarding overlay, settings screen)
+- [x] Expand test coverage (suggestion bar, grid widget, onboarding overlay, search bar, recent phrases bar, AppState logic) — 65 tests total (completed 2026-05-03)
 - [x] Fix markNeedsBuild() hack in UsageStatsScreen — route stats clear through AppState.notifyListeners() (discovered 2026-05-02)
 - [x] Fix unawaited _tts.stop() in TtsService.dispose() — wrap with unawaited() for clarity (discovered 2026-05-02)
 - [x] Replace hardcoded destructive-action colors with ColorScheme.error (discovered 2026-05-01 — leftover from theming migration)

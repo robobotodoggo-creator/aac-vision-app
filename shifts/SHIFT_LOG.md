@@ -330,3 +330,20 @@
 **Learned:** AppState creates concrete service instances (TTS, UsageStats) internally that call platform channels even for pure-logic methods like `addToSentence()` (triggers `usageStats.recordTap()` → SharedPreferences). Mocking `SharedPreferences.setMockInitialValues({})` and adding a mock handler for the `flutter_tts` MethodChannel resolves this without needing dependency injection refactoring.
 **Blocked:** Nothing
 **Next:** Physical device testing is the only remaining task. Consider expanding tests (suggestion bar, grid, onboarding) or adding new features.
+
+## 2026-05-03 — Claude Opus 4.6
+**Task:** Expand test coverage — suggestion bar, grid widget, onboarding overlay, search bar, recent phrases bar, and additional AppState logic (LOW priority backlog item)
+**Done:**
+- Expanded test suite from 25 to 65 tests (40 new tests)
+- OnboardingOverlay: 9 tests — first step render, Next advances step, Skip calls onComplete, Get Started on last step, Get Started calls onComplete, 5 progress dots, title 16sp+, description 16sp+, buttons 60dp height
+- SuggestionBar: 1 test — renders nothing when no suggestions
+- AacGrid: 2 tests — renders GridView, shows no tiles when empty
+- SymbolSearchBar: 4 tests — search icon, hint text with category name, no clear button when empty, text size 16sp
+- RecentPhrasesBar: 1 test — hidden when no recent phrases
+- AppState custom symbols: 9 tests — addCustomSymbol, deleteCustomSymbol, isCustomSymbol, filteredSymbols by category, filteredSymbols excludes hidden, toggleSymbolVisibility, search query filter, case-insensitive search, resetSymbolCustomizations
+- AppState defaults: 11 tests — darkMode, soundEffects, onboardingComplete, cameraEnabled, cloudEnabled, gridColumns, speechRate, pitch, initialized, recentPhrases, suggestedSymbols
+- AppState import/export: 3 tests — error on invalid JSON, loads custom symbols, loads hidden IDs
+- All 65 tests pass, `flutter analyze` clean
+**Learned:** `addCustomSymbol` uses `DateTime.now().millisecondsSinceEpoch` for IDs, which can collide when two calls execute within the same millisecond in fast test environments. Using `importSymbolConfig` with explicit IDs is the reliable approach for tests that need multiple symbols with distinct identities.
+**Blocked:** Nothing
+**Next:** Physical device testing is the only remaining task. All code backlog items are complete including expanded test coverage.
