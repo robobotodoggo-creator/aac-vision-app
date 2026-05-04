@@ -61,8 +61,10 @@ class CloudService {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body) as Map<String, dynamic>;
-        final content = data['content'] as List;
-        final text = content[0]['text'] as String;
+        final content = data['content'] as List?;
+        if (content == null || content.isEmpty) return null;
+        final text = (content[0] as Map<String, dynamic>?)?['text'] as String?;
+        if (text == null) return null;
         final suggestions = List<String>.from(json.decode(text) as List);
         _cachedSuggestions = suggestions;
         _lastRequest = DateTime.now();

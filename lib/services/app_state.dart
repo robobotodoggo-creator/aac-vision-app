@@ -154,11 +154,15 @@ class AppState extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final customJson = prefs.getString('customSymbols');
     if (customJson != null) {
-      final list = json.decode(customJson) as List;
-      _customSymbols = list
-          .map((s) => AacSymbol.fromJson(s as Map<String, dynamic>))
-          .toList();
-      _allSymbols.addAll(_customSymbols);
+      try {
+        final list = json.decode(customJson) as List;
+        _customSymbols = list
+            .map((s) => AacSymbol.fromJson(s as Map<String, dynamic>))
+            .toList();
+        _allSymbols.addAll(_customSymbols);
+      } catch (_) {
+        _customSymbols = [];
+      }
     }
   }
 
@@ -220,9 +224,13 @@ class AppState extends ChangeNotifier {
         (prefs.getStringList('hiddenSymbolIds') ?? []).toSet();
     final orderStr = prefs.getString('symbolOrder');
     if (orderStr != null) {
-      final decoded = json.decode(orderStr) as Map<String, dynamic>;
-      _symbolOrder = decoded.map(
-          (k, v) => MapEntry(k, (v as List).cast<String>()));
+      try {
+        final decoded = json.decode(orderStr) as Map<String, dynamic>;
+        _symbolOrder = decoded.map(
+            (k, v) => MapEntry(k, (v as List).cast<String>()));
+      } catch (_) {
+        _symbolOrder = {};
+      }
     }
     final apiKey = prefs.getString('apiKey');
     if (apiKey != null) cloud.setApiKey(apiKey);

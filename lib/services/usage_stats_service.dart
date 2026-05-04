@@ -24,13 +24,21 @@ class UsageStatsService {
     final prefs = await SharedPreferences.getInstance();
     final symbolJson = prefs.getString('usageSymbolCounts');
     if (symbolJson != null) {
-      final decoded = json.decode(symbolJson) as Map<String, dynamic>;
-      _symbolCounts = decoded.map((k, v) => MapEntry(k, v as int));
+      try {
+        final decoded = json.decode(symbolJson) as Map<String, dynamic>;
+        _symbolCounts = decoded.map((k, v) => MapEntry(k, v as int));
+      } catch (_) {
+        _symbolCounts = {};
+      }
     }
     final dailyJson = prefs.getString('usageDailyCounts');
     if (dailyJson != null) {
-      final decoded = json.decode(dailyJson) as Map<String, dynamic>;
-      _dailyCounts = decoded.map((k, v) => MapEntry(k, v as int));
+      try {
+        final decoded = json.decode(dailyJson) as Map<String, dynamic>;
+        _dailyCounts = decoded.map((k, v) => MapEntry(k, v as int));
+      } catch (_) {
+        _dailyCounts = {};
+      }
     }
   }
 
