@@ -360,3 +360,19 @@
 **Learned:** After 9+ audit shifts, the codebase is thoroughly hardened. The one legitimate gap is Semantics widgets for Android TalkBack support — not a bug but an accessibility enhancement that would help caregivers configuring the device. The audit agent flagged Color.lerp null return as a crash risk, but this is a false positive when both input colors are non-null ColorScheme properties.
 **Blocked:** No code work to do — all backlog items complete. Physical device testing requires hardware.
 **Next:** Physical device testing is the only remaining task. TalkBack accessibility added to LOW backlog for future work.
+
+## 2026-05-04 — Claude Opus 4.6
+**Task:** Add Semantics widgets for Android TalkBack support (LOW priority backlog item)
+**Done:**
+- Added `Semantics` wrappers to all interactive widgets across 7 files for Android TalkBack screen reader support
+- SymbolTile: label with `speakText`, button role, hint describing tap/long-press actions; `ExcludeSemantics` on emoji and label text to prevent redundant announcements
+- SentenceBar: chips labeled with word position ("word 1", "word 2"), clear button labeled "Clear sentence", speak button labeled "Speak sentence" with hint
+- HomeScreen: category buttons (both sidebar and horizontal tabs) labeled with category name and selected state; sidebar settings button with label and `ExcludeSemantics` on child content
+- RecentPhrasesBar: history icon labeled "Recent phrases", each phrase chip labeled with phrase text, button role, hint "Tap to speak this phrase", `ExcludeSemantics` on inner text
+- CameraPreview: labeled as "Camera preview, detecting objects for suggestions" with image role
+- SuggestionBar: "Suggested" text marked as header for TalkBack navigation
+- SymbolSearchBar: clear button wrapped with "Clear search" label
+- `flutter analyze` passes clean, all 65 tests pass
+**Learned:** `ExcludeSemantics` is important when wrapping composite widgets (emoji + label) with a single Semantics node — without it, TalkBack would announce the parent label AND each child text, creating noisy/confusing output for screen reader users. The pattern is: one Semantics node per interactive element with a clear label, exclude children that would duplicate information.
+**Blocked:** Nothing
+**Next:** Physical device testing is the only remaining task. All code backlog items are complete.

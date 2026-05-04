@@ -34,7 +34,7 @@
 - [x] Onboarding tutorial overlay for first launch
 - [x] Add `web/` to .gitignore (untracked Flutter web scaffold, not needed)
 - [x] Store stream subscriptions in AppState and cancel in dispose() (discovered 2026-04-30 — cosmetic, not a practical leak since vision.dispose() closes the controllers)
-- [ ] Add Semantics widgets for Android TalkBack support — wrap interactive widgets (symbol tiles, category buttons, sentence bar chips, settings controls) with Semantics labels so caregivers using screen readers can navigate the app (discovered 2026-05-03)
+- [x] Add Semantics widgets for Android TalkBack support — wrap interactive widgets (symbol tiles, category buttons, sentence bar chips, settings controls) with Semantics labels so caregivers using screen readers can navigate the app (completed 2026-05-04)
 
 ## DONE
 - [x] Project scaffold and dependency setup

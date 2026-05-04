@@ -1,15 +1,16 @@
 # Handoff — Current State
 
 ## Last Updated
-2026-05-03 by Claude Opus 4.6
+2026-05-04 by Claude Opus 4.6
 
 ## Project Status
-All HIGH and MEDIUM priority code backlog items are complete. One new LOW priority item added (TalkBack/Semantics accessibility). Physical device testing (MEDIUM) still pending. `flutter analyze` passes clean. Test suite has 65 tests all passing.
+All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical device testing (MEDIUM) still pending. `flutter analyze` passes clean. Test suite has 65 tests all passing.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
 - 56 default AAC symbols across 7 categories (core, food, feelings, actions, people, places, emergency)
 - **Widget test suite** — 65 tests covering AacSymbol model, AppState logic (sentences, categories, search, custom symbols, defaults, import/export), SymbolTile, SentenceBar, SuggestionBar, OnboardingOverlay, AacGrid, SymbolSearchBar, RecentPhrasesBar
+- **TalkBack/Semantics accessibility** — all interactive widgets wrapped with Semantics labels for Android screen reader support (symbol tiles, category buttons, sentence bar chips/buttons, recent phrases, search clear, suggestion header, camera preview)
 - **Onboarding tutorial overlay** — 5-step first-launch walkthrough; persisted in SharedPreferences
 - **Tap sound effects** — programmatic WAV generation, toggle in Settings (off by default)
 - **Dark/light theme toggle** — Material 3 theming, all widgets use ColorScheme
@@ -46,11 +47,15 @@ All HIGH and MEDIUM priority code backlog items are complete. One new LOW priori
 1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 2. **Java runtime** — APK builds require Java; not installed on current dev machine
 3. **Dependencies** — Minor version updates available (camera, cupertino_icons, shared_preferences, wakelock_plus); no urgency or security issues
-4. **TalkBack accessibility** — Add Semantics widgets to interactive elements for screen reader support (LOW backlog)
 
 ## Key Files Changed This Shift
-- `shifts/BACKLOG.md` — added TalkBack/Semantics accessibility item (LOW)
-- No code changes — codebase audit found no actionable issues
+- `lib/widgets/symbol_tile.dart` — Semantics with speakText label, ExcludeSemantics on emoji/label
+- `lib/widgets/sentence_bar.dart` — Semantics on chips (word position), clear button, speak button
+- `lib/screens/home_screen.dart` — Semantics on category buttons (sidebar + horizontal), settings button
+- `lib/widgets/recent_phrases_bar.dart` — Semantics on history icon, phrase chips
+- `lib/widgets/camera_preview.dart` — Semantics with image role on camera PiP
+- `lib/widgets/suggestion_bar.dart` — Semantics header on "Suggested" label
+- `lib/widgets/symbol_search_bar.dart` — Semantics on clear search button
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)
