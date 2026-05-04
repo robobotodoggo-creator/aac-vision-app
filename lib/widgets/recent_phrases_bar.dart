@@ -19,9 +19,12 @@ class RecentPhrasesBar extends StatelessWidget {
           color: cs.surfaceContainerHigh,
           child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 12),
-                child: Icon(Icons.history, color: cs.outline, size: 20),
+              Semantics(
+                label: 'Recent phrases',
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Icon(Icons.history, color: cs.outline, size: 20),
+                ),
               ),
               Expanded(
                 child: ListView.builder(
@@ -33,25 +36,32 @@ class RecentPhrasesBar extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 4, vertical: 8),
-                      child: Material(
-                        color: cs.surfaceContainer,
-                        borderRadius: BorderRadius.circular(20),
-                        child: InkWell(
+                      child: Semantics(
+                        label: phrase,
+                        button: true,
+                        hint: 'Tap to speak this phrase',
+                        child: Material(
+                          color: cs.surfaceContainer,
                           borderRadius: BorderRadius.circular(20),
-                          onTap: () {
-                            HapticFeedback.mediumImpact();
-                            state.speakPhrase(phrase);
-                          },
-                          child: Container(
-                            constraints: const BoxConstraints(minHeight: 60),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 6),
-                            child: Center(
-                              child: Text(
-                                phrase,
-                                style: TextStyle(
-                                  color: cs.onSurface,
-                                  fontSize: 16,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(20),
+                            onTap: () {
+                              HapticFeedback.mediumImpact();
+                              state.speakPhrase(phrase);
+                            },
+                            child: Container(
+                              constraints: const BoxConstraints(minHeight: 60),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 6),
+                              child: Center(
+                                child: ExcludeSemantics(
+                                  child: Text(
+                                    phrase,
+                                    style: TextStyle(
+                                      color: cs.onSurface,
+                                      fontSize: 16,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

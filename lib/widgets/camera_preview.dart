@@ -18,13 +18,17 @@ class CameraPreviewWidget extends StatelessWidget {
         return Positioned(
           right: 12,
           bottom: 12,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: SizedBox(
-              // Slightly smaller PiP in landscape to save vertical space
-              width: isLandscape ? 100 : 120,
-              height: isLandscape ? 130 : 160,
-              child: CameraPreview(state.vision.cameraController!),
+          child: Semantics(
+            label: 'Camera preview, detecting objects for suggestions',
+            image: true,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                // Slightly smaller PiP in landscape to save vertical space
+                width: isLandscape ? 100 : 120,
+                height: isLandscape ? 130 : 160,
+                child: CameraPreview(state.vision.cameraController!),
+              ),
             ),
           ),
         );

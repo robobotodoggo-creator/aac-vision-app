@@ -22,12 +22,15 @@ class SuggestionBar extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 12, top: 4),
-                child: Text(
-                  'Suggested',
-                  style: TextStyle(
-                    color: cs.onPrimaryContainer,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                child: Semantics(
+                  header: true,
+                  child: Text(
+                    'Suggested',
+                    style: TextStyle(
+                      color: cs.onPrimaryContainer,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

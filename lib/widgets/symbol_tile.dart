@@ -76,29 +76,40 @@ class _SymbolTileState extends State<SymbolTile>
           ),
         );
       },
-      child: Container(
-        constraints: const BoxConstraints(minHeight: 60, minWidth: 60),
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              widget.symbol.emoji,
-              style: const TextStyle(fontSize: 32),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              widget.symbol.label,
-              style: TextStyle(
-                color: cs.onSurface,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+      child: Semantics(
+        label: widget.symbol.speakText,
+        button: true,
+        hint: widget.onLongPress != null
+            ? 'Tap to speak, long press to add to sentence'
+            : 'Tap to speak',
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 60, minWidth: 60),
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ExcludeSemantics(
+                child: Text(
+                  widget.symbol.emoji,
+                  style: const TextStyle(fontSize: 32),
+                ),
               ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+              const SizedBox(height: 4),
+              ExcludeSemantics(
+                child: Text(
+                  widget.symbol.label,
+                  style: TextStyle(
+                    color: cs.onSurface,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

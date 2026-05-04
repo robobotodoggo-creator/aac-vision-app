@@ -31,46 +31,59 @@ class SentenceBar extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 4, vertical: 8),
-                            child: Chip(
-                              label: Text(
-                                '${s.emoji} ${s.label}',
-                                style: TextStyle(
-                                    color: cs.onPrimaryContainer,
-                                    fontSize: 16),
+                            child: Semantics(
+                              label: '${s.label}, sentence word ${index + 1}',
+                              hint: 'Double tap delete to remove from sentence',
+                              child: Chip(
+                                label: Text(
+                                  '${s.emoji} ${s.label}',
+                                  style: TextStyle(
+                                      color: cs.onPrimaryContainer,
+                                      fontSize: 16),
+                                ),
+                                backgroundColor: cs.primaryContainer,
+                                deleteIcon: Icon(Icons.close,
+                                    size: 18, color: cs.onPrimaryContainer),
+                                onDeleted: () => state.removeFromSentenceAt(index),
                               ),
-                              backgroundColor: cs.primaryContainer,
-                              deleteIcon: Icon(Icons.close,
-                                  size: 18, color: cs.onPrimaryContainer),
-                              onDeleted: () => state.removeFromSentenceAt(index),
                             ),
                           );
                         },
                       ),
               ),
               if (state.sentenceSymbols.isNotEmpty) ...[
-                IconButton(
-                  onPressed: () {
-                    HapticFeedback.mediumImpact();
-                    state.clearSentence();
-                  },
-                  icon: Icon(Icons.delete_outline,
-                      color: cs.onSurfaceVariant, size: 28),
+                Semantics(
+                  label: 'Clear sentence',
+                  button: true,
+                  child: IconButton(
+                    onPressed: () {
+                      HapticFeedback.mediumImpact();
+                      state.clearSentence();
+                    },
+                    icon: Icon(Icons.delete_outline,
+                        color: cs.onSurfaceVariant, size: 28),
+                  ),
                 ),
                 const SizedBox(width: 4),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    HapticFeedback.heavyImpact();
-                    state.speakSentence();
-                  },
-                  icon: const Icon(Icons.volume_up, size: 24),
-                  label: const Text('Speak',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[700],
-                    foregroundColor: Colors.white,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                Semantics(
+                  label: 'Speak sentence',
+                  button: true,
+                  hint: 'Speaks all words in the sentence bar',
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      HapticFeedback.heavyImpact();
+                      state.speakSentence();
+                    },
+                    icon: const Icon(Icons.volume_up, size: 24),
+                    label: const Text('Speak',
+                        style:
+                            TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[700],
+                      foregroundColor: Colors.white,
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
                   ),
                 ),
               ],

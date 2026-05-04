@@ -94,29 +94,36 @@ class HomeScreen extends StatelessWidget {
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                  child: Material(
-                    color: isSelected ? cs.primary : cs.surfaceContainer,
-                    borderRadius: BorderRadius.circular(12),
-                    child: InkWell(
+                  child: Semantics(
+                    label: '${cat[0].toUpperCase()}${cat.substring(1)} category',
+                    selected: isSelected,
+                    button: true,
+                    child: Material(
+                      color: isSelected ? cs.primary : cs.surfaceContainer,
                       borderRadius: BorderRadius.circular(12),
-                      onTap: () => state.selectCategory(cat),
-                      child: Container(
-                        constraints: const BoxConstraints(minHeight: 60),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 12),
-                        child: Text(
-                          cat[0].toUpperCase() + cat.substring(1),
-                          style: TextStyle(
-                            color: isSelected
-                                ? cs.onPrimary
-                                : cs.onSurfaceVariant,
-                            fontSize: 16,
-                            fontWeight: isSelected
-                                ? FontWeight.bold
-                                : FontWeight.normal,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () => state.selectCategory(cat),
+                        child: Container(
+                          constraints: const BoxConstraints(minHeight: 60),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 12),
+                          child: ExcludeSemantics(
+                            child: Text(
+                              cat[0].toUpperCase() + cat.substring(1),
+                              style: TextStyle(
+                                color: isSelected
+                                    ? cs.onPrimary
+                                    : cs.onSurfaceVariant,
+                                fontSize: 16,
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
@@ -128,36 +135,42 @@ class HomeScreen extends StatelessWidget {
           // Settings button at bottom of sidebar
           Padding(
             padding: const EdgeInsets.all(6),
-            child: Material(
-              color: cs.surfaceContainer,
-              borderRadius: BorderRadius.circular(12),
-              child: InkWell(
+            child: Semantics(
+              label: 'Settings',
+              button: true,
+              child: Material(
+                color: cs.surfaceContainer,
                 borderRadius: BorderRadius.circular(12),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const SettingsScreen(),
-                    ),
-                  );
-                },
-                child: Container(
-                  constraints: const BoxConstraints(minHeight: 60),
-                  alignment: Alignment.center,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.settings,
-                          color: cs.onSurfaceVariant, size: 24),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Settings',
-                        style: TextStyle(
-                            color: cs.onSurfaceVariant, fontSize: 16),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SettingsScreen(),
                       ),
-                    ],
+                    );
+                  },
+                  child: Container(
+                    constraints: const BoxConstraints(minHeight: 60),
+                    alignment: Alignment.center,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                    child: ExcludeSemantics(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.settings,
+                              color: cs.onSurfaceVariant, size: 24),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Settings',
+                            style: TextStyle(
+                                color: cs.onSurfaceVariant, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -180,18 +193,23 @@ class HomeScreen extends StatelessWidget {
             final isSelected = cat == state.selectedCategory;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: FilterChip(
-                label: Text(
-                  cat[0].toUpperCase() + cat.substring(1),
-                  style: TextStyle(
-                    color: isSelected ? cs.onPrimary : cs.onSurfaceVariant,
-                    fontSize: 16,
-                  ),
-                ),
+              child: Semantics(
+                label: '${cat[0].toUpperCase()}${cat.substring(1)} category',
                 selected: isSelected,
-                selectedColor: cs.primary,
-                backgroundColor: cs.surfaceContainer,
-                onSelected: (_) => state.selectCategory(cat),
+                button: true,
+                child: FilterChip(
+                  label: Text(
+                    cat[0].toUpperCase() + cat.substring(1),
+                    style: TextStyle(
+                      color: isSelected ? cs.onPrimary : cs.onSurfaceVariant,
+                      fontSize: 16,
+                    ),
+                  ),
+                  selected: isSelected,
+                  selectedColor: cs.primary,
+                  backgroundColor: cs.surfaceContainer,
+                  onSelected: (_) => state.selectCategory(cat),
+                ),
               ),
             );
           }),

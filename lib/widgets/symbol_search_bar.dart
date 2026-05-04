@@ -51,13 +51,17 @@ class _SymbolSearchBarState extends State<SymbolSearchBar> {
                 prefixIcon:
                     Icon(Icons.search, color: cs.onSurfaceVariant, size: 24),
                 suffixIcon: state.searchQuery.isNotEmpty
-                    ? IconButton(
-                        icon: Icon(Icons.clear,
-                            color: cs.onSurfaceVariant, size: 24),
-                        onPressed: () {
-                          _controller.clear();
-                          state.setSearchQuery('');
-                        },
+                    ? Semantics(
+                        label: 'Clear search',
+                        button: true,
+                        child: IconButton(
+                          icon: Icon(Icons.clear,
+                              color: cs.onSurfaceVariant, size: 24),
+                          onPressed: () {
+                            _controller.clear();
+                            state.setSearchQuery('');
+                          },
+                        ),
                       )
                     : null,
                 filled: true,
