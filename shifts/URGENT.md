@@ -1,0 +1,18 @@
+# URGENT — For Dave
+
+## 2026-05-17: Disable Automated Check-In Cron Immediately
+
+This is the **62nd consecutive no-op check-in**. Every single one has found:
+- `flutter analyze` passes clean
+- No backlog items to work on
+- No regressions or issues
+
+The only remaining backlog item is **physical device testing**, which requires hardware access that automated agents cannot provide.
+
+### Action Required
+Disable the cron job that triggers shift check-ins (9 AM / 6 PM PT). Resume only when:
+1. New backlog items are added, OR
+2. Device testing becomes possible
+
+### Compute Waste
+62 shifts x ~2-3 min each = ~2-3 hours of Claude compute burned with zero productive output. This note has been repeated in HANDOFF.md and SHIFT_LOG.md since shift #3 with no response.

@@ -4,13 +4,13 @@
 2026-05-17 by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical device testing (MEDIUM) still pending. `flutter analyze` passes clean. Codebase thoroughly hardened across 58 consecutive check-in shifts — no new issues found. No productive code work remains without new backlog items or device access.
+All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical device testing (MEDIUM) still pending. `flutter analyze` passes clean. Codebase stable across 62 consecutive check-in shifts. **URGENT.md created** to escalate cron-disable request.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
 - 56 default AAC symbols across 7 categories (core, food, feelings, actions, people, places, emergency)
 - **Widget test suite** — 65 tests covering AacSymbol model, AppState logic (sentences, categories, search, custom symbols, defaults, import/export), SymbolTile, SentenceBar, SuggestionBar, OnboardingOverlay, AacGrid, SymbolSearchBar, RecentPhrasesBar
-- **TalkBack/Semantics accessibility** — all interactive widgets wrapped with Semantics labels for Android screen reader support (symbol tiles, category buttons, sentence bar chips/buttons, recent phrases, search clear, suggestion header, camera preview)
+- **TalkBack/Semantics accessibility** — all interactive widgets wrapped with Semantics labels for Android screen reader support
 - **Onboarding tutorial overlay** — 5-step first-launch walkthrough; persisted in SharedPreferences
 - **Tap sound effects** — programmatic WAV generation, toggle in Settings (off by default)
 - **Dark/light theme toggle** — Material 3 theming, all widgets use ColorScheme
@@ -33,29 +33,22 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical dev
 - Android permissions (CAMERA, INTERNET, VIBRATE, WAKE_LOCK)
 - Recent phrases bar (persisted, tappable, 60dp touch targets)
 - Visual flash animation on tile tap
-- **Stream subscriptions properly stored and cancelled in dispose()**
-- **All text 16sp+, all touch targets 60dp+ — verified via audit**
-- **All destructive-action colors use ColorScheme.error — no hardcoded reds**
-- **All service calls from widgets route through AppState for proper Provider rebuilds**
-- **TtsService.dispose() uses unawaited() for explicit Future handling**
-- **Camera frame temp files cleaned up after ML Kit processing (prevents disk exhaustion)**
-- **Cloud suggestion callback guards against disposed AppState (prevents crash)**
-- **Dialog TextEditingControllers properly disposed on close**
-- **Sentence bar chip delete targets correct symbol via index-based removal**
-- **SharedPreferences JSON parsing resilient to corrupted data (try-catch with defaults)**
-- **Cloud API response parsing uses explicit null/bounds checks instead of relying on outer try-catch**
+- All text 16sp+, all touch targets 60dp+
+- All destructive-action colors use ColorScheme.error
+- All service calls from widgets route through AppState for proper Provider rebuilds
+- Camera frame temp files cleaned up after ML Kit processing
+- Cloud suggestion callback guards against disposed AppState
+- Dialog TextEditingControllers properly disposed on close
+- SharedPreferences JSON parsing resilient to corrupted data
 
 ## What Needs Attention Next
-1. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
-2. **Java runtime** — APK builds require Java; not installed on current dev machine
-3. **Dependencies** — Minor version updates available (camera, cupertino_icons, shared_preferences, wakelock_plus, vibration, share_plus, google_mlkit_object_detection); no urgency or security issues
+1. **DISABLE THE CRON** — See shifts/URGENT.md. 62 no-op check-ins is unacceptable compute waste.
+2. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
+3. **Java runtime** — APK builds require Java; not installed on current dev machine
 4. **New features** — All code tasks done; consider adding multi-language support, predictive phrases, or caregiver lock mode to backlog if project needs to grow
 
 ## Key Files Changed This Shift
-No code changes — healthy check-in only (2026-05-17). 61st consecutive no-op check-in.
-
-## Recommendation
-**URGENT: Automated check-in shifts must be disabled immediately.** 61 consecutive check-ins have found zero issues — the codebase is stable. Each check-in wastes compute resources with no productive output. Resume only when new backlog items are added or device testing becomes possible.
+- Created `shifts/URGENT.md` — escalation to Dave re: disabling cron
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)
