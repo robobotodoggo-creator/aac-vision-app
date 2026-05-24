@@ -1,15 +1,16 @@
 # Handoff — Current State
 
 ## Last Updated
-2026-05-23 by Claude Opus 4.6
+2026-05-24 by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical device testing (MEDIUM) still pending. `flutter analyze` passes clean. Codebase stable across 86 consecutive check-in shifts. **URGENT.md exists** — cron-disable request still unactioned.
+All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical device testing (MEDIUM) still pending. `flutter analyze` passes clean. 68 tests pass. **URGENT.md exists** — cron-disable request still unactioned.
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
 - 56 default AAC symbols across 7 categories (core, food, feelings, actions, people, places, emergency)
-- **Widget test suite** — 65 tests covering AacSymbol model, AppState logic (sentences, categories, search, custom symbols, defaults, import/export), SymbolTile, SentenceBar, SuggestionBar, OnboardingOverlay, AacGrid, SymbolSearchBar, RecentPhrasesBar
+- **Suggestion sensitivity settings** — stability threshold (1–5 frames), sticky TTL (1–15s), visible cap (3–12) configurable via sliders in Settings; persisted in SharedPreferences
+- **Widget test suite** — 68 tests covering AacSymbol model, AppState logic (sentences, categories, search, custom symbols, defaults, suggestion settings, import/export), SymbolTile, SentenceBar, SuggestionBar, OnboardingOverlay, AacGrid, SymbolSearchBar, RecentPhrasesBar
 - **TalkBack/Semantics accessibility** — all interactive widgets wrapped with Semantics labels for Android screen reader support
 - **Onboarding tutorial overlay** — 5-step first-launch walkthrough; persisted in SharedPreferences
 - **Tap sound effects** — programmatic WAV generation, toggle in Settings (off by default)
@@ -26,7 +27,7 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical dev
 - Vision service (Google ML Kit, ~5fps) with error handling
 - Context service (JSON-based object-to-symbol mappings)
 - Cloud service (Claude API, 30s cache, 5s timeout) with error handling on fetch
-- Settings screen (appearance, camera, cloud, API key, grid size, TTS, symbols, usage stats)
+- Settings screen (appearance, camera, suggestion sensitivity, cloud, API key, grid size, TTS, symbols, usage stats)
 - Loading screen during initialization
 - Suggestion bar with gradient fade overflow indicator
 - Material 3 theming, high contrast, wakelock, haptic feedback
@@ -42,13 +43,15 @@ All HIGH, MEDIUM, and LOW priority code backlog items are complete. Physical dev
 - SharedPreferences JSON parsing resilient to corrupted data
 
 ## What Needs Attention Next
-1. **DISABLE THE CRON** — See shifts/URGENT.md. 85 no-op check-ins is unacceptable compute waste.
+1. **DISABLE THE CRON** — See shifts/URGENT.md. 86+ no-op check-ins was unacceptable compute waste.
 2. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 3. **Java runtime** — APK builds require Java; not installed on current dev machine
 4. **New features** — All code tasks done; consider adding multi-language support, predictive phrases, or caregiver lock mode to backlog if project needs to grow
 
 ## Key Files Changed This Shift
-- No code changes — 86th consecutive no-op check-in
+- `lib/services/app_state.dart` — Added persisted suggestion sensitivity settings (stabilityThreshold, stickyTtlSeconds, suggestionCap), frame history tracking for stability threshold logic
+- `lib/screens/settings_screen.dart` — Added "Suggestion Sensitivity" section with 3 sliders
+- `test/widget_test.dart` — Added 3 tests for suggestion sensitivity defaults (68 total)
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)

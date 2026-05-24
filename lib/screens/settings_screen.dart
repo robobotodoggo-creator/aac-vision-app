@@ -103,6 +103,77 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 16),
 
+              // Suggestion sensitivity
+              _buildSection(
+                context,
+                'Suggestion Sensitivity',
+                [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                            'Stability: ${state.stabilityThreshold} of 5 frames',
+                            style: TextStyle(
+                                color: cs.onSurface, fontSize: 18)),
+                        Text(
+                            'Higher = fewer false suggestions',
+                            style: TextStyle(
+                                color: cs.onSurfaceVariant, fontSize: 16)),
+                        Slider(
+                          value: state.stabilityThreshold.toDouble(),
+                          min: 1,
+                          max: 5,
+                          divisions: 4,
+                          label: '${state.stabilityThreshold}',
+                          onChanged: (v) =>
+                              state.setStabilityThreshold(v.round()),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                            'Sticky duration: ${state.stickyTtlSeconds}s',
+                            style: TextStyle(
+                                color: cs.onSurface, fontSize: 18)),
+                        Text(
+                            'How long suggestions stay after object disappears',
+                            style: TextStyle(
+                                color: cs.onSurfaceVariant, fontSize: 16)),
+                        Slider(
+                          value: state.stickyTtlSeconds.toDouble(),
+                          min: 1,
+                          max: 15,
+                          divisions: 14,
+                          label: '${state.stickyTtlSeconds}s',
+                          onChanged: (v) =>
+                              state.setStickyTtlSeconds(v.round()),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                            'Max visible: ${state.suggestionCap}',
+                            style: TextStyle(
+                                color: cs.onSurface, fontSize: 18)),
+                        Text(
+                            'Maximum number of suggestions shown at once',
+                            style: TextStyle(
+                                color: cs.onSurfaceVariant, fontSize: 16)),
+                        Slider(
+                          value: state.suggestionCap.toDouble(),
+                          min: 3,
+                          max: 12,
+                          divisions: 9,
+                          label: '${state.suggestionCap}',
+                          onChanged: (v) =>
+                              state.setSuggestionCap(v.round()),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
+
               // Cloud toggle
               _buildSection(
                 context,

@@ -784,6 +784,18 @@ void main() {
     test('suggested symbols starts empty', () {
       expect(state.suggestedSymbols, isEmpty);
     });
+
+    test('stability threshold defaults to 3', () {
+      expect(state.stabilityThreshold, 3);
+    });
+
+    test('sticky TTL defaults to 5 seconds', () {
+      expect(state.stickyTtlSeconds, 5);
+    });
+
+    test('suggestion cap defaults to 6', () {
+      expect(state.suggestionCap, 6);
+    });
   });
 
   group('AppState import/export config', () {

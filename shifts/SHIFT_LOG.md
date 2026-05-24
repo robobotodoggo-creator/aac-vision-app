@@ -1187,3 +1187,16 @@
 **Learned:** Nothing new. 86th consecutive no-op check-in. URGENT.md exists but cron still has not been disabled.
 **Blocked:** No code work to do. Physical device testing requires hardware access. Cron continues despite URGENT.md escalation.
 **Next:** Dave must disable the automated check-in cron. No further shifts should occur until new backlog items exist or device testing is possible.
+
+## 2026-05-24 — Claude Opus 4.6
+**Task:** Add suggestion-bar sensitivity slider in Settings (HIGH priority)
+**Done:**
+- Implemented 3 configurable suggestion tuning parameters in AppState: stabilityThreshold (1–5, default 3), stickyTtlSeconds (1–15, default 5), suggestionCap (3–12, default 6)
+- Added frame history tracking — object must be detected in N of last 5 frames before promoting to a visible suggestion (previously showed on first detection)
+- Added "Suggestion Sensitivity" section in Settings with labeled sliders for all 3 parameters
+- All values persisted via SharedPreferences with bounds-clamped loading
+- Added 3 new tests for defaults (68 total, all pass)
+- `flutter analyze` clean, all tests green
+**Learned:** The previous implementation had no stability threshold at all — a single frame detection immediately showed a suggestion. The new frame-history approach should significantly reduce flickering/noise from transient ML Kit detections, which matters for aphasia users who need predictable, stable UI.
+**Blocked:** Nothing
+**Next:** All code backlog items are complete again. Physical device testing remains the only open MEDIUM task.

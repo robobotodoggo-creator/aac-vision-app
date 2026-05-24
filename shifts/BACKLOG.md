@@ -1,7 +1,7 @@
 # AAC Vision App Backlog
 
 ## HIGH Priority
-- [ ] Add suggestion-bar sensitivity slider in Settings — let users tune the stability threshold (3-of-5 frames default), sticky TTL (5s default), and visible cap (6 default) without rebuilding (added 2026-05-23)
+- [x] Add suggestion-bar sensitivity slider in Settings — let users tune the stability threshold (3-of-5 frames default), sticky TTL (5s default), and visible cap (6 default) without rebuilding (added 2026-05-23, completed 2026-05-24)
 
 ## RESEARCH (low priority, write findings to docs/research/)
 - [ ] **Kotlin / native rewrite feasibility:** Build the same app in Kotlin + CameraX + native ML Kit. Measure cold-start time, memory footprint, sustained battery drain over 30 min of camera-on use, frame latency for label-to-suggestion. Compare against current Flutter version on the same Samsung Tab S9 Ultra. Report whether the gain justifies maintaining two codebases. (added 2026-05-23)

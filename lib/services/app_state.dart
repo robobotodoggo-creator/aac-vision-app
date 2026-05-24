@@ -22,11 +22,15 @@ class AppState extends ChangeNotifier {
   final SoundService sound = SoundService();
 
   // Suggestion display tuning: predictability matters more than freshness for
-  // aphasia users. Suggestions stick for [_stickyTtl] after last seen so they
-  // can be tapped, are sorted alphabetically for stable position, and capped
-  // so the bar never overflows.
-  static const Duration _stickyTtl = Duration(seconds: 5);
-  static const int _maxVisibleSuggestions = 6;
+  // aphasia users. Suggestions stick for [_stickyTtlSeconds] after last seen
+  // so they can be tapped, are sorted alphabetically for stable position, and
+  // capped so the bar never overflows. The stability threshold requires an
+  // object to be detected in N of the last 5 frames before promoting it.
+  int _stabilityThreshold = 3;
+  int _stickyTtlSeconds = 5;
+  int _suggestionCap = 6;
+  static const int _frameHistorySize = 5;
+  final Map<String, List<bool>> _frameHistory = {};
   final Map<String, DateTime> _suggestionLastSeen = {};
   bool _suggestionsFrozen = false;
 
@@ -75,6 +79,9 @@ class AppState extends ChangeNotifier {
   bool get darkMode => _darkMode;
   bool get soundEffects => _soundEffects;
   bool get onboardingComplete => _onboardingComplete;
+  int get stabilityThreshold => _stabilityThreshold;
+  int get stickyTtlSeconds => _stickyTtlSeconds;
+  int get suggestionCap => _suggestionCap;
   String? get visionError => _visionError;
 
   List<String> get categories {
@@ -234,6 +241,10 @@ class AppState extends ChangeNotifier {
     _darkMode = prefs.getBool('darkMode') ?? true;
     _soundEffects = prefs.getBool('soundEffects') ?? false;
     _onboardingComplete = prefs.getBool('onboardingComplete') ?? false;
+    _stabilityThreshold =
+        (prefs.getInt('stabilityThreshold') ?? 3).clamp(1, _frameHistorySize);
+    _stickyTtlSeconds = (prefs.getInt('stickyTtlSeconds') ?? 5).clamp(1, 15);
+    _suggestionCap = (prefs.getInt('suggestionCap') ?? 6).clamp(3, 12);
     // TTS rate/pitch already set during init() — no redundant calls needed
     _hiddenSymbolIds =
         (prefs.getStringList('hiddenSymbolIds') ?? []).toSet();
@@ -395,6 +406,27 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setStabilityThreshold(int value) async {
+    _stabilityThreshold = value.clamp(1, _frameHistorySize);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('stabilityThreshold', _stabilityThreshold);
+    notifyListeners();
+  }
+
+  Future<void> setStickyTtlSeconds(int value) async {
+    _stickyTtlSeconds = value.clamp(1, 15);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('stickyTtlSeconds', _stickyTtlSeconds);
+    notifyListeners();
+  }
+
+  Future<void> setSuggestionCap(int value) async {
+    _suggestionCap = value.clamp(3, 12);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('suggestionCap', _suggestionCap);
+    notifyListeners();
+  }
+
   Future<void> completeOnboarding() async {
     _onboardingComplete = true;
     final prefs = await SharedPreferences.getInstance();
@@ -502,9 +534,24 @@ class AppState extends ChangeNotifier {
     final now = DateTime.now();
     final suggestionIds = context.getSuggestions(objects);
 
-    // Refresh "last seen" timestamps for currently detected suggestions.
-    for (final id in suggestionIds) {
-      _suggestionLastSeen[id] = now;
+    // Update frame history for all tracked IDs.
+    final currentIds = suggestionIds.toSet();
+    final allTrackedIds = {..._frameHistory.keys, ...currentIds};
+    for (final id in allTrackedIds) {
+      final history = _frameHistory.putIfAbsent(id, () => []);
+      history.add(currentIds.contains(id));
+      if (history.length > _frameHistorySize) {
+        history.removeAt(0);
+      }
+    }
+
+    // Promote to "last seen" only if stability threshold is met.
+    for (final id in currentIds) {
+      final history = _frameHistory[id]!;
+      final trueCount = history.where((v) => v).length;
+      if (trueCount >= _stabilityThreshold) {
+        _suggestionLastSeen[id] = now;
+      }
     }
 
     _rebuildVisibleSuggestions(now);
@@ -538,13 +585,14 @@ class AppState extends ChangeNotifier {
   }
 
   /// Rebuilds [_suggestedSymbols] from "last seen" timestamps:
-  ///   - drops anything older than [_stickyTtl] (sticky display so users can tap)
+  ///   - drops anything older than [_stickyTtlSeconds] (sticky display so users can tap)
   ///   - sorts alphabetically by label (stable position across frames)
-  ///   - caps at [_maxVisibleSuggestions] (oldest first to drop)
+  ///   - caps at [_suggestionCap] (oldest first to drop)
   void _rebuildVisibleSuggestions(DateTime now) {
+    final stickyTtl = Duration(seconds: _stickyTtlSeconds);
     // Prune stale entries
     _suggestionLastSeen.removeWhere(
-        (_, seenAt) => now.difference(seenAt) > _stickyTtl);
+        (_, seenAt) => now.difference(seenAt) > stickyTtl);
 
     // Resolve IDs → symbols
     final alive = _suggestionLastSeen.keys
@@ -555,10 +603,10 @@ class AppState extends ChangeNotifier {
         .toList();
 
     // If too many, keep the most-recently-seen
-    if (alive.length > _maxVisibleSuggestions) {
+    if (alive.length > _suggestionCap) {
       alive.sort((a, b) => _suggestionLastSeen[b.id]!
           .compareTo(_suggestionLastSeen[a.id]!));
-      alive.removeRange(_maxVisibleSuggestions, alive.length);
+      alive.removeRange(_suggestionCap, alive.length);
     }
 
     // Final display sort: alphabetical = stable position
