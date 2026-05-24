@@ -1,6 +1,14 @@
 # AAC Vision App Backlog
 
 ## HIGH Priority
+- [ ] Add suggestion-bar sensitivity slider in Settings — let users tune the stability threshold (3-of-5 frames default), sticky TTL (5s default), and visible cap (6 default) without rebuilding (added 2026-05-23)
+
+## RESEARCH (low priority, write findings to docs/research/)
+- [ ] **Kotlin / native rewrite feasibility:** Build the same app in Kotlin + CameraX + native ML Kit. Measure cold-start time, memory footprint, sustained battery drain over 30 min of camera-on use, frame latency for label-to-suggestion. Compare against current Flutter version on the same Samsung Tab S9 Ultra. Report whether the gain justifies maintaining two codebases. (added 2026-05-23)
+- [ ] **Older / cheaper Android device benchmarks:** Same app, three target tablets: Samsung Tab A (entry-level, ~$150), Tab S6 Lite (mid, ~$300), Tab S9 Ultra (current). Measure ML Kit label latency, dropped-frame rate, battery drain. Goal: document the minimum viable hardware for this app to be usable for stroke survivors on a budget. (added 2026-05-23)
+- [ ] **External vision compute investigation:** Research feasibility of pairing the tablet (display + UI) with an external compute board (Raspberry Pi 5, Jetson Orin Nano, Coral USB Accelerator) for vision processing. Questions to answer: does ML Kit's on-device speed already saturate the bottleneck? Would offloading vision to a more powerful board meaningfully improve label quality, detection of small/distant objects, or simultaneous-object count? What's the latency cost of sending camera frames over USB/Wi-Fi/BLE to an external board? Mockup a rigid case design that could house tablet + small SBC + battery. Write up tradeoffs and a recommendation. (added 2026-05-23)
+- [ ] **Screenshot-in-the-loop dev workflow:** Investigate adding `adb shell screencap` + Claude Vision check to the autonomous shift loop, so agents can verify visual correctness of their UI changes before committing. Prototype: shift runs flutter test, builds APK, installs on attached device, takes screenshot of each major screen, sends to Claude Vision with the diff for a "does this look right?" pass. (added 2026-05-23)
+
 - [x] Fix text below 16sp minimum in 3 locations (accessibility violation of project design principles)
 - [x] Fix touch targets below 60dp minimum in 3 locations (accessibility violation of project design principles)
 - [x] Add .catchError() to unawaited cloud suggestion fetch in AppState (error handling gap)
