@@ -21,6 +21,15 @@ class AppState extends ChangeNotifier {
   final UsageStatsService usageStats = UsageStatsService();
   final SoundService sound = SoundService();
 
+  // Suggestion display tuning: predictability matters more than freshness for
+  // aphasia users. Suggestions stick for [_stickyTtl] after last seen so they
+  // can be tapped, are sorted alphabetically for stable position, and capped
+  // so the bar never overflows.
+  static const Duration _stickyTtl = Duration(seconds: 5);
+  static const int _maxVisibleSuggestions = 6;
+  final Map<String, DateTime> _suggestionLastSeen = {};
+  bool _suggestionsFrozen = false;
+
   List<AacSymbol> _allSymbols = [];
   List<AacSymbol> _suggestedSymbols = [];
   final List<AacSymbol> _sentenceSymbols = [];
@@ -53,6 +62,12 @@ class AppState extends ChangeNotifier {
   String get selectedCategory => _selectedCategory;
   String get searchQuery => _searchQuery;
   bool get cameraEnabled => _cameraEnabled;
+  bool get suggestionsFrozen => _suggestionsFrozen;
+
+  void toggleSuggestionsFrozen() {
+    _suggestionsFrozen = !_suggestionsFrozen;
+    notifyListeners();
+  }
   bool get cloudEnabled => _cloudEnabled;
   int get gridColumns => _gridColumns;
   double get speechRate => _speechRate;
@@ -482,10 +497,17 @@ class AppState extends ChangeNotifier {
   }
 
   void _onObjectsDetected(List<String> objects) {
+    if (_suggestionsFrozen) return;
+
+    final now = DateTime.now();
     final suggestionIds = context.getSuggestions(objects);
-    _suggestedSymbols = _allSymbols
-        .where((s) => suggestionIds.contains(s.id))
-        .toList();
+
+    // Refresh "last seen" timestamps for currently detected suggestions.
+    for (final id in suggestionIds) {
+      _suggestionLastSeen[id] = now;
+    }
+
+    _rebuildVisibleSuggestions(now);
 
     if (_cloudEnabled && cloud.isConfigured) {
       cloud
@@ -494,12 +516,13 @@ class AppState extends ChangeNotifier {
             recentPhrases: _recentPhrases,
           )
           .then((cloudSuggestions) {
-        if (_disposed || cloudSuggestions == null) return;
-        // Cloud suggestions are raw text — show as temporary symbols
+        if (_disposed || cloudSuggestions == null || _suggestionsFrozen) return;
         for (final text in cloudSuggestions) {
-          if (!_suggestedSymbols.any((s) => s.speakText == text)) {
-            _suggestedSymbols.add(AacSymbol(
-              id: 'cloud_${text.hashCode}',
+          final fakeId = 'cloud_${text.hashCode}';
+          _suggestionLastSeen[fakeId] = DateTime.now();
+          if (!_suggestedSymbols.any((s) => s.id == fakeId)) {
+            _allSymbols.add(AacSymbol(
+              id: fakeId,
               label: text,
               speakText: text,
               category: 'cloud',
@@ -507,12 +530,41 @@ class AppState extends ChangeNotifier {
             ));
           }
         }
-        notifyListeners();
+        _rebuildVisibleSuggestions(DateTime.now());
       }).catchError((_) {
         // Cloud is optional — fall back to on-device suggestions silently
       });
     }
+  }
 
+  /// Rebuilds [_suggestedSymbols] from "last seen" timestamps:
+  ///   - drops anything older than [_stickyTtl] (sticky display so users can tap)
+  ///   - sorts alphabetically by label (stable position across frames)
+  ///   - caps at [_maxVisibleSuggestions] (oldest first to drop)
+  void _rebuildVisibleSuggestions(DateTime now) {
+    // Prune stale entries
+    _suggestionLastSeen.removeWhere(
+        (_, seenAt) => now.difference(seenAt) > _stickyTtl);
+
+    // Resolve IDs → symbols
+    final alive = _suggestionLastSeen.keys
+        .map((id) => _allSymbols.firstWhere((s) => s.id == id,
+            orElse: () => AacSymbol(
+                id: id, label: id, speakText: id, category: '', emoji: '')))
+        .where((s) => s.label.isNotEmpty)
+        .toList();
+
+    // If too many, keep the most-recently-seen
+    if (alive.length > _maxVisibleSuggestions) {
+      alive.sort((a, b) => _suggestionLastSeen[b.id]!
+          .compareTo(_suggestionLastSeen[a.id]!));
+      alive.removeRange(_maxVisibleSuggestions, alive.length);
+    }
+
+    // Final display sort: alphabetical = stable position
+    alive.sort((a, b) => a.label.toLowerCase().compareTo(b.label.toLowerCase()));
+
+    _suggestedSymbols = alive;
     notifyListeners();
   }
 

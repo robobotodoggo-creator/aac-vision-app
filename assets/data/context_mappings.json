@@ -1,36 +1,60 @@
 {
   "mappings": [
     {
-      "objects": ["food", "bowl", "cup", "bottle", "dining table"],
+      "objects": ["food", "fruit", "vegetable", "bread", "sandwich", "pizza", "cake", "dessert", "snack", "meal", "bowl", "cup", "bottle", "dining table", "plate"],
       "suggestions": ["eat", "drink", "more", "all_done", "hungry", "yummy"]
     },
     {
-      "objects": ["person", "people", "child"],
+      "objects": ["coffee", "tea", "beer", "wine", "juice", "milk", "water", "soft drink", "drink", "beverage"],
+      "suggestions": ["drink", "more", "thirsty", "want", "yummy"]
+    },
+    {
+      "objects": ["person", "people", "child", "baby", "face", "selfie", "man", "woman", "boy", "girl"],
       "suggestions": ["hi", "bye", "help", "play", "friend"]
     },
     {
-      "objects": ["car", "bus", "truck", "bicycle"],
+      "objects": ["car", "bus", "truck", "bicycle", "motorcycle", "vehicle", "train", "boat", "airplane"],
       "suggestions": ["go", "stop", "car", "home", "scared"]
     },
     {
-      "objects": ["dog", "cat", "bird", "animal"],
+      "objects": ["dog", "cat", "bird", "animal", "horse", "cattle", "sheep", "wildlife", "pet", "rabbit", "fish"],
       "suggestions": ["like", "scared", "happy", "stop", "more"]
     },
     {
-      "objects": ["tv", "laptop", "phone", "remote"],
+      "objects": ["tv", "laptop", "phone", "mobile phone", "remote", "television", "computer", "monitor", "tablet", "keyboard", "mouse"],
       "suggestions": ["watch", "play", "stop", "more", "listen"]
     },
     {
-      "objects": ["book", "notebook"],
+      "objects": ["book", "notebook", "magazine", "paper"],
       "suggestions": ["read", "more", "open", "close", "like"]
     },
     {
-      "objects": ["bed", "pillow", "blanket"],
+      "objects": ["bed", "pillow", "blanket", "couch", "sofa", "chair", "bedroom"],
       "suggestions": ["tired", "stop", "more", "love", "help"]
     },
     {
-      "objects": ["toilet", "sink", "bathtub"],
+      "objects": ["toilet", "sink", "bathtub", "bathroom", "shower"],
       "suggestions": ["bathroom", "help", "all_done", "water"]
+    },
+    {
+      "objects": ["plant", "flower", "tree", "leaf", "grass", "garden"],
+      "suggestions": ["pretty", "like", "outside", "more"]
+    },
+    {
+      "objects": ["sky", "cloud", "sun", "moon", "outdoors", "nature"],
+      "suggestions": ["outside", "go", "play", "happy"]
+    },
+    {
+      "objects": ["toy", "ball", "doll", "lego", "stuffed toy", "game"],
+      "suggestions": ["play", "want", "like", "more", "share"]
+    },
+    {
+      "objects": ["clothing", "shoe", "hat", "shirt", "pants", "jacket", "footwear"],
+      "suggestions": ["wear", "help", "want", "all_done"]
+    },
+    {
+      "objects": ["home good", "furniture", "houseplant", "room"],
+      "suggestions": ["home", "want", "like", "play"]
     }
   ]
 }
