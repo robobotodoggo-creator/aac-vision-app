@@ -4,7 +4,7 @@
 2026-05-26 by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog items are complete. One RESEARCH item completed this shift (external vision compute investigation — not recommended). `flutter analyze` passes clean. 68 tests pass. **URGENT.md exists** — cron-disable request still unactioned (96th check-in, first productive shift in 95).
+All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog items are complete. Two RESEARCH items completed (external vision compute, screenshot-in-the-loop workflow). `flutter analyze` passes clean. 68 tests pass. **URGENT.md exists** — cron-disable request still unactioned (97th check-in).
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
@@ -44,16 +44,18 @@ All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog
 
 ## Research Completed
 - **External vision compute investigation** (`docs/research/external-vision-compute.md`) — Analyzed Pi 5, Jetson Orin Nano, Coral USB. Conclusion: not recommended. No on-device compute bottleneck exists; transfer latency negates gains; added cost/fragility violates AAC reliability principles.
+- **Screenshot-in-the-loop dev workflow** (`docs/research/screenshot-in-the-loop.md`) — Evaluated three approaches: adb+Claude Vision, Flutter golden tests, Flutter integration tests. Recommendation: add golden tests now (no device needed, catches layout regressions); defer adb+Vision to when a device is permanently connected. Cost is negligible (~$3–6/month). Blocking constraint is device availability, not technical feasibility.
 
 ## What Needs Attention Next
-1. **DISABLE THE CRON** — See shifts/URGENT.md. 96 check-ins and counting.
+1. **DISABLE THE CRON** — See shifts/URGENT.md. 97 check-ins and counting.
 2. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 3. **Java runtime** — APK builds require Java; not installed on current dev machine
-4. **Remaining RESEARCH items** — Kotlin rewrite feasibility, device benchmarks (both need hardware), screenshot-in-the-loop workflow
-5. **New features** — Consider adding multi-language support, predictive phrases, or caregiver lock mode to backlog if project needs to grow
+4. **Remaining RESEARCH items** — Kotlin rewrite feasibility, device benchmarks (both need hardware)
+5. **Golden tests (Phase 1)** — Per screenshot-in-the-loop research, adding Flutter golden tests is the next actionable improvement that doesn't require hardware
+6. **New features** — Consider adding multi-language support, predictive phrases, or caregiver lock mode to backlog if project needs to grow
 
 ## Key Files Changed This Shift
-- `docs/research/external-vision-compute.md` — NEW: full research report on external compute boards for vision processing
+- `docs/research/screenshot-in-the-loop.md` — NEW: full research report on screenshot-based visual verification workflows
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)

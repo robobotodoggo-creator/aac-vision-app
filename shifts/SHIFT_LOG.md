@@ -1302,3 +1302,16 @@
 **Learned:** First productive shift after 95 consecutive no-ops. The Tab S10+'s Dimensity 9300+ NPU handles ML Kit inference well within the 200ms frame budget — the stability filter (3-of-5 frames), not compute speed, determines perceived latency. External compute only makes sense if the app moves to much heavier models (scene understanding, activity recognition).
 **Blocked:** Physical device testing still requires hardware. Remaining RESEARCH items (Kotlin rewrite, device benchmarks) also require hardware access.
 **Next:** Three RESEARCH items remain (Kotlin rewrite, device benchmarks, screenshot-in-the-loop). The first two need physical devices. Screenshot-in-the-loop could be investigated without hardware but has limited value without a connected device. Dave should disable the cron.
+
+## 2026-05-26 — Claude Opus 4.6
+**Task:** Screenshot-in-the-loop dev workflow (RESEARCH backlog item)
+**Done:**
+- Ran `flutter analyze` — passes clean, zero issues
+- Completed RESEARCH item: "Screenshot-in-the-loop dev workflow"
+- Evaluated three approaches: (1) adb screenshots + Claude Vision API, (2) Flutter golden tests, (3) Flutter integration tests with screenshot capture
+- Wrote full report to `docs/research/screenshot-in-the-loop.md`
+- Recommendation: Implement Flutter golden tests first (no device needed, catches layout regressions in seconds). Defer adb+Vision workflow until a device is permanently connected. Cost is negligible (~$3–6/month). Blocking constraint is device availability.
+- Updated BACKLOG.md, HANDOFF.md, URGENT.md
+**Learned:** Flutter golden tests are the most pragmatic first step — they run in the test renderer without any device, catch layout/sizing regressions deterministically, and integrate directly into the existing `flutter test` workflow. The full adb+Vision approach is technically sound and cheap but requires solving the device-availability problem first. Claude Vision's cost for 7 screenshots per shift would be ~$0.05–0.10 using Sonnet — negligible. The real complexity is screen navigation automation on-device (coordinate-based adb taps are fragile; Flutter integration_test with widget keys is the correct solution).
+**Blocked:** Only two RESEARCH items remain (Kotlin rewrite, device benchmarks), both requiring physical hardware. All software-only work is complete.
+**Next:** No actionable backlog items remain that don't require hardware. Golden tests (Phase 1 of the screenshot report) could be added as a new backlog item if Dave wants. Dave should disable the cron.
