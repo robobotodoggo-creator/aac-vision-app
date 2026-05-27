@@ -1289,3 +1289,16 @@
 **Learned:** Nothing new. 95th consecutive no-op check-in. URGENT.md has been active since shift ~3 with no response. Compute waste continues to accumulate.
 **Blocked:** No code work to do. Physical device testing requires hardware access. Cron continues despite URGENT.md escalation.
 **Next:** Dave must disable the automated check-in cron. No further shifts should occur until new backlog items exist or device testing is possible.
+
+## 2026-05-26 — Claude Opus 4.6
+**Task:** External vision compute investigation (RESEARCH backlog item)
+**Done:**
+- Ran `flutter analyze` — passes clean, zero issues
+- Completed RESEARCH item: "External vision compute investigation"
+- Analyzed Raspberry Pi 5, Jetson Orin Nano, Coral USB Accelerator as external compute options
+- Wrote full report to `docs/research/external-vision-compute.md`
+- Recommendation: Do not pursue. No on-device compute bottleneck exists (50–130ms processing vs 200ms budget). Transfer latency negates gains. Added cost/fragility violates AAC reliability principles.
+- Updated BACKLOG.md, HANDOFF.md, URGENT.md
+**Learned:** First productive shift after 95 consecutive no-ops. The Tab S10+'s Dimensity 9300+ NPU handles ML Kit inference well within the 200ms frame budget — the stability filter (3-of-5 frames), not compute speed, determines perceived latency. External compute only makes sense if the app moves to much heavier models (scene understanding, activity recognition).
+**Blocked:** Physical device testing still requires hardware. Remaining RESEARCH items (Kotlin rewrite, device benchmarks) also require hardware access.
+**Next:** Three RESEARCH items remain (Kotlin rewrite, device benchmarks, screenshot-in-the-loop). The first two need physical devices. Screenshot-in-the-loop could be investigated without hardware but has limited value without a connected device. Dave should disable the cron.
