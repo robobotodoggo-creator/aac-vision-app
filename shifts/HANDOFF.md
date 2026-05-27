@@ -1,10 +1,10 @@
 # Handoff — Current State
 
 ## Last Updated
-2026-05-26 by Claude Opus 4.6
+2026-05-27 by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog items are complete. Two RESEARCH items completed (external vision compute, screenshot-in-the-loop workflow). `flutter analyze` passes clean. 68 tests pass. **URGENT.md exists** — cron-disable request still unactioned (97th check-in).
+All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog items are complete. Two RESEARCH items completed (external vision compute, screenshot-in-the-loop workflow). `flutter analyze` passes clean. 68 tests pass. **URGENT.md exists** — cron-disable request still unactioned (98th check-in).
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
@@ -47,7 +47,7 @@ All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog
 - **Screenshot-in-the-loop dev workflow** (`docs/research/screenshot-in-the-loop.md`) — Evaluated three approaches: adb+Claude Vision, Flutter golden tests, Flutter integration tests. Recommendation: add golden tests now (no device needed, catches layout regressions); defer adb+Vision to when a device is permanently connected. Cost is negligible (~$3–6/month). Blocking constraint is device availability, not technical feasibility.
 
 ## What Needs Attention Next
-1. **DISABLE THE CRON** — See shifts/URGENT.md. 97 check-ins and counting.
+1. **DISABLE THE CRON** — See shifts/URGENT.md. 98 check-ins and counting.
 2. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 3. **Java runtime** — APK builds require Java; not installed on current dev machine
 4. **Remaining RESEARCH items** — Kotlin rewrite feasibility, device benchmarks (both need hardware)
@@ -55,7 +55,7 @@ All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog
 6. **New features** — Consider adding multi-language support, predictive phrases, or caregiver lock mode to backlog if project needs to grow
 
 ## Key Files Changed This Shift
-- `docs/research/screenshot-in-the-loop.md` — NEW: full research report on screenshot-based visual verification workflows
+- No code changes — 96th no-op check-in
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)
