@@ -29,6 +29,7 @@
 - [ ] Test on physical Android device
 
 ## LOW Priority
+- [x] Add Flutter golden tests for visual regression detection — 8 golden tests covering SymbolTile (dark/light), SentenceBar (empty/populated), AacGrid, OnboardingOverlay (step 1/5), SymbolSearchBar. Phase 1 of screenshot-in-the-loop research. 76 tests total. (added 2026-05-27, completed 2026-05-27)
 - [x] Add widget test suite for core functionality (model, state logic, SymbolTile, SentenceBar) — 25 tests (completed 2026-05-03)
 - [x] Expand test coverage (suggestion bar, grid widget, onboarding overlay, search bar, recent phrases bar, AppState logic) — 65 tests total (completed 2026-05-03)
 - [x] Fix markNeedsBuild() hack in UsageStatsScreen — route stats clear through AppState.notifyListeners() (discovered 2026-05-02)

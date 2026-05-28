@@ -1345,3 +1345,20 @@
 **Learned:** Nothing new. 98th consecutive no-op check-in. This is the 100th total check-in — a milestone that underscores the need to disable the cron. URGENT.md has been requesting cron disable since approximately check-in #3 with no response.
 **Blocked:** No code work to do. Physical device testing requires hardware access. Cron continues despite URGENT.md escalation.
 **Next:** Dave must disable the automated check-in cron. No further shifts should occur until new backlog items exist or device testing is possible.
+
+## 2026-05-27 — Claude Opus 4.6
+**Task:** Implement Flutter golden tests (Phase 1 of screenshot-in-the-loop research)
+**Done:**
+- Created `test/golden/widget_golden_test.dart` with 8 golden tests covering:
+  - SymbolTile in dark theme and light theme
+  - SentenceBar empty (placeholder) and populated (3 symbol chips + Speak/Clear controls)
+  - AacGrid with 8 symbols in 4-column layout
+  - OnboardingOverlay step 1 (Welcome) and step 5 (Customize in Settings)
+  - SymbolSearchBar with hint text
+- Generated 8 golden reference images in `test/golden/goldens/`
+- All 76 tests pass (68 existing + 8 new golden tests)
+- `flutter analyze` passes clean
+- Updated BACKLOG.md, HANDOFF.md
+**Learned:** Golden tests are fast (all 8 complete in <1 second) and require zero device setup. They use Flutter's test renderer, so fonts render differently than on device, but they catch layout/sizing/visibility regressions deterministically. The golden files are small (~3–8KB PNG each) so git bloat is not a concern at this scale. `importSymbolConfig` is a convenient way to inject test symbols into AppState without needing `init()` or real asset loading.
+**Blocked:** Phase 2 (adb + Claude Vision device screenshots) requires physical hardware. Cron should still be disabled.
+**Next:** No further software-only backlog items. Phase 2 of screenshot workflow and remaining RESEARCH items require hardware. Dave should disable the cron and add new features to backlog if project needs to grow.

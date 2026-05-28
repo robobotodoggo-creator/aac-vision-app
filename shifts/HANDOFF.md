@@ -4,13 +4,14 @@
 2026-05-27 by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog items are complete. Two RESEARCH items completed (external vision compute, screenshot-in-the-loop workflow). `flutter analyze` passes clean. 68 tests pass. **URGENT.md exists** — cron-disable request still unactioned (100th check-in).
+All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog items are complete. Two RESEARCH items completed (external vision compute, screenshot-in-the-loop workflow). Golden tests (Phase 1) implemented — 8 golden tests added, 76 total tests pass. `flutter analyze` passes clean. **URGENT.md exists** — cron-disable request still unactioned (101st check-in).
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
 - 56 default AAC symbols across 7 categories (core, food, feelings, actions, people, places, emergency)
+- **Golden tests (Phase 1)** — 8 golden tests covering SymbolTile (dark/light), SentenceBar (empty/populated), AacGrid (4-col grid), OnboardingOverlay (step 1 + 5), SymbolSearchBar; catches layout/sizing regressions deterministically
 - **Suggestion sensitivity settings** — stability threshold (1–5 frames), sticky TTL (1–15s), visible cap (3–12) configurable via sliders in Settings; persisted in SharedPreferences
-- **Widget test suite** — 68 tests covering AacSymbol model, AppState logic (sentences, categories, search, custom symbols, defaults, suggestion settings, import/export), SymbolTile, SentenceBar, SuggestionBar, OnboardingOverlay, AacGrid, SymbolSearchBar, RecentPhrasesBar
+- **Widget test suite** — 76 tests covering AacSymbol model, AppState logic (sentences, categories, search, custom symbols, defaults, suggestion settings, import/export), SymbolTile, SentenceBar, SuggestionBar, OnboardingOverlay, AacGrid, SymbolSearchBar, RecentPhrasesBar, plus 8 golden visual regression tests
 - **TalkBack/Semantics accessibility** — all interactive widgets wrapped with Semantics labels for Android screen reader support
 - **Onboarding tutorial overlay** — 5-step first-launch walkthrough; persisted in SharedPreferences
 - **Tap sound effects** — programmatic WAV generation, toggle in Settings (off by default)
@@ -44,18 +45,19 @@ All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog
 
 ## Research Completed
 - **External vision compute investigation** (`docs/research/external-vision-compute.md`) — Analyzed Pi 5, Jetson Orin Nano, Coral USB. Conclusion: not recommended. No on-device compute bottleneck exists; transfer latency negates gains; added cost/fragility violates AAC reliability principles.
-- **Screenshot-in-the-loop dev workflow** (`docs/research/screenshot-in-the-loop.md`) — Evaluated three approaches: adb+Claude Vision, Flutter golden tests, Flutter integration tests. Recommendation: add golden tests now (no device needed, catches layout regressions); defer adb+Vision to when a device is permanently connected. Cost is negligible (~$3–6/month). Blocking constraint is device availability, not technical feasibility.
+- **Screenshot-in-the-loop dev workflow** (`docs/research/screenshot-in-the-loop.md`) — Evaluated three approaches: adb+Claude Vision, Flutter golden tests, Flutter integration tests. Recommendation: add golden tests now (no device needed, catches layout regressions); defer adb+Vision to when a device is permanently connected. Cost is negligible (~$3–6/month). Blocking constraint is device availability, not technical feasibility. **Phase 1 (golden tests) now implemented.**
 
 ## What Needs Attention Next
-1. **DISABLE THE CRON** — See shifts/URGENT.md. 100 check-ins and counting.
+1. **DISABLE THE CRON** — See shifts/URGENT.md. 101 check-ins and counting.
 2. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 3. **Java runtime** — APK builds require Java; not installed on current dev machine
 4. **Remaining RESEARCH items** — Kotlin rewrite feasibility, device benchmarks (both need hardware)
-5. **Golden tests (Phase 1)** — Per screenshot-in-the-loop research, adding Flutter golden tests is the next actionable improvement that doesn't require hardware
+5. **Phase 2: adb + Claude Vision** — Per screenshot research, the full device-screenshot workflow should be added when a device is permanently connected
 6. **New features** — Consider adding multi-language support, predictive phrases, or caregiver lock mode to backlog if project needs to grow
 
 ## Key Files Changed This Shift
-- No code changes — 98th no-op check-in
+- `test/golden/widget_golden_test.dart` — new, 8 golden tests
+- `test/golden/goldens/*.png` — 8 golden reference images (symbol_tile_dark/light, sentence_bar_empty/with_symbols, aac_grid_4col, onboarding_step1/step5, search_bar_empty)
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)
