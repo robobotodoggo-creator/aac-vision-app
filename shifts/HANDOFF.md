@@ -1,10 +1,10 @@
 # Handoff — Current State
 
 ## Last Updated
-2026-05-27 by Claude Opus 4.6
+2026-05-28 by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog items are complete. Two RESEARCH items completed (external vision compute, screenshot-in-the-loop workflow). Golden tests (Phase 1) implemented — 8 golden tests added, 76 total tests pass. `flutter analyze` passes clean. **URGENT.md exists** — cron-disable request still unactioned (101st check-in).
+All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog items are complete. Three RESEARCH items completed (external vision compute, screenshot-in-the-loop workflow, custom TFLite model). Golden tests (Phase 1) implemented — 8 golden tests added, 76 total tests pass. `flutter analyze` passes clean. **URGENT.md exists** — cron-disable request still unactioned (102nd check-in).
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
@@ -46,18 +46,19 @@ All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog
 ## Research Completed
 - **External vision compute investigation** (`docs/research/external-vision-compute.md`) — Analyzed Pi 5, Jetson Orin Nano, Coral USB. Conclusion: not recommended. No on-device compute bottleneck exists; transfer latency negates gains; added cost/fragility violates AAC reliability principles.
 - **Screenshot-in-the-loop dev workflow** (`docs/research/screenshot-in-the-loop.md`) — Evaluated three approaches: adb+Claude Vision, Flutter golden tests, Flutter integration tests. Recommendation: add golden tests now (no device needed, catches layout regressions); defer adb+Vision to when a device is permanently connected. Cost is negligible (~$3–6/month). Blocking constraint is device availability, not technical feasibility. **Phase 1 (golden tests) now implemented.**
+- **Custom AAC-trained TFLite vision model** (`docs/research/custom-tflite-model.md`) — Cataloged 500 AAC-relevant object classes across 11 domains. ML Kit's default ~400-class model only has ~50 classes useful for AAC (10%). OpenImages V7 covers ~120 of the 500 target classes; ~330 need new data collection. Recommended architecture: EfficientNet-Lite0 INT8 (~5 MB, ~6.5 ms CPU latency). Integration is a ~10-line change in vision_service.dart. Per-user personalization feasible via frozen-base + trainable-head architecture. Blocking constraint: dataset curation for AAC-specific classes (mobility aids, therapy tools, communication devices).
 
 ## What Needs Attention Next
-1. **DISABLE THE CRON** — See shifts/URGENT.md. 101 check-ins and counting.
+1. **DISABLE THE CRON** — See shifts/URGENT.md. 102 check-ins and counting.
 2. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 3. **Java runtime** — APK builds require Java; not installed on current dev machine
 4. **Remaining RESEARCH items** — Kotlin rewrite feasibility, device benchmarks (both need hardware)
 5. **Phase 2: adb + Claude Vision** — Per screenshot research, the full device-screenshot workflow should be added when a device is permanently connected
-6. **New features** — Consider adding multi-language support, predictive phrases, or caregiver lock mode to backlog if project needs to grow
+6. **Custom TFLite model implementation** — Research complete, next step is data collection + model training (needs GPU, Colab sufficient)
+7. **New features** — Consider adding multi-language support, predictive phrases, or caregiver lock mode to backlog if project needs to grow
 
 ## Key Files Changed This Shift
-- `test/golden/widget_golden_test.dart` — new, 8 golden tests
-- `test/golden/goldens/*.png` — 8 golden reference images (symbol_tile_dark/light, sentence_bar_empty/with_symbols, aac_grid_4col, onboarding_step1/step5, search_bar_empty)
+- `docs/research/custom-tflite-model.md` — new, comprehensive research on custom AAC vision model
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)

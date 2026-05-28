@@ -1362,3 +1362,18 @@
 **Learned:** Golden tests are fast (all 8 complete in <1 second) and require zero device setup. They use Flutter's test renderer, so fonts render differently than on device, but they catch layout/sizing/visibility regressions deterministically. The golden files are small (~3–8KB PNG each) so git bloat is not a concern at this scale. `importSymbolConfig` is a convenient way to inject test symbols into AppState without needing `init()` or real asset loading.
 **Blocked:** Phase 2 (adb + Claude Vision device screenshots) requires physical hardware. Cron should still be disabled.
 **Next:** No further software-only backlog items. Phase 2 of screenshot workflow and remaining RESEARCH items require hardware. Dave should disable the cron and add new features to backlog if project needs to grow.
+
+## 2026-05-28 — Claude Opus 4.6
+**Task:** Research: Custom AAC-trained TFLite vision model
+**Done:**
+- Wrote comprehensive research document at `docs/research/custom-tflite-model.md`
+- Phase 1: Cataloged 500 AAC-relevant object classes across 11 domains (mobility aids, medical equipment, AAC devices, therapy tools, adapted eating, household, food, clothing, people/pets, activities/rooms, outdoors/community)
+- Phase 2: Identified dataset sources — OpenImages V7 covers ~120 classes, Roboflow covers mobility aids, specialty datasets cover pills/groceries/nursing home objects; ~330 classes need new data collection
+- Phase 3: Designed training pipeline using EfficientNet-Lite0 + INT8 quantization (~5 MB model, ~6.5 ms CPU / ~1-2 ms NPU inference). Drop-in replacement for ML Kit's default labeler via CustomImageLabelerOptions
+- Phase 4: Designed per-user personalization concept using frozen base + trainable head architecture; 5-10 photos per personal object, ~30s on-device training, ~100 KB personal model
+- Key finding: only ~50 of ML Kit's ~400 default labels are useful for AAC; a custom 500-class model would increase AAC-relevant coverage from 10% to 100%
+- `flutter analyze` passes clean
+- Updated BACKLOG.md, HANDOFF.md
+**Learned:** ML Kit's default ~400-class model is heavily biased toward consumer photography (Rafting, Bullfighting, Casino, Prom, etc.) and almost entirely misses the assistive technology domain. OpenImages V7 has wheelchair and crutch but no walker, no oxygen tank, no communication board. The biggest data gap is AAC-specific devices — no public dataset covers them well. Web scraping medical supply retailers + clinical partnerships would be needed. EfficientNet-Lite0 INT8 at 5 MB is comfortably within the latency budget (6.5 ms vs 200 ms frame interval). Integration is a ~10-line code change in vision_service.dart.
+**Blocked:** Training requires GPU (Colab sufficient) + curated dataset. Real testing requires physical device. Data collection for AAC-specific classes (~330 classes) requires web scraping or clinical partnerships.
+**Next:** Remaining RESEARCH items (Kotlin rewrite, device benchmarks) both need physical hardware. All software-only backlog items complete. Cron should still be disabled.
