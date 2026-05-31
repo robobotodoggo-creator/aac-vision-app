@@ -4,7 +4,7 @@
 2026-05-31 by Claude Opus 4.6
 
 ## Project Status
-All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog items are complete. Three RESEARCH items completed (external vision compute, screenshot-in-the-loop workflow, custom TFLite model). Golden tests (Phase 1) implemented — 8 golden tests added, 76 total tests pass. `flutter analyze` passes clean. **URGENT.md exists** — cron-disable request still unactioned (114th check-in).
+All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog items are complete. Three RESEARCH items completed (external vision compute, screenshot-in-the-loop workflow, custom TFLite model). Golden tests (Phase 1) implemented — 8 golden tests added, 76 total tests pass. `flutter analyze` passes clean. **URGENT.md exists** — cron-disable request still unactioned (115th check-in).
 
 ## What's Working
 - Full project structure with models, services, screens, widgets
@@ -49,7 +49,7 @@ All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog
 - **Custom AAC-trained TFLite vision model** (`docs/research/custom-tflite-model.md`) — Cataloged 500 AAC-relevant object classes across 11 domains. ML Kit's default ~400-class model only has ~50 classes useful for AAC (10%). OpenImages V7 covers ~120 of the 500 target classes; ~330 need new data collection. Recommended architecture: EfficientNet-Lite0 INT8 (~5 MB, ~6.5 ms CPU latency). Integration is a ~10-line change in vision_service.dart. Per-user personalization feasible via frozen-base + trainable-head architecture. Blocking constraint: dataset curation for AAC-specific classes (mobility aids, therapy tools, communication devices).
 
 ## What Needs Attention Next
-1. **DISABLE THE CRON** — See shifts/URGENT.md. 113 check-ins and counting.
+1. **DISABLE THE CRON** — See shifts/URGENT.md. 115 check-ins and counting.
 2. **Device testing** — Need to test on actual Samsung Galaxy Tab S10+ or any Android device
 3. **Java runtime** — APK builds require Java; not installed on current dev machine
 4. **Remaining RESEARCH items** — Kotlin rewrite feasibility, device benchmarks (both need hardware)
@@ -58,7 +58,7 @@ All HIGH, MEDIUM (except physical device testing), and LOW priority code backlog
 7. **New features** — Consider adding multi-language support, predictive phrases, or caregiver lock mode to backlog if project needs to grow
 
 ## Key Files Changed This Shift
-- No code changes — 110th no-op check-in, updated shift docs only
+- No code changes — 111th no-op check-in, updated shift docs only
 
 ## Target Device
 Samsung Galaxy Tab S10+ (12.4" display, Android, Dimensity 9300+)
